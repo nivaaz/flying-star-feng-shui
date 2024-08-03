@@ -2,7 +2,7 @@ const Intro = () => {
   return (
     <div className="bg-slate-200 dark:bg-slate-800 dark:text-slate-100 text-slate-900 p-4 md:p-8 rounded-xl">
       <h1 className="text-xl py-4"> Flying Star Feng Shui By Nivaaz 📍 </h1>
-      <p className="font-bold py-4"> You'll need:</p>
+      <p className="font-bold py-4"> You will need:</p>
       <ol className="pl-8 list-decimal">
         <li>
           The date you moved into your home & flying star chart for the same

@@ -67,7 +67,7 @@ export default function Home() {
           <div>
             <p>
               {" "}
-              Here is the combined chart with Period 9, 2024 and your home's
+              Here is the combined chart with Period 9, 2024 and the chart of your home
               chart.
             </p>
             <div className="grid lg:grid-cols-3 w-full">
