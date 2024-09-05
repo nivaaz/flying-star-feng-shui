@@ -3,6 +3,7 @@ import { useState } from "react";
 import { currentYear, directions, period9, Star } from "./charts";
 import Intro from "./intro";
 import CurrentElement from "./currentElement";
+import Container from "./components/container";
 
 export default function Home() {
   const [homeChart, setHomeChart] = useState<Star[][]>([
@@ -33,7 +34,7 @@ export default function Home() {
 
         <Intro />
 
-        <div className="flex flex-col md:flex-row w-full bg-slate-50 p-8 rounded-xl">
+        <Container>
           <div>
             <h2 className="text-lg">Flying Star Charts - your home</h2>
             <p> Add the chart for the year you moved into your home </p>
@@ -57,9 +58,9 @@ export default function Home() {
               )}
             </div>
           </div>
-        </div>
+        </Container>
 
-        <div className="bg-slate-50 p-8 w-full">
+        <Container>
           <div>
             <h2 className="text-xl "> Your chart</h2>
             <p>
@@ -70,20 +71,22 @@ export default function Home() {
           <div className="py-8">
             <p className="text-lg"> Chat view options </p>
             <button
-              className="border bg-slate-100 p-2 rounded-lg"
+              className="border bg-slate-100 p-2 rounded-lg dark:bg-slate-900 dark:text-slate-100 m-1"
               onClick={() => {
+                console.log(showYear);
                 setShowYear(!showYear);
               }}
             >
-              {showYear ? "Show" : "Hide"} current year
+              {showYear ? "Hide" : "Show"} current year
             </button>
             <button
-              className="border bg-slate-100 p-2 rounded-lg"
+              className="border bg-slate-100 p-2 rounded-lg dark:bg-slate-900 dark:text-slate-100 m-1"
               onClick={() => {
+                console.log(showPeriod);
                 setShowPeriod(!showPeriod);
               }}
             >
-              {showPeriod ? "Show" : "Hide"} current period{" "}
+              {showPeriod ? "Hide" : "Show"} current period{" "}
             </button>
           </div>
 
@@ -112,7 +115,7 @@ export default function Home() {
               ))
             )}
           </div>
-        </div>
+        </Container>
       </div>
     </main>
   );
