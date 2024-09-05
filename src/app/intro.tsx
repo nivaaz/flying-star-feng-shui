@@ -4,8 +4,7 @@ const Intro = () => {
       <h1 className="text-4xl py-4"> Flying Star Feng Shui By Nivaaz 📍 </h1>
       <p className="text-lg py-4"> What is this page?</p>
       <p>
-        {" "}
-        This page will compare your home's flying star chart with that of the
+        This page will compare your home&apos;s flying star chart with that of the
         current period and current year.{" "}
       </p>
       <p className="text-lg py-4"> What do you need to use this page?</p>
@@ -20,9 +19,8 @@ const Intro = () => {
       <ol className="pl-8 list-decimal">
         <li>Fill in the flying star numbers for your home below</li>
         <li>
-          {" "}
           Your chart elements + elements for the current period and year will be
-          populated.{" "}
+          populated.
         </li>
         <li> Auspicious stars will be marked with a ⭐️ </li>
         <li> Inspicious stars will be marked with a 🧂 </li>

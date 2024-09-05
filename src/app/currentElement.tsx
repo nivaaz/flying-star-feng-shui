@@ -24,8 +24,7 @@ const ColouredElement = ({
         element === "water" && "border-blue-200"
       )}
     >
-      {isAuspicious ? "--" : "++"}&nbsp;
-      {element}
+      {isAuspicious ? "--" : "++"} {element}
     </p>
   );
 };
