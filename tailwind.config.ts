@@ -9,7 +9,8 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        mukta: ['"Mukta"', "sans-serif"],
+        mukta: ["Mukta", "sans-serif"],
+        "open-sans": ["Open Sans", "sans-serif"],
       },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",

@@ -6,59 +6,61 @@ import {
   Star,
 } from "./charts";
 
+const ColouredElement = ({
+  isAuspicious,
+  element,
+}: {
+  isAuspicious: boolean;
+  element: string;
+}) => {
+  return (
+    <p
+      className={clsx(
+        "text-xs rounded-md p-1 border-2 m-auto",
+        element === "fire" && "border-yellow-200",
+        element === "earth" && "border-orange-200",
+        element === "wood" && "border-green-200",
+        element === "metal" && "border-gray-200",
+        element === "water" && "border-blue-200"
+      )}
+    >
+      {isAuspicious ? "--" : "++"}&nbsp;
+      {element}
+    </p>
+  );
+};
+
 const CurrentElement = ({ star, chart }: { star: Star; chart: string }) => {
   const el = elementNumberMap[star];
   const nourish = getNourishingElement(el?.element);
   const drain = getDrainingElement(el?.element);
   return (
     <div className="flex flex-col">
-      <p className="text-xs rounded-md pb-1"> {chart} </p>
+      <p className="text-xs rounded-md pb-1 text-slate-500"> {chart} </p>
       <div
         className={clsx(
-          "text-xs p-4 rounded-md bg-opacity-20 grid grid-flow-col md:grid-cols-3",
-          el?.color === "black" && "bg-gray-400",
-          el?.color === "jade" && "bg-green-400",
-          el?.color === "green" && "bg-green-400",
-          el?.color === "yellow" && "bg-yellow-400",
-          el?.color === "white" && "bg-slate-200",
-          el?.color === "red" && "bg-red-400",
-          el?.color === "purple" && "bg-purple-400"
+          "text-xs p-4 rounded-md bg-opacity-20 grid grid-flow-col md:grid-cols-3 border-l-4",
+          el?.color === "black" && " border-gray-400",
+          el?.color === "jade" && " border-green-400",
+          el?.color === "green" && " border-green-400",
+          el?.color === "yellow" && " border-yellow-400",
+          el?.color === "white" && " border-slate-200",
+          el?.color === "red" && " border-red-400",
+          el?.color === "purple" && " border-purple-400"
         )}
       >
-        <p className="px-1 flex">
-          {el?.auspicious ? "⭐️" : "🧂"} {star}
-        </p>
-        <p className="px-1 flex">
-          {" "}
-          {el?.element} {el?.elementIcon}{" "}
-        </p>
-        <p className="px-1 flex"> {el?.color} </p>
-        <p
-          className={clsx(
-            "font-bold",
-            nourish === "fire" && "text-yellow-400",
-            nourish === "earth" && "text-orange-400",
-            nourish === "wood" && "text-green-400",
-            nourish === "metal" && "text-gray-400",
-            nourish === "water" && "text-blue-400"
-          )}
-        >
-          {el?.auspicious ? "++" : "--"}
-          {nourish}
-        </p>
-        <p
-          className={clsx(
-            "font-bold",
-            drain === "fire" && "text-yellow-400",
-            drain === "earth" && "text-orange-400",
-            drain === "wood" && "text-green-400",
-            drain === "metal" && "text-gray-400",
-            drain === "water" && "text-blue-400"
-          )}
-        >
-          {el?.auspicious ? "--" : "++"}
-          {drain}
-        </p>
+        <div>
+          <p className="px-1 flex">
+            {star}
+            {el?.auspicious ? "⭐️" : "🧂"}
+          </p>
+          <p className="px-1 flex">
+            {el?.element} {el?.elementIcon}{" "}
+          </p>
+          <p className="px-1 flex"> {el?.color} </p>
+        </div>
+        <ColouredElement element={nourish} isAuspicious={!el?.auspicious} />
+        <ColouredElement element={drain} isAuspicious={el?.auspicious} />
       </div>
     </div>
   );
