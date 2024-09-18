@@ -1,8 +1,8 @@
 export type Element = "fire" | "earth" | "wood" | "metal" | "water";
 export const directions = [
-  ["SW", "S", "SE"],
-  ["W", "C", "E"],
-  ["NW", "N", "NE"],
+  [ "SE", "S","SW"],
+  [ "E", "C","W"],
+  [ "NE", "N","NW"],
 ];
 
 export const currentYear: Star[][] = [
