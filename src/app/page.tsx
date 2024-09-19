@@ -30,7 +30,7 @@ export default function Home() {
   };
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-4 md:p-24">
+    <main className="flex min-h-screen flex-col items-center justify-between p-4 lg:p-24 pb-40">
       <div className="z-10 w-full max-w-5xl items-center justify-between text-sm lg:flex flex-col space-y-8">
         <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-slate-900 dark:via-slate-900 lg:static lg:size-auto lg:bg-none">
           <p className="dark:text-slate-200">
@@ -50,7 +50,7 @@ export default function Home() {
         <Container>
           <div>
             <h2 className="text-lg">Flying Star Charts - your home</h2>
-            <p> Add the chart for the year you moved into your home </p>
+            <p> Add the chart for the period you moved into your home </p>
           </div>
           <div className="w-fit m-auto">
             <div className="grid grid-cols-3">
@@ -81,7 +81,7 @@ export default function Home() {
               your home chart.
             </p>
           </div>
-          <div className="py-8">
+          <div className="py-8 print:hidden">
             <p className="text-lg"> Chat view options </p>
             <button
               className="border bg-slate-100 p-2 rounded-lg dark:bg-slate-900 dark:text-slate-100 m-1"
@@ -103,24 +103,21 @@ export default function Home() {
             </button>
           </div>
 
-          <div className="grid lg:grid-cols-3 w-full">
+          <div className="grid md:grid-cols-3 w-full">
             {period9.map((row, i) =>
               row.map((_, j) => (
                 <div
                   key={i + j}
-                  className="p-4 space-y-4 border border-slate-200 m-1 rounded-sm"
+                  className="p-4 space-y-4 border border-slate-500 m-1 rounded-sm"
                 >
-                  <div className="flex space-x-4"> 
-                  <p className="text-center text-lg">
-                    {directions[i][j]}{" "}
-                    
-                  </p>
-                  <input
-                      className="w-full dark:bg-slate-700 dark:text-slate-100 text-center py-1 text-slate-900 rounded-md"
+                  <div className="flex space-x-4">
+                    <p className="text-center text-lg">{directions[i][j]} </p>
+                    <input
+                      className="w-full dark:bg-slate-800 dark:text-slate-100 text-center py-1 text-slate-900 "
                       type="text"
-                      placeholder="room name"
+                      placeholder="add room name"
                     />{" "}
-                    </div>
+                  </div>
                   {showPeriod && (
                     <CurrentElement
                       chart="current period (9)"
@@ -134,9 +131,27 @@ export default function Home() {
                     />
                   )}
                   <CurrentElement chart="home" star={homeChart[i][j]} />
+                  <textarea
+                    className="w-full dark:bg-slate-800 dark:text-slate-100 py-1 text-slate-900"
+                    placeholder="notes"
+                  />{" "}
                 </div>
               ))
             )}
+          </div>
+        </Container>
+        <Container>
+          <div className="print:hidden">
+            <p>When you're happy with your design, print as a pdf.</p>
+            <button
+              onClick={() => {
+                window.print();
+              }}
+              className="border bg-slate-100 p-2 rounded-lg dark:bg-slate-900 dark:text-slate-100 m-1"
+            >
+              {" "}
+              Save Design{" "}
+            </button>
           </div>
         </Container>
       </div>

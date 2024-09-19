@@ -38,7 +38,7 @@ const CurrentElement = ({ star, chart }: { star: Star; chart: string }) => {
       <p className="text-xs rounded-md pb-1 text-slate-500"> {chart} </p>
       <div
         className={clsx(
-          "text-xs p-4 rounded-md bg-opacity-20 grid grid-flow-col md:grid-cols-3 border-l-4",
+          "text-xs lg:p-4 rounded-md bg-opacity-20 grid grid-flow-col md:grid-cols-3 border-l-4",
           el?.color === "black" && " border-gray-400",
           el?.color === "jade" && " border-green-400",
           el?.color === "green" && " border-green-400",

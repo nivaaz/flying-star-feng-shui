@@ -4,7 +4,8 @@ const Intro = () => {
   return (
     <Container>
       <h1 className="text-4xl py-4"> Flying Star Feng Shui By Nivaaz 📍 </h1>
-      <p className="text-lg py-4"> What is this page?</p>
+      <div className="print:hidden"> 
+      <p className="text-lg py-4 "> What is this page?</p>
       <p>
         This page will compare your home&apos;s flying star chart with that of
         the current period and current year.{" "}
@@ -17,6 +18,7 @@ const Intro = () => {
         </li>
         <li> A floor plan of your home and which direction is North </li>
       </ol>
+      </div>
       <p className="text-lg py-4"> How to get your</p>
       <ol className="pl-8 list-decimal">
         <li>Fill in the flying star numbers for your home below</li>
@@ -28,7 +30,6 @@ const Intro = () => {
         <li> Inspicious stars will be marked with a 🧂 </li>
         <li> Add salt cures to any rooms with inauspcious stars 🧂 </li>
       </ol>
-      <div></div>
     </Container>
   );
 };
