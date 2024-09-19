@@ -16,12 +16,12 @@ const ColouredElement = ({
   return (
     <p
       className={clsx(
-        "text-xs rounded-md p-1 border-2 m-auto",
-        element === "fire" && "border-yellow-200",
-        element === "earth" && "border-orange-200",
-        element === "wood" && "border-green-200",
-        element === "metal" && "border-gray-200",
-        element === "water" && "border-blue-200"
+        "text-xs rounded-md p-1 m-auto text-black dark:text-white font-bold border",
+        element === "fire" && "border-yellow-100",
+        element === "earth" && "border-orange-100",
+        element === "wood" && "border-green-100",
+        element === "metal" && "border-gray-100",
+        element === "water" && "border-blue-100"
       )}
     >
       {isAuspicious ? "--" : "++"} {element}
@@ -48,16 +48,11 @@ const CurrentElement = ({ star, chart }: { star: Star; chart: string }) => {
           el?.color === "purple" && " border-purple-400"
         )}
       >
-        <div>
-          <p className="px-1 flex">
-            {star}
-            {el?.auspicious ? "⭐️" : "🧂"}
-          </p>
-          <p className="px-1 flex">
-            {el?.element} {el?.elementIcon}{" "}
-          </p>
-          <p className="px-1 flex"> {el?.color} </p>
-        </div>
+        <p className="px-1 flex text-slate-400">
+          {star}
+          {el?.auspicious ? "⭐️" : "🧂"}
+          {el?.element} {el?.elementIcon} {el?.color}{" "}
+        </p>
         <ColouredElement element={nourish} isAuspicious={!el?.auspicious} />
         <ColouredElement element={drain} isAuspicious={el?.auspicious} />
       </div>

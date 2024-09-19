@@ -1,8 +1,8 @@
 export type Element = "fire" | "earth" | "wood" | "metal" | "water";
 export const directions = [
-  [ "SE", "S","SW"],
-  [ "E", "C","W"],
-  [ "NE", "N","NW"],
+    ["SE", "S", "SW"],
+    ["E", "C", "W"],
+    ["NE", "N", "NW"],
 ];
 
 export const currentYear: Star[][] = [
@@ -17,42 +17,42 @@ export const period9: Star[][] = [
 ]
 export type Star = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
 
-export const elementNumberMap: Record<Star, { auspicious: boolean, color: string, elementIcon: string, element: Element }> = {
+export const elementNumberMap: Record<Star, { auspicious: boolean, color: string, elementIcon: string, theme: string; element: Element }> = {
     1: {
-        auspicious: true, color: 'black', elementIcon: '💧'
-        , element: 'water'
+        auspicious: true, color: 'black', elementIcon: '💧',
+        theme: "fame and wealth ", element: 'water'
     },
     2: {
-        auspicious: false, color: 'black', elementIcon: '🌏'
-        , element: 'earth'
+        auspicious: false, color: 'black', elementIcon: '🌏',
+        theme: " illness", element: 'earth'
     },
     3: {
-        auspicious: false, color: 'jade', elementIcon: '🪵'
-        , element: 'wood'
+        auspicious: false, color: 'jade', elementIcon: '🪵',
+        theme: " quarrels", element: 'wood'
     },
     4: {
-        auspicious: true, color: 'green', elementIcon: '🪵'
-        , element: 'wood'
+        auspicious: true, color: 'green', elementIcon: '🪵',
+        theme: " intelligence & education", element: 'wood'
     },
     5: {
-        auspicious: false, color: 'yellow', elementIcon: '🌏'
-        , element: 'earth'
+        auspicious: false, color: 'yellow', elementIcon: '🌏',
+        theme: "  illness and misfortune", element: 'earth'
     },
     6: {
-        auspicious: true, color: 'white', elementIcon: '🪙'
-        , element: 'metal'
+        auspicious: true, color: 'white', elementIcon: '🪙',
+        theme: " wealth & career promotion", element: 'metal'
     },
     7: {
-        auspicious: false, color: 'red', elementIcon: '🪙'
-        , element: 'metal'
+        auspicious: false, color: 'red', elementIcon: '🪙',
+        theme: "conflicts & arguments ", element: 'metal'
     },
     8: {
-        auspicious: true, color: 'white', elementIcon: '🌏'
-        , element: 'earth'
+        auspicious: true, color: 'white', elementIcon: '🌏',
+        theme: " health & wealth", element: 'earth'
     },
     9: {
-        auspicious: true, color: 'purple', elementIcon: '🔥'
-        , element: 'fire'
+        auspicious: true, color: 'purple', elementIcon: '🔥',
+        theme: "celebration star, rules all things auspicious ", element: 'fire'
     },
 }
 

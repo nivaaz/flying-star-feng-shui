@@ -1,6 +1,12 @@
 "use client";
 import { useState } from "react";
-import { currentYear, directions, period9, Star } from "./charts";
+import {
+  currentYear,
+  directions,
+  elementNumberMap,
+  period9,
+  Star,
+} from "./charts";
 import Intro from "./intro";
 import CurrentElement from "./currentElement";
 import Container from "./components/container";
@@ -33,7 +39,14 @@ export default function Home() {
         </div>
 
         <Intro />
-
+        {/* <Container>
+          <div>
+            <p> What are your goals?</p>
+            {Array.from(Array(8).keys()).map((star, i) => (
+              <button key={i} className="border rounded-md p-2 m-1 text-black" >{}</button>
+            ))}
+          </div>
+        </Container> */}
         <Container>
           <div>
             <h2 className="text-lg">Flying Star Charts - your home</h2>
@@ -97,7 +110,17 @@ export default function Home() {
                   key={i + j}
                   className="p-4 space-y-4 border border-slate-200 m-1 rounded-sm"
                 >
-                  <p className="text-center text-lg">{directions[i][j]} </p>
+                  <div className="flex space-x-4"> 
+                  <p className="text-center text-lg">
+                    {directions[i][j]}{" "}
+                    
+                  </p>
+                  <input
+                      className="w-full dark:bg-slate-700 dark:text-slate-100 text-center py-1 text-slate-900 rounded-md"
+                      type="text"
+                      placeholder="room name"
+                    />{" "}
+                    </div>
                   {showPeriod && (
                     <CurrentElement
                       chart="current period (9)"
