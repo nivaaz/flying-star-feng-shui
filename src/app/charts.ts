@@ -1,20 +1,36 @@
 export type Element = "fire" | "earth" | "wood" | "metal" | "water";
+type LoShuSquare = Star[][];
+
+
 export const directions = [
     ["SE", "S", "SW"],
     ["E", "C", "W"],
     ["NE", "N", "NW"],
 ];
 
-export const currentYear: Star[][] = [
+export const currentYear: LoShuSquare = [
     [2, 7, 9],
     [1, 3, 5],
     [6, 8, 4],
 ]
-export const period9: Star[][] = [
+export const period9: LoShuSquare = [
     [8, 4, 6],
     [7, 9, 2],
     [3, 5, 1],
 ]
+const period8: LoShuSquare = [
+    [7, 3, 5],
+    [6, 8, 1],
+    [2, 4, 9],
+]
+const period7: LoShuSquare = [
+    [6, 2, 4],
+    [5, 7, 9],
+    [1, 3, 8],
+]
+
+export const loShuSquareByPeriod: LoShuSquare[] = [period9, period8, period7]
+
 export type Star = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
 
 export const elementNumberMap: Record<Star, { auspicious: boolean, color: string, elementIcon: string, theme: string; element: Element }> = {

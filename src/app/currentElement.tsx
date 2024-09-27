@@ -17,11 +17,11 @@ const ColouredElement = ({
     <p
       className={clsx(
         "text-xs rounded-md p-1 m-auto text-black dark:text-white font-bold border",
-        element === "fire" && "border-yellow-100",
-        element === "earth" && "border-orange-100",
-        element === "wood" && "border-green-100",
-        element === "metal" && "border-gray-100",
-        element === "water" && "border-blue-100"
+        element === "fire" && "border-yellow-200",
+        element === "earth" && "border-orange-200",
+        element === "wood" && "border-green-200",
+        element === "metal" && "border-gray-200",
+        element === "water" && "border-blue-200"
       )}
     >
       {isAuspicious ? "--" : "++"} {element}

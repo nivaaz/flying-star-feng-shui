@@ -4,6 +4,7 @@ import {
   currentYear,
   directions,
   elementNumberMap,
+  loShuSquareByPeriod,
   period9,
   Star,
 } from "./charts";
@@ -11,15 +12,49 @@ import Intro from "./intro";
 import CurrentElement from "./currentElement";
 import Container from "./components/container";
 
+const periods = [
+  "period 9 (2024-2043)",
+  "period 8 (2004-2023)",
+  "period 7 (1984-2003)",
+  "custom",
+];
+
+const defaultLoShuSquare: Star[][] = [
+  [1, 1, 1],
+  [1, 1, 1],
+  [1, 1, 1],
+];
+
 export default function Home() {
   const [homeChart, setHomeChart] = useState<Star[][]>([
     [1, 1, 1],
     [1, 1, 1],
     [1, 1, 1],
   ]);
+  const [customPeriod, setCustomPeriod] = useState<Boolean>(true);
 
   const [showPeriod, setShowPeriod] = useState(true);
   const [showYear, setShowYear] = useState(true);
+  const [showHomePeriod, setShowHomePeriod] = useState(true);
+  const [goals, setGoals] = useState<Boolean[]>([
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+  ]);
+
+  const onChangeGoals = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const index = parseInt(e.target.value);
+    const newGoals = [...goals];
+    newGoals[index] = !newGoals[index];
+    setGoals(newGoals);
+    console.log(newGoals);
+  };
 
   const onChangeChartValue = (e: React.ChangeEvent<HTMLInputElement>) => {
     const [i, j] = e.target.id.split(" ");
@@ -27,6 +62,20 @@ export default function Home() {
     const currRow: Star[] = newChart[parseInt(i)];
     currRow[parseInt(j)] = parseInt(e.target.value) as Star;
     setHomeChart(newChart);
+  };
+
+  const onSelectPeriod = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const periodIndex = e.target.value;
+    console.log(periodIndex);
+    if (periodIndex === "periodIndex3") {
+      setHomeChart(defaultLoShuSquare);
+      setCustomPeriod(true);
+    } else {
+      setCustomPeriod(false);
+      const period = parseInt(periodIndex.slice(-1));
+      setHomeChart(loShuSquareByPeriod[period]);
+      console.log(loShuSquareByPeriod[period]);
+    }
   };
 
   return (
@@ -39,35 +88,85 @@ export default function Home() {
         </div>
 
         <Intro />
-        {/* <Container>
-          <div>
-            <p> What are your goals?</p>
-            {Array.from(Array(8).keys()).map((star, i) => (
-              <button key={i} className="border rounded-md p-2 m-1 text-black" >{}</button>
-            ))}
-          </div>
-        </Container> */}
         <Container>
           <div>
-            <h2 className="text-lg">Flying Star Charts - your home</h2>
-            <p> Add the chart for the period you moved into your home </p>
-          </div>
-          <div className="w-fit m-auto">
+            <p className="text-lg"> What are your goals?</p>
             <div className="grid grid-cols-3">
-              {directions.map((row, i) =>
-                row.map((cell, j) => (
-                  <label className="p-1 m-0" key={row + cell}>
-                    <p className="absolute text-blue-500 pl-1 pt-1"> {cell} </p>{" "}
+              {Array.from(Array(9).keys()).map((_, index) => (
+                <label
+                  key={index}
+                  className="flex items-center space-x-2 p-1 border border-green-300 bg-green-100 rounded-md"
+                >
+                  <input
+                    type="checkbox"
+                    value={index + 1}
+                    className="rounded-md"
+                    onChange={onChangeGoals}
+                  />
+                  <p>
+                    {"(" + (index + 1) + ") "}
+                    {!elementNumberMap[(index + 1) as Star].auspicious &&
+                      "reduce "}
+                    {elementNumberMap[(index + 1) as Star].theme}
+                  </p>
+                </label>
+              ))}
+            </div>
+          </div>
+        </Container>
+        <Container>
+          <div>
+            <h2 className="text-xl">Flying Star Charts - your home</h2>
+          </div>
+          <div className="w-fit">
+            <p className="pt-8 text-lg"> When did you move into your home?</p>
+            <div>
+              <div className="flex justify-center space-x-4">
+                {periods.map((period, i) => (
+                  <label
+                    className="flex items-center space-x-2 p-1 border border-green-300 bg-green-100 rounded-md"
+                    key={period}
+                  >
                     <input
-                      id={i + " " + j}
-                      pattern="[0-9]*"
-                      onChange={onChangeChartValue}
-                      type="number"
-                      maxLength={1}
-                      className="dark:bg-slate-700 dark:text-slate-100 text-center text-xl w-16 h-16 text-slate-900 rounded-md"
+                      type="radio"
+                      name="periodIndex"
+                      value={"periodIndex" + i}
+                      onChange={onSelectPeriod}
+                      defaultChecked={i === 3}
                     />
+                    <span>{period}</span>
                   </label>
-                ))
+                ))}
+              </div>
+            </div>
+            <div className="w-fit mr-auto">
+              {customPeriod && (
+                <>
+                  <p className="py-4 text-lg">
+                    {" "}
+                    Add the period chart for your home
+                  </p>
+                  <div className="grid grid-cols-3">
+                    {directions.map((row, i) =>
+                      row.map((cell, j) => (
+                        <label className="p-1 m-0" key={row + cell}>
+                          <p className="absolute text-green-500  pl-1 pt-1">
+                            {" "}
+                            {cell}{" "}
+                          </p>{" "}
+                          <input
+                            id={i + " " + j}
+                            pattern="[0-9]*"
+                            onChange={onChangeChartValue}
+                            type="number"
+                            maxLength={1}
+                            className="dark:bg-slate-700 dark:text-slate-100 text-center text-xl w-16 h-16 text-slate-900 rounded-md"
+                          />
+                        </label>
+                      ))
+                    )}
+                  </div>
+                </>
               )}
             </div>
           </div>
@@ -82,24 +181,33 @@ export default function Home() {
             </p>
           </div>
           <div className="py-8 print:hidden">
-            <p className="text-lg"> Chat view options </p>
+            <p className="text-xl"> Chat view options </p>
             <button
-              className="border bg-slate-100 p-2 rounded-lg dark:bg-slate-900 dark:text-slate-100 m-1"
+              className="border border-green-300 bg-green-100 p-2 rounded-lg dark:bg-green-900 dark:text-green-100 m-1"
               onClick={() => {
                 console.log(showYear);
                 setShowYear(!showYear);
               }}
             >
-              {showYear ? "Hide" : "Show"} current year
+              {showYear ? "Hide" : "Show"} current year (2024)
             </button>
             <button
-              className="border bg-slate-100 p-2 rounded-lg dark:bg-slate-900 dark:text-slate-100 m-1"
+              className="border border-green-300 bg-green-100 p-2 rounded-lg dark:bg-green-900 dark:text-green-100 m-1"
               onClick={() => {
                 console.log(showPeriod);
                 setShowPeriod(!showPeriod);
               }}
             >
-              {showPeriod ? "Hide" : "Show"} current period{" "}
+              {showPeriod ? "Hide" : "Show"} current period (9)
+            </button>
+            <button
+              className="border border-green-300 bg-green-100 p-2 rounded-lg dark:bg-green-900 dark:text-green-100 m-1"
+              onClick={() => {
+                console.log(showHomePeriod);
+                setShowHomePeriod(!showHomePeriod);
+              }}
+            >
+              {showHomePeriod ? "Hide" : "Show"} home chart{" "}
             </button>
           </div>
 
@@ -108,10 +216,10 @@ export default function Home() {
               row.map((_, j) => (
                 <div
                   key={i + j}
-                  className="p-4 space-y-4 border border-slate-500 m-1 rounded-sm"
+                  className="p-4 space-y-4 border border-green-200 m-1 rounded-sm"
                 >
                   <div className="flex space-x-4">
-                    <p className="text-center text-lg">{directions[i][j]} </p>
+                    <p className="text-center text-xl">{directions[i][j]} </p>
                     <input
                       className="w-full dark:bg-slate-800 dark:text-slate-100 text-center py-1 text-slate-900 "
                       type="text"
@@ -130,7 +238,9 @@ export default function Home() {
                       star={currentYear[i][j]}
                     />
                   )}
-                  <CurrentElement chart="home" star={homeChart[i][j]} />
+                  {showHomePeriod && (
+                    <CurrentElement chart="home" star={homeChart[i][j]} />
+                  )}
                   <textarea
                     className="w-full dark:bg-slate-800 dark:text-slate-100 py-1 text-slate-900"
                     placeholder="notes"
@@ -147,7 +257,7 @@ export default function Home() {
               onClick={() => {
                 window.print();
               }}
-              className="border bg-slate-100 p-2 rounded-lg dark:bg-slate-900 dark:text-slate-100 m-1"
+              className="border border-green-300 bg-green-100 p-2 rounded-lg dark:bg-green-900 dark:text-green-100 m-1"
             >
               {" "}
               Save Design{" "}
