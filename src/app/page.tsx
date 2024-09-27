@@ -99,7 +99,7 @@ export default function Home() {
               {Array.from(Array(9).keys()).map((_, index) => (
                 <label
                   key={index}
-                  className="flex items-center space-x-2 p-1 border border-green-300 bg-green-100 rounded-md"
+                  className="m-0.5 flex items-center space-x-2 p-1 border border-green-300 bg-green-100 rounded-md"
                 >
                   <input
                     type="checkbox"
@@ -120,13 +120,16 @@ export default function Home() {
         </Container>
         <Container>
           <div>
-            <h2 className="text-xl">Flying Star Charts - your home</h2>
+            <h2 className="text-xl pb-4">Flying Star Charts - your home</h2>
           </div>
-          <div> What year do you want to create a chart for?</div>
-          <div className="flex justify-center space-x-4">
+          <p className="text-lg">
+            {" "}
+            What year do you want to create a chart for?
+          </p>
+          <div className="flex space-x-4">
             {[...Object.keys(currentYear)].map((year) => (
               <label
-                className="flex items-center space-x-2 p-1 border border-green-300 bg-green-100 rounded-md"
+                className="flex space-x-2 p-1 border border-green-300 bg-green-100 rounded-md"
                 key={year}
               >
                 <input
