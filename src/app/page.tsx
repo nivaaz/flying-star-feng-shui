@@ -4,6 +4,7 @@ import {
   currentYear,
   directions,
   elementNumberMap,
+  LoShuSquare,
   loShuSquareByPeriod,
   period9,
   Star,
@@ -47,6 +48,9 @@ export default function Home() {
     false,
     false,
   ]);
+  const [currentYearSquare, setCurrentYearSquare] = useState<"2024" | "2025">(
+    "2024"
+  );
 
   const onChangeGoals = (e: React.ChangeEvent<HTMLInputElement>) => {
     const index = parseInt(e.target.value);
@@ -118,6 +122,28 @@ export default function Home() {
           <div>
             <h2 className="text-xl">Flying Star Charts - your home</h2>
           </div>
+          <div> What year do you want to create a chart for?</div>
+          <div className="flex justify-center space-x-4">
+            {[...Object.keys(currentYear)].map((year) => (
+              <label
+                className="flex items-center space-x-2 p-1 border border-green-300 bg-green-100 rounded-md"
+                key={year}
+              >
+                <input
+                  type="radio"
+                  name="year"
+                  value={year}
+                  onChange={(e) =>
+                    setCurrentYearSquare(
+                      parseInt(e.target.value) as "2024" | "2025"
+                    )
+                  }
+                  defaultChecked={currentYearSquare === year}
+                />
+                <span>{year}</span>
+              </label>
+            ))}
+          </div>
           <div className="w-fit">
             <p className="pt-8 text-lg"> When did you move into your home?</p>
             <div>
@@ -182,6 +208,7 @@ export default function Home() {
           </div>
           <div className="py-8 print:hidden">
             <p className="text-xl"> Chat view options </p>
+
             <button
               className="border border-green-300 bg-green-100 p-2 rounded-lg dark:bg-green-900 dark:text-green-100 m-1"
               onClick={() => {
@@ -189,7 +216,8 @@ export default function Home() {
                 setShowYear(!showYear);
               }}
             >
-              {showYear ? "Hide" : "Show"} current year (2024)
+              {showYear ? "Hide" : "Show"} current year{" "}
+              {"(" + currentYearSquare + ")"}
             </button>
             <button
               className="border border-green-300 bg-green-100 p-2 rounded-lg dark:bg-green-900 dark:text-green-100 m-1"
@@ -234,8 +262,8 @@ export default function Home() {
                   )}
                   {showYear && (
                     <CurrentElement
-                      chart="current year (2024)"
-                      star={currentYear[i][j]}
+                      chart={"current year " + currentYearSquare}
+                      star={currentYear[currentYearSquare][i][j]}
                     />
                   )}
                   {showHomePeriod && (

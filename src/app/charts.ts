@@ -1,5 +1,5 @@
 export type Element = "fire" | "earth" | "wood" | "metal" | "water";
-type LoShuSquare = Star[][];
+export type LoShuSquare = Star[][];
 
 
 export const directions = [
@@ -8,11 +8,23 @@ export const directions = [
     ["NE", "N", "NW"],
 ];
 
-export const currentYear: LoShuSquare = [
+export const loShuYear2024: LoShuSquare = [
     [2, 7, 9],
     [1, 3, 5],
     [6, 8, 4],
 ]
+
+export const loShuYear2025: LoShuSquare = [
+    [1, 6, 8],
+    [9, 2, 4],
+    [5, 7, 3],
+]
+
+export const currentYear = {
+    2024: loShuYear2024,
+    2025: loShuYear2025
+}
+
 export const period9: LoShuSquare = [
     [8, 4, 6],
     [7, 9, 2],
