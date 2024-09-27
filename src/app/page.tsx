@@ -4,14 +4,13 @@ import {
   currentYear,
   directions,
   elementNumberMap,
-  LoShuSquare,
   loShuSquareByPeriod,
   period9,
-  Star,
 } from "./charts";
 import Intro from "./intro";
 import CurrentElement from "./currentElement";
 import Container from "./components/container";
+import { Star, YearSquares } from "./types";
 
 const periods = [
   "period 9 (2024-2043)",
@@ -48,9 +47,8 @@ export default function Home() {
     false,
     false,
   ]);
-  const [currentYearSquare, setCurrentYearSquare] = useState<"2024" | "2025">(
-    "2024"
-  );
+  const [currentYearSquare, setCurrentYearSquare] =
+    useState<YearSquares>("2024");
 
   const onChangeGoals = (e: React.ChangeEvent<HTMLInputElement>) => {
     const index = parseInt(e.target.value);
@@ -137,9 +135,7 @@ export default function Home() {
                   name="year"
                   value={year}
                   onChange={(e) =>
-                    setCurrentYearSquare(
-                      parseInt(e.target.value) as "2024" | "2025"
-                    )
+                    setCurrentYearSquare(e.target.value as YearSquares)
                   }
                   defaultChecked={currentYearSquare === year}
                 />

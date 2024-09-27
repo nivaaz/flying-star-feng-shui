@@ -1,10 +1,7 @@
 import clsx from "clsx";
-import {
-  elementNumberMap,
-  getDrainingElement,
-  getNourishingElement,
-  Star,
-} from "./charts";
+import { elementNumberMap } from "./charts";
+import { getDrainingElement, getNourishingElement } from "./utils";
+import { Star, Element } from "./types";
 
 const ColouredElement = ({
   isAuspicious,
@@ -17,11 +14,11 @@ const ColouredElement = ({
     <p
       className={clsx(
         "text-xs rounded-md p-1 m-auto text-black dark:text-white font-bold border",
-        element === "fire" && "border-yellow-200",
-        element === "earth" && "border-orange-200",
-        element === "wood" && "border-green-200",
-        element === "metal" && "border-gray-200",
-        element === "water" && "border-blue-200"
+        element === Element.fire && "border-yellow-200",
+        element === Element.earth && "border-orange-200",
+        element === Element.wood && "border-green-200",
+        element === Element.metal && "border-gray-200",
+        element === Element.water && "border-blue-200"
       )}
     >
       {isAuspicious ? "--" : "++"} {element}
@@ -31,8 +28,8 @@ const ColouredElement = ({
 
 const CurrentElement = ({ star, chart }: { star: Star; chart: string }) => {
   const el = elementNumberMap[star];
-  const nourish = getNourishingElement(el?.element);
-  const drain = getDrainingElement(el?.element);
+  const nourish = getNourishingElement(el.element);
+  const drain = getDrainingElement(el.element);
   return (
     <div className="flex flex-col">
       <p className="text-xs rounded-md pb-1 text-slate-500"> {chart} </p>
