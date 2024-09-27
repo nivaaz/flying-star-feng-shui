@@ -252,7 +252,7 @@ export default function Home() {
         </Container>
         <Container>
           <div className="print:hidden">
-            <p>When you're happy with your design, print as a pdf.</p>
+            <p>When you&apos;re happy with your design, print as a pdf.</p>
             <button
               onClick={() => {
                 window.print();
