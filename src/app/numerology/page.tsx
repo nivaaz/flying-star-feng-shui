@@ -16,6 +16,7 @@ const Numerology = () => {
     postalCode: "",
     homeYear: "",
     bornYear: "",
+    bday: "",
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -59,7 +60,13 @@ const Numerology = () => {
           </form>
         </Container>
         <Container>
-          <Banner>Your real estate numerology </Banner>
+          <Banner>
+            <p> Your real estate numerology</p>{" "}
+          </Banner>
+          <p className="text-xs text-center p-4 opacity-80">
+            {" "}
+            Start filling in your address to populate
+          </p>
           <div className="m-auto p-4 w-full  dark:bg-slate-800 rounded space-y-8">
             {formData.unitNumber && (
               <Level
@@ -138,6 +145,23 @@ const Numerology = () => {
             )}
           </div>
         </Container>
+        <hr />
+        <Container>
+          <Banner> Life Path </Banner>
+          <InputAddressComponent
+            handleChange={handleChange}
+            label="birthday"
+            example=""
+            currentId="bday"
+            type="date"
+          />
+          <Level
+            level="personal numerology"
+            description=""
+            inputString={formData.bday}
+            output={chaldeanNumerologyCalculator(formData.bday).toString()}
+          />
+        </Container>
       </div>
     </div>
   );
@@ -150,12 +174,14 @@ const InputAddressComponent = ({
   example,
   warning,
   currentId,
+  type = "text",
 }: {
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   label: string;
   example: string;
   warning?: string;
   currentId: string;
+  type?: string;
 }) => {
   return (
     <div className="p-4">
@@ -167,12 +193,16 @@ const InputAddressComponent = ({
       </label>
       <input
         className="rounded-md p-2 mt-2 border border-yellow-200 dark:text-white dark:bg-slate-900"
-        type="text"
+        type={type}
         id={currentId}
         name={currentId}
         onChange={handleChange}
       />
       <p className="text-xs"> {example}</p>
+      <p className="bg-red-100 text-xs w-fit px-0.5 m-0.5 rounded">
+        {" "}
+        {warning}
+      </p>
     </div>
   );
 };

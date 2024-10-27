@@ -7,12 +7,13 @@ export const addressFields = [
     {
         example: "e.g. 24 Astonia",
         label: " Street Number + Building Name",
+        warning: "Don't include direction e.g. W",
         currentId: "streetNumber",
     },
     {
         example: "e.g. Madison (Madison Ave)",
         label: "  Street Name",
-        warning: "Don't include 'ave' etc",
+        warning: "Don't include 'road' etc",
         currentId: "streetName",
     },
     {
