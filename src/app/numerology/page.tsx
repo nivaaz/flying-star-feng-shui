@@ -8,10 +8,6 @@ import {
 import { addressFields, NumerologyMeanings } from "./constants";
 import Container from "../components/container";
 
-const isDirtyForm = (obj: any) => {
-  return !Object.values(obj).some((value) => value !== "");
-};
-
 const Numerology = () => {
   const [formData, setFormData] = useState({
     streetNumber: "",
@@ -21,6 +17,7 @@ const Numerology = () => {
     homeYear: "",
     bornYear: "",
     bday: "",
+    isDirtyForm: false,
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -28,13 +25,10 @@ const Numerology = () => {
     setFormData((prevState) => ({
       ...prevState,
       [name]: value,
+      isDirtyForm: true,
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    console.log(formData);
-  };
   return (
     <div className="w-full flex flex-col p-1 justify-center">
       <h1 className="text-xl text-center py-8  font-extrabold uppercase">
@@ -43,10 +37,7 @@ const Numerology = () => {
       <div className="m-auto w-full lg:w-2/3 p-4 space-y-8">
         <Container>
           <Banner>Let&apos;s start with your info</Banner>
-          <form
-            className="w-full rounded p-4 dark:text-white  space-y-4"
-            onSubmit={handleSubmit}
-          >
+          <form className="w-full rounded p-4 dark:text-white  space-y-4">
             <div className="grid sm:grid-cols-2 md:grid-cols-3 m-auto">
               {addressFields.map((element) => {
                 return (
@@ -68,7 +59,7 @@ const Numerology = () => {
             <p> Your real estate numerology</p>{" "}
           </Banner>
           <div className="m-auto p-4 w-full  space-y-8">
-            {isDirtyForm(formData) && (
+            {!formData.isDirtyForm && (
               <p className="text-xs text-center p-4 opacity-80">
                 {" "}
                 Start filling in your address to populate
@@ -161,12 +152,14 @@ const Numerology = () => {
             currentId="bday"
             type="date"
           />
-          <Level
-            level="personal numerology"
-            description=""
-            inputString={formData.bday}
-            output={chaldeanNumerologyCalculator(formData.bday).toString()}
-          />
+          <div className="p-4">
+            <Level
+              level="personal numerology"
+              description=""
+              inputString={formData.bday}
+              output={chaldeanNumerologyCalculator(formData.bday).toString()}
+            />
+          </div>
         </Container>
       </div>
     </div>
@@ -192,7 +185,7 @@ const InputAddressComponent = ({
   return (
     <div className="p-4 ">
       <label
-        className="opacity-75 text-xs absolute bg-white px-1 rounded dark:bg-slate-900 dark:text-white "
+        className=" text-xs absolute bg-white px-1 rounded dark:bg-slate-800 dark:text-white "
         htmlFor={currentId}
       >
         {label}
@@ -230,7 +223,7 @@ const Level = ({
     NumerologyMeanings[output as keyof typeof NumerologyMeanings] ?? null;
   return (
     <div className="rounded-lg border dark:border-yellow-50 border-yellow-900">
-      <p className="font-bold text-sm  text-yellow-900 dark:bg-yellow-50 dark:text-yellow-900 rounded-t-md p-2 border-b border-yellow-900">
+      <p className="font-bold text-sm  text-yellow-900  dark:text-yellow-50 rounded-t-md p-2 border-b border-yellow-900 dark:border-yellow-50">
         {level} {description}
       </p>
       <div className="p-2">
@@ -239,7 +232,7 @@ const Level = ({
         </p>
         {numerologyMeanings && (
           <>
-            <p className="uppercase text-sm font-bold pt-4">
+            <p className="uppercase text-sm font-bold mt-4 mb-1 px-1 bg-yellow-50 dark:bg-yellow-900 w-fit">
               {" "}
               {numerologyMeanings?.meaning}
             </p>{" "}
