@@ -18,7 +18,6 @@ export function chaldeanNumerologyCalculator(inputString: string) {
   // Calculate the Chaldean number by summing the mapped values
   let total = 0;
   for (let char of fromattedInput as string) {
-    console.log(Number(char), char)
     if (!isNaN(Number(char))) {
       total += Number(char);
     } else {
