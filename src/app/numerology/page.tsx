@@ -8,6 +8,10 @@ import {
 import { addressFields, NumerologyMeanings } from "./constants";
 import Container from "../components/container";
 
+const isDirtyForm = (obj: any) => {
+  return !Object.values(obj).some((value) => value !== "");
+};
+
 const Numerology = () => {
   const [formData, setFormData] = useState({
     streetNumber: "",
@@ -40,7 +44,7 @@ const Numerology = () => {
         <Container>
           <Banner>Let&apos;s start with your info</Banner>
           <form
-            className="w-full rounded p-4 dark:text-white dark:bg-slate-900 space-y-4"
+            className="w-full rounded p-4 dark:text-white  space-y-4"
             onSubmit={handleSubmit}
           >
             <div className="grid sm:grid-cols-2 md:grid-cols-3 m-auto">
@@ -63,11 +67,13 @@ const Numerology = () => {
           <Banner>
             <p> Your real estate numerology</p>{" "}
           </Banner>
-          <div className="m-auto p-4 w-full  dark:bg-slate-900 rounded space-y-8">
-          <p className="text-xs text-center p-4 opacity-80">
-            {" "}
-            Start filling in your address to populate
-          </p>
+          <div className="m-auto p-4 w-full  space-y-8">
+            {isDirtyForm(formData) && (
+              <p className="text-xs text-center p-4 opacity-80">
+                {" "}
+                Start filling in your address to populate
+              </p>
+            )}
             {formData.unitNumber && (
               <Level
                 level="L0"
@@ -184,9 +190,9 @@ const InputAddressComponent = ({
   type?: string;
 }) => {
   return (
-    <div className="p-4">
+    <div className="p-4 ">
       <label
-        className="text-xs absolute bg-white px-1 rounded dark:bg-slate-900 dark:text-white "
+        className="opacity-75 text-xs absolute bg-white px-1 rounded dark:bg-slate-900 dark:text-white "
         htmlFor={currentId}
       >
         {label}
@@ -198,7 +204,7 @@ const InputAddressComponent = ({
         name={currentId}
         onChange={handleChange}
       />
-      <p className="text-xs"> {example}</p>
+      <p className="text-xs opacity-75"> {example}</p>
       <p className="bg-red-100 dark:bg-red-900 text-xs w-fit px-0.5 m-0.5 rounded">
         {" "}
         {warning}
@@ -223,8 +229,8 @@ const Level = ({
   const numerologyMeanings =
     NumerologyMeanings[output as keyof typeof NumerologyMeanings] ?? null;
   return (
-    <div className="border border-yellow-50 dark:border-yellow-950">
-      <p className="font-bold text-sm bg-yellow-100 dark:bg-yellow-700 dark:text-yellow-100 text-yellow-700 rounded-t-md p-2">
+    <div className="rounded-lg border dark:border-yellow-50 border-yellow-900">
+      <p className="font-bold text-sm  text-yellow-900 dark:bg-yellow-50 dark:text-yellow-900 rounded-t-md p-2 border-b border-yellow-900">
         {level} {description}
       </p>
       <div className="p-2">
@@ -233,7 +239,10 @@ const Level = ({
         </p>
         {numerologyMeanings && (
           <>
-            <p> {numerologyMeanings?.meaning}</p>{" "}
+            <p className="uppercase text-sm font-bold pt-4">
+              {" "}
+              {numerologyMeanings?.meaning}
+            </p>{" "}
             <p> {numerologyMeanings?.description}</p>
           </>
         )}
@@ -244,7 +253,7 @@ const Level = ({
 
 const Banner = ({ children }: { children: ReactNode }) => {
   return (
-    <div className="text-center bg-yellow-50 rounded-t-lg p-4 dark:bg-yellow-800 text-yellow-800 dark:text-yellow-200 font-bold">
+    <div className="text-center bg-yellow-50 rounded-t-lg p-4 dark:bg-yellow-900 text-yellow-900 dark:text-yellow-100 font-bold">
       {children}
     </div>
   );
