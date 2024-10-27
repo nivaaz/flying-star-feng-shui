@@ -94,7 +94,7 @@ export default function Home() {
               {Array.from(Array(9).keys()).map((_, index) => (
                 <label
                   key={index}
-                  className="m-0.5 flex items-center space-x-2 p-1 border border-green-300 bg-green-100 rounded-md"
+                  className="m-0.5 flex items-center space-x-2 p-1 border border-green-300 bg-green-100 dark:bg-green-900 rounded-md"
                 >
                   <input
                     type="checkbox"
@@ -124,7 +124,7 @@ export default function Home() {
           <div className="flex space-x-4">
             {[...Object.keys(currentYear)].map((year) => (
               <label
-                className="flex space-x-2 p-1 border border-green-300 bg-green-100 rounded-md"
+                className="flex space-x-2 p-1 border border-green-300 bg-green-100 dark:bg-green-900 rounded-md"
                 key={year}
               >
                 <input
@@ -146,7 +146,7 @@ export default function Home() {
               <div className="flex justify-center space-x-4">
                 {periods.map((period, i) => (
                   <label
-                    className="flex items-center space-x-2 p-1 border border-green-300 bg-green-100 rounded-md"
+                    className="flex items-center space-x-2 p-1 border border-green-300 bg-green-100 dark:bg-green-900 rounded-md"
                     key={period}
                   >
                     <input
