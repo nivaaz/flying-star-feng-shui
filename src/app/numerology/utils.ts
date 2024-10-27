@@ -47,8 +47,7 @@ const chineseZodiac = [
 ];
 
 export function getChineseZodiac(year: number): string {
-  const startYear = 1648; // Starting year of the cycle
-  const index =(year - startYear) % 12;
+  const index = (year - 4) % 12;
   return chineseZodiac[index];
 }
 
