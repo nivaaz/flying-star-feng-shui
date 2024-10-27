@@ -223,7 +223,7 @@ const Level = ({
   const numerologyMeanings =
     NumerologyMeanings[output as keyof typeof NumerologyMeanings] ?? null;
   return (
-    <div className="bg-white border border-yellow-50 dark:border-yellow-950">
+    <div className="border border-yellow-50 dark:border-yellow-950">
       <p className="font-bold text-sm bg-yellow-100 dark:bg-yellow-700 dark:text-yellow-100 text-yellow-700 rounded-t-md p-2">
         {level} {description}
       </p>
