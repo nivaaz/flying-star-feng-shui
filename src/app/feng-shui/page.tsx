@@ -55,7 +55,6 @@ export default function Home() {
     const newGoals = [...goals];
     newGoals[index] = !newGoals[index];
     setGoals(newGoals);
-    console.log(newGoals);
   };
 
   const onChangeChartValue = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -68,7 +67,6 @@ export default function Home() {
 
   const onSelectPeriod = (e: React.ChangeEvent<HTMLInputElement>) => {
     const periodIndex = e.target.value;
-    console.log(periodIndex);
     if (periodIndex === "periodIndex3") {
       setHomeChart(defaultLoShuSquare);
       setCustomPeriod(true);
@@ -76,7 +74,6 @@ export default function Home() {
       setCustomPeriod(false);
       const period = parseInt(periodIndex.slice(-1));
       setHomeChart(loShuSquareByPeriod[period]);
-      console.log(loShuSquareByPeriod[period]);
     }
   };
 
@@ -211,7 +208,6 @@ export default function Home() {
             <button
               className="border border-green-300 bg-green-100 p-2 rounded-lg dark:bg-green-900 dark:text-green-100 m-1"
               onClick={() => {
-                console.log(showYear);
                 setShowYear(!showYear);
               }}
             >
@@ -221,7 +217,6 @@ export default function Home() {
             <button
               className="border border-green-300 bg-green-100 p-2 rounded-lg dark:bg-green-900 dark:text-green-100 m-1"
               onClick={() => {
-                console.log(showPeriod);
                 setShowPeriod(!showPeriod);
               }}
             >
@@ -230,7 +225,6 @@ export default function Home() {
             <button
               className="border border-green-300 bg-green-100 p-2 rounded-lg dark:bg-green-900 dark:text-green-100 m-1"
               onClick={() => {
-                console.log(showHomePeriod);
                 setShowHomePeriod(!showHomePeriod);
               }}
             >

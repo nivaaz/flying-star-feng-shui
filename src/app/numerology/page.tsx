@@ -29,7 +29,6 @@ const Numerology = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(formData);
   };
   return (
     <div className="w-full flex flex-col p-1 justify-center">
@@ -199,7 +198,7 @@ const InputAddressComponent = ({
         onChange={handleChange}
       />
       <p className="text-xs"> {example}</p>
-      <p className="bg-red-100 text-xs w-fit px-0.5 m-0.5 rounded">
+      <p className="bg-red-100 dark:bg-red-900 text-xs w-fit px-0.5 m-0.5 rounded">
         {" "}
         {warning}
       </p>
