@@ -29,6 +29,7 @@ const Numerology = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    console.log(formData);
   };
   return (
     <div className="w-full flex flex-col p-1 justify-center">
@@ -39,10 +40,10 @@ const Numerology = () => {
         <Container>
           <Banner>Let&apos;s start with your info</Banner>
           <form
-            className="w-full  rounded p-4 dark:text-white dark:bg-slate-900 space-y-4"
+            className="w-full rounded p-4 dark:text-white dark:bg-slate-900 space-y-4"
             onSubmit={handleSubmit}
           >
-            <div className="grid sm:grid-cols-2 md:grid-cols-3">
+            <div className="grid sm:grid-cols-2 md:grid-cols-3 m-auto">
               {addressFields.map((element) => {
                 return (
                   <InputAddressComponent
@@ -62,11 +63,11 @@ const Numerology = () => {
           <Banner>
             <p> Your real estate numerology</p>{" "}
           </Banner>
+          <div className="m-auto p-4 w-full  dark:bg-slate-900 rounded space-y-8">
           <p className="text-xs text-center p-4 opacity-80">
             {" "}
             Start filling in your address to populate
           </p>
-          <div className="m-auto p-4 w-full  dark:bg-slate-800 rounded space-y-8">
             {formData.unitNumber && (
               <Level
                 level="L0"

@@ -20,17 +20,17 @@ export default function RootLayout({
     <html lang="en">
       <body className={openSans.className}>
         <>
-          <nav className="text-center text-xs bg-cyan-50 flex flex-row justify-center p-1">
-            <p className=""> Tools by Nivaaz</p>
+          <nav className="text-center text-xs bg-cyan-50 dark:bg-cyan-800  flex flex-row justify-center p-1 ">
+            <p className="my-auto"> Tools by Nivaaz</p>
             <Link href="/feng-shui">
               {" "}
-              <p className=" w-fit underline font-bold p-2 mx-1 bg-cyan-100 rounded">
+              <p className=" w-fit underline font-bold p-2 mx-1 bg-cyan-100 dark:bg-cyan-900 rounded">
                 {" "}
                 Feng Shui{" "}
               </p>
             </Link>
             <Link href="/numerology">
-              <p className=" w-fit underline font-bold p-2 mx-1 bg-cyan-100 rounded">
+              <p className=" w-fit underline font-bold p-2 mx-1 bg-cyan-100 dark:bg-cyan-900 rounded">
                 {" "}
                 Numerology{" "}
               </p>
