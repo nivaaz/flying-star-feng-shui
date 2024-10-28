@@ -25,7 +25,7 @@ const Numerology = () => {
     setFormData((prevState) => ({
       ...prevState,
       [name]: value,
-      isDirtyForm: true,
+      isDirtyForm: name !== "bday",
     }));
   };
 
@@ -145,6 +145,7 @@ const Numerology = () => {
         <hr />
         <Container>
           <Banner> Life Path </Banner>
+
           <InputAddressComponent
             handleChange={handleChange}
             label="birthday"
@@ -152,20 +153,27 @@ const Numerology = () => {
             currentId="bday"
             type="date"
           />
-          <div className="p-4 space-y-4">
-            <Level
-              level="Life Path Number"
-              description=""
-              inputString={formData.bday}
-              output={chaldeanNumerologyCalculator(formData.bday).toString()}
-            />
-            <Level
-              level="Personal Year Number"
-              description=""
-              inputString={formData.bday}
-              output={personaYearNumber(formData.bday).toString()}
-            />
-          </div>
+          {formData.bday !== "" ? (
+            <div className="p-4 space-y-4">
+              <Level
+                level="Life Path Number"
+                description=""
+                inputString={formData.bday}
+                output={chaldeanNumerologyCalculator(formData.bday).toString()}
+              />
+              <Level
+                level="Personal Year Number"
+                description=""
+                inputString={formData.bday}
+                output={personaYearNumber(formData.bday).toString()}
+              />
+            </div>
+          ) : (
+            <p className="text-xs text-center p-4 opacity-80">
+              {" "}
+              Add your birthday to see your lifepath & personal year number{" "}
+            </p>
+          )}
         </Container>
       </div>
     </div>

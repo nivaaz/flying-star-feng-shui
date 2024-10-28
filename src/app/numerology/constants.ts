@@ -37,39 +37,39 @@ export const addressFields = [
 export const NumerologyMeanings = {
     "1": {
         meaning: "The Leader",
-        description: "The number 1 is the number of independence and self-sufficiency. It is the number of the leader, the original thinker, the innovator, and the pioneer. It is the number of the individual, the self, the ego. ."
+        description: "masculine, independent, direct, leadership, originality, courage, new beginnings"
     },
     "2": {
         meaning: "The Peacemaker",
-        description: "The number 2 is the number of cooperation, diplomacy, and peace. It is the number of the mediator, the peacemaker, and the diplomat. It is the number of the partnership, the relationship, and the union."
+        description: "feminine, partnership, balance, peaceful"
     },
     "3": {
         meaning: "The Communicator",
-        description: "The number 3 is the number of communication, creativity, and self-expression. It is the number of the artist, the writer, the performer, and the speaker. It is the number of the communicator, the creator, and the storyteller. "
+        description: "social, network, friendships"
     },
     "4": {
         meaning: "The Worker",
-        description: "The number 4 is the number of hard work, discipline, and order. It is the number of the builder, the organizer, and the planner. It is the number of the worker, the doer, and the achiever. "
+        description: "stability, security, responsibility"
     },
     "5": {
         meaning: "The Adventurer",
-        description: "The number 5 is the number of freedom, adventure, and change. It is the number of the traveler, the explorer, and the risk-taker. It is the number of the adventurer, the thrill-seeker, and the experience-seeker. "
+        description: "change, travel, movement, chaos"
     },
     "6": {
         meaning: "The Nurturer",
-        description: "The number 6 is the number of family, home, and community. It is the number of the parent, the caregiver, and the protector. It is the number of the nurturer, the healer, and the teacher. "
+        description: "family, pets, romance, intimacy"
     },
     "7": {
         meaning: "The Seeker",
-        description: "The number 7 is the number of spirituality, wisdom, and intuition. It is the number of the seeker, the thinker, and the philosopher. It is the number of the mystic, the psychic, and the healer. "
+        description: "spirituality, creativity, artistic"
     },
     "8": {
         meaning: "The Achiever",
-        description: "The number 8 is the number of success, abundance, and power. It is the number of the achiever, the leader, and the manager. It is the number of the entrepreneur, the executive, and the visionary."
+        description: "money, karma, power, privacy"
     },
     "9": {
         meaning: "The Humanitarian",
-        description: "The number 9 is the number of compassion, empathy, and service. It is the number of the humanitarian, the philanthropist, and the healer. It is the number of the teacher, the counselor, and the mentor. "
+        description: "wisdom, growth, mastery, shamanic journey"
     },
     "11": {
         meaning: "The Visionary",
