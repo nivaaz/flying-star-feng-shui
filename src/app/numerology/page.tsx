@@ -30,7 +30,7 @@ const Numerology = () => {
   };
 
   return (
-    <div className="w-full flex flex-col p-1 justify-center">
+    <div className="w-full flex flex-col p-1 justify-center pb-32">
       <h1 className="text-xl text-center py-8  font-extrabold uppercase">
         Numerology
       </h1>
@@ -152,12 +152,18 @@ const Numerology = () => {
             currentId="bday"
             type="date"
           />
-          <div className="p-4">
+          <div className="p-4 space-y-4">
             <Level
-              level="personal numerology"
+              level="Life Path Number"
               description=""
               inputString={formData.bday}
               output={chaldeanNumerologyCalculator(formData.bday).toString()}
+            />
+            <Level
+              level="Personal Year Number"
+              description=""
+              inputString={formData.bday}
+              output={personaYearNumber(formData.bday).toString()}
             />
           </div>
         </Container>
@@ -166,6 +172,14 @@ const Numerology = () => {
   );
 };
 export default Numerology;
+
+const personaYearNumber = (bday: string) => {
+  console.log(bday);
+  const x = bday.split("-");
+  const year = new Date().getFullYear();
+  x[0] = year.toString();
+  return chaldeanNumerologyCalculator(x.join("-"));
+};
 
 const InputAddressComponent = ({
   handleChange,
@@ -217,8 +231,6 @@ const Level = ({
   inputString?: string;
   output: string;
 }) => {
-  const numberOutput = Number(output);
-  const isOutputCharacter = isNaN(numberOutput);
   const numerologyMeanings =
     NumerologyMeanings[output as keyof typeof NumerologyMeanings] ?? null;
   return (
