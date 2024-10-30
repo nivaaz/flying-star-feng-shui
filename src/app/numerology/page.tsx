@@ -49,7 +49,7 @@ const Numerology = () => {
             <p className="text-center text-sm">
               {" "}
               Addresses vary between countryies & cities, so might have empty
-              fields, and that's ok!
+              fields, and that&apos;s ok!
             </p>
             <div className="grid sm:grid-cols-2 md:grid-cols-3 m-auto">
               {addressFields.map((element) => {
@@ -81,6 +81,7 @@ const Numerology = () => {
             {levels.map((l: LevelType) => {
               return (
                 <Level
+                  key={l.value + l.name}
                   level={l.level}
                   description={l.name}
                   inputString={l.value}
@@ -88,12 +89,14 @@ const Numerology = () => {
                 />
               );
             })}
-           {formData.postalCode && (
+            {formData.postalCode && (
               <Level
                 level="L4"
                 description="Postal Code"
                 inputString={formData.postalCode.toString()}
-                output={chaldeanNumerologyCalculator(formData.postalCode).toString()}
+                output={chaldeanNumerologyCalculator(
+                  formData.postalCode
+                ).toString()}
               />
             )}
             {formData.homeYear && (
@@ -209,7 +212,10 @@ const InputAddressComponent = ({
       <p className="text-xs opacity-75"> {example}</p>
 
       {warning?.map((w) => (
-        <p className="bg-red-100 dark:bg-red-900 text-xs w-fit px-0.5 m-0.5 rounded">
+        <p
+          key={w}
+          className="bg-red-100 dark:bg-red-900 text-xs w-fit px-0.5 m-0.5 rounded"
+        >
           {w}
         </p>
       ))}
