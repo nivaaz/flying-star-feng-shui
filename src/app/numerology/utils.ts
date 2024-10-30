@@ -1,3 +1,5 @@
+import { FormDataType, LevelType } from "./types";
+
 // Chaldean mapping of letters to numbers
 const chaldeanMapping: { [key: string]: number } = {
   A: 1, I: 1, J: 1, Q: 1, Y: 1,
@@ -9,6 +11,46 @@ const chaldeanMapping: { [key: string]: number } = {
   O: 7, Z: 7,
   F: 8, P: 8
 };
+
+export const getLevelsArray = (formData: FormDataType): LevelType[] => {
+  let levelsArray = [];
+  if (formData.unitNumber !== "") {
+    levelsArray.push({ value: (formData.unitNumber), name: "Unit Number" });
+  }
+  if (formData.buildingNumberAndName !== "") {
+    levelsArray.push({ value: (formData.buildingNumberAndName), name: "Building Name and Number" })
+  }
+  if (levelsArray.length === 0) {
+    if (formData.streetNumber !== "") {
+      levelsArray.push({ value: (formData.streetNumber), name: "Street Number" });
+    }
+    if (formData.streetName !== "") {
+      levelsArray.push({ value: (formData.streetName), name: "Street Name" });
+    }
+  } else if (formData.streetNumber !== "" && formData.streetName !== "") {
+    levelsArray.push({ value: (formData.streetNumber + " " + formData.streetName), name: "Street Number & Name" });
+  }
+
+
+  console.log(levelsArray);
+  if (levelsArray.length >= 3) {
+    return [
+      { level: 'L1', ...levelsArray[0] },
+      { level: 'L2', ...levelsArray[1] },
+      { level: 'L1L2', value: levelsArray[1].value + ' ' + levelsArray[0].value, name: levelsArray[1].name + ' ' + levelsArray[0].name },
+      { level: 'L3', ...levelsArray[2] },
+    ]
+  } else if (levelsArray.length === 2) {
+    return [
+      { level: 'L1', ...levelsArray[0] },
+      { level: 'L2', ...levelsArray[1] },
+      { level: 'L1L2', value: levelsArray[1].value + ' ' + levelsArray[0].value, name: levelsArray[1].name + ' ' + levelsArray[0].name },
+    ]
+  } else {
+    return levelsArray.map((level, index) => ({ level: `L${index + 1}`, ...level }));
+  }
+
+}
 
 export function chaldeanNumerologyCalculator(inputString: string) {
 

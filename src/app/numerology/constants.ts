@@ -1,19 +1,24 @@
 export const addressFields = [
     {
-        example: "3B",
-        label: " Unit/Apartment Number",
+        example: "e.g. 3B",
+        label: "Unit/Apartment Number",
         currentId: "unitNumber",
     },
     {
         example: "e.g. 24 Astonia",
-        label: " Street Number + Building Name",
-        warning: "Don't include direction e.g. W",
+        label: "Building Number + Building Name",
+        warning: ["Don't include direction e.g. W"],
+        currentId: "buildingNumberAndName",
+    },
+    {
+        example: "e.g. 32 Wallaby Road => 32",
+        label: "Street Number",
         currentId: "streetNumber",
     },
     {
         example: "e.g. Madison (Madison Ave)",
-        label: "  Street Name",
-        warning: "Don't include 'road' etc",
+        label: "Street Name ",
+        warning: ["Don't include direction e.g. W.", "Don't include 'Road' etc", "Don't include 'rd' from 3rd etc"],
         currentId: "streetName",
     },
     {

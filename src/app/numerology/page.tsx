@@ -1,18 +1,21 @@
 "use client";
-import { ReactNode, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import {
   areZodiacsCompatible,
   chaldeanNumerologyCalculator,
   getChineseZodiac,
+  getLevelsArray,
 } from "./utils";
 import { addressFields, NumerologyMeanings } from "./constants";
 import Container from "../components/container";
+import { FormDataType, LevelType } from "./types";
 
 const Numerology = () => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormDataType>({
     streetNumber: "",
-    unitNumber: "",
     streetName: "",
+    buildingNumberAndName: "",
+    unitNumber: "",
     postalCode: "",
     homeYear: "",
     bornYear: "",
@@ -20,13 +23,18 @@ const Numerology = () => {
     isDirtyForm: false,
   });
 
+  const [levels, setLevels] = useState<LevelType[]>([]);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData((prevState) => ({
-      ...prevState,
+    const newFormData = {
+      ...formData,
       [name]: value,
       isDirtyForm: name !== "bday",
-    }));
+    };
+
+    setFormData(newFormData);
+    setLevels(getLevelsArray(newFormData));
   };
 
   return (
@@ -38,6 +46,11 @@ const Numerology = () => {
         <Container>
           <Banner>Let&apos;s start with your info</Banner>
           <form className="w-full rounded p-4 dark:text-white  space-y-4">
+            <p className="text-center text-sm">
+              {" "}
+              Addresses vary between countryies & cities, so might have empty
+              fields, and that's ok!
+            </p>
             <div className="grid sm:grid-cols-2 md:grid-cols-3 m-auto">
               {addressFields.map((element) => {
                 return (
@@ -65,69 +78,43 @@ const Numerology = () => {
                 Start filling in your address to populate
               </p>
             )}
-            {formData.unitNumber && (
+            {levels.map((l: LevelType) => {
+              return (
+                <Level
+                  level={l.level}
+                  description={l.name}
+                  inputString={l.value}
+                  output={chaldeanNumerologyCalculator(l.value).toString()}
+                />
+              );
+            })}
+           {formData.postalCode && (
               <Level
-                level="L0"
-                description="Unit"
-                inputString={formData.unitNumber}
-                output={chaldeanNumerologyCalculator(
-                  formData.unitNumber
-                ).toString()}
-              />
-            )}
-            {formData.streetNumber && (
-              <Level
-                level="L1"
-                description="Street Number"
-                inputString={formData.streetNumber}
-                output={chaldeanNumerologyCalculator(
-                  formData.streetNumber
-                ).toString()}
-              />
-            )}
-            {formData.streetName && (
-              <Level
-                level="L1 + L2"
-                description="Street Name + Street Number"
-                inputString={
-                  formData.streetNumber + " & " + formData.unitNumber
-                }
-                output={chaldeanNumerologyCalculator(
-                  formData.unitNumber + formData.streetNumber
-                ).toString()}
-              />
-            )}
-            {formData.streetName && (
-              <Level
-                level="L3"
-                description="Street Name"
-                inputString={formData.streetName}
-                output={chaldeanNumerologyCalculator(
-                  formData.streetName
-                ).toString()}
-              />
-            )}
-            {formData.postalCode && (
-              <Level
-                level="L3"
-                description="Post Code"
-                inputString={formData.postalCode}
-                output={chaldeanNumerologyCalculator(
-                  formData.postalCode
-                ).toString()}
+                level="L4"
+                description="Postal Code"
+                inputString={formData.postalCode.toString()}
+                output={getChineseZodiac(Number(formData.postalCode))}
               />
             )}
             {formData.homeYear && (
               <Level
-                level="L4"
-                description=" Home build year vs your birth year"
+                level="Bonus 1"
+                description="Chinese zodiac of Home build year"
                 inputString={formData.homeYear.toString()}
                 output={getChineseZodiac(Number(formData.homeYear))}
               />
             )}
+            {formData.homeYear && (
+              <Level
+                level="Bonus 1"
+                description="Chinese zodiac of birth year"
+                inputString={formData.homeYear.toString()}
+                output={getChineseZodiac(Number(formData.bday))}
+              />
+            )}
             {formData.bornYear && formData.homeYear && (
               <Level
-                level="L4"
+                level="Bonus 2"
                 description="Compatibility between home build year and birth year"
                 inputString={
                   formData.bornYear +
@@ -149,7 +136,7 @@ const Numerology = () => {
           <InputAddressComponent
             handleChange={handleChange}
             label="birthday"
-            example=""
+            example="DD/MM/YYYY"
             currentId="bday"
             type="date"
           />
@@ -200,7 +187,7 @@ const InputAddressComponent = ({
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   label: string;
   example: string;
-  warning?: string;
+  warning?: string[];
   currentId: string;
   type?: string;
 }) => {
@@ -220,10 +207,12 @@ const InputAddressComponent = ({
         onChange={handleChange}
       />
       <p className="text-xs opacity-75"> {example}</p>
-      <p className="bg-red-100 dark:bg-red-900 text-xs w-fit px-0.5 m-0.5 rounded">
-        {" "}
-        {warning}
-      </p>
+
+      {warning?.map((w) => (
+        <p className="bg-red-100 dark:bg-red-900 text-xs w-fit px-0.5 m-0.5 rounded">
+          {w}
+        </p>
+      ))}
     </div>
   );
 };
