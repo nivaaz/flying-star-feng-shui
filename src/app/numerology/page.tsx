@@ -93,7 +93,7 @@ const Numerology = () => {
                 level="L4"
                 description="Postal Code"
                 inputString={formData.postalCode.toString()}
-                output={getChineseZodiac(Number(formData.postalCode))}
+                output={chaldeanNumerologyCalculator(formData.postalCode).toString()}
               />
             )}
             {formData.homeYear && (
@@ -104,17 +104,17 @@ const Numerology = () => {
                 output={getChineseZodiac(Number(formData.homeYear))}
               />
             )}
-            {formData.homeYear && (
+            {formData.bday && (
               <Level
-                level="Bonus 1"
+                level="Bonus 2"
                 description="Chinese zodiac of birth year"
-                inputString={formData.homeYear.toString()}
+                inputString={formData.bday.toString()}
                 output={getChineseZodiac(Number(formData.bday))}
               />
             )}
             {formData.bornYear && formData.homeYear && (
               <Level
-                level="Bonus 2"
+                level="Bonus 1 & Bonus 2"
                 description="Compatibility between home build year and birth year"
                 inputString={
                   formData.bornYear +

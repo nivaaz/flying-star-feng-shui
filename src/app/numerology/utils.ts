@@ -83,12 +83,12 @@ function reduceToSingleDigit(numIn: number) {
   return num;
 }
 
-const chineseZodiac = [
+const chineseZodiac: Zodiacs[] = [
   'Rat', 'Ox', 'Tiger', 'Rabbit', 'Dragon', 'Snake',
   'Horse', 'Goat', 'Monkey', 'Rooster', 'Dog', 'Pig'
 ];
 
-export function getChineseZodiac(year: number): string {
+export function getChineseZodiac(year: number): Zodiacs {
   const index = (year - 4) % 12;
   return chineseZodiac[index];
 }
