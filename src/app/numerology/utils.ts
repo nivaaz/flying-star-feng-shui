@@ -93,29 +93,44 @@ export function getChineseZodiac(year: number): string {
   return chineseZodiac[index];
 }
 
-const zodiacCompatibility: { [key: string]: string[] } = {
-  Rat: ['Ox', 'Dragon', 'Monkey'],
-  Ox: ['Rat', 'Snake', 'Rooster'],
-  Tiger: ['Dragon', 'Horse', 'Pig'],
-  Rabbit: ['Sheep', 'Monkey', 'Dog', 'Pig'],
-  Dragon: ['Rat', 'Tiger', 'Snake'],
-  Snake: ['Ox', 'Rooster'],
-  Horse: ['Tiger', 'Goat', 'Dog'],
-  Goat: ['Rabbit', 'Horse', 'Pig'],
-  Monkey: ['Rat', 'Dragon', 'Rabbit'],
-  Rooster: ['Ox', 'Snake'],
-  Dog: ['Rabbit', 'Tiger', 'Horse'],
-  Pig: ['Tiger', 'Rabbit', 'Goat']
-};
-
-export function areZodiacsCompatible(zodiac1: string, zodiac2: string): string {
-  if (zodiacCompatibility[zodiac1]?.includes(zodiac2)) {
-    return 'comptible';
-  } else if (zodiacCompatibility[zodiac2]?.includes(zodiac1)) {
-    return 'comptible';
-  } else if (zodiacCompatibility[zodiac1] && zodiacCompatibility[zodiac2]) {
-    return 'not comptible';
-  } else {
-    return 'unknown';
-  }
+type Zodiacs = 'Ox' | 'Tiger' | 'Rabbit' | 'Dragon' | 'Snake' | 'Horse' | 'Goat' | 'Monkey' | 'Rooster' | 'Dog' | 'Pig' | 'Rat';
+const ZodiacMapping = [
+  "Ox",
+  "Tiger",
+  "Rabbit",
+  "Dragon",
+  "Snake",
+  "Horse",
+  "Goat",
+  "Monkey",
+  "Rooster",
+  "Dog",
+  "Pig",
+  "Rat",
+]
+type ranks = '-' | 'x' | 'd' | '?' | 't' | 'h';
+const compatabilityRanking = {
+  '-': 'average',
+  'x': 'worst',
+  'd': 'above average',
+  '?': 'good match OR enemy',
+  't': 'good match',
+  'h': 'perfect match',
+}
+const IsZodiacCompatible: ranks[][] = [
+  ["-", "x", "d", "x", "d", "x", "x", "h", "h", "d", "?", "h"],
+  ["x", "x", "-", "h", "x", "h", "t", "x", "d", "d", "h", "-"],
+  ["d", "-", "-", "-", "x", "-", "h", "h", "x", "h", "h", "h"],
+  ["x", "h", "-", "t", "h", "-", "x", "d", "d", "x", "t", "h"],
+  ["d", "x", "x", "h", "x", "t", "x", "t", "h", "-", "x", "t"],
+  ["x", "h", "-", "-", "t", "x", "h", "-", "x", "-", "d", "x"],
+  ["x", "t", "h", "x", "x", "h", "d", "d", "-", "x", "h", "?"],
+  ["h", "x", "h", "d", "t", "-", "d", "t", "-", "d", "x", "h"],
+  ["h", "d", "x", "d", "h", "x", "-", "-", "x", "x", "-", "x"],
+  ["d", "d", "h", "x", "-", "-", "x", "d", "x", "-", "d", "d"],
+  ["?", "h", "h", "t", "x", "d", "h", "x", "-", "d", "t", "d"],
+  ["h", "-", "h", "h", "t", "x", "?", "h", "x", "d", "d", "-"]
+]
+export function areZodiacsCompatible(zodiac1: Zodiacs, zodiac2: Zodiacs): string {
+  return compatabilityRanking[IsZodiacCompatible[ZodiacMapping.indexOf(zodiac1)][ZodiacMapping.indexOf(zodiac2)]];
 }
