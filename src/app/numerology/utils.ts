@@ -53,7 +53,9 @@ export const getLevelsArray = (formData: FormDataType): LevelType[] => {
 }
 
 export function chaldeanNumerologyCalculator(inputString: string) {
-
+ if (inputString === '11' || inputString === '22' || inputString === '33'){
+  return Number(inputString);
+ }
   // Remove all spaces from the input
   let fromattedInput = inputString.replace(/\s+/g, '');
 
@@ -66,7 +68,9 @@ export function chaldeanNumerologyCalculator(inputString: string) {
       total += chaldeanMapping[char.toUpperCase()] || 0;
     }
   }
-
+  if (total === 11 || total === 22 || total === 33){
+    return total;
+  }
   return reduceToSingleDigit(total);
 }
 // Function to reduce the total to a single-digit or 11, 22, or 33 (Master Numbers)
