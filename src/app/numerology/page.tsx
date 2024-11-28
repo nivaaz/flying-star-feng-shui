@@ -46,9 +46,8 @@ const Numerology = () => {
         <Container>
           <Banner>Let&apos;s start with your info</Banner>
           <form className="w-full rounded p-4 dark:text-white  space-y-4">
-            <p className="text-center text-sm">
-              {" "}
-              Addresses vary between countryies & cities, so might have empty
+            <p className="text-center text-sm text-slate-700 dark:text-slate-300">
+              Addresses vary between countries & cities, so might have empty
               fields, and that&apos;s ok!
             </p>
             <div className="grid sm:grid-cols-2 md:grid-cols-3 m-auto">
@@ -66,11 +65,7 @@ const Numerology = () => {
               })}
             </div>
           </form>
-        </Container>
-        <Container>
-          <Banner>
-            <p> Your real estate numerology</p>{" "}
-          </Banner>
+
           <div className="m-auto p-4 w-full  space-y-8">
             {!formData.isDirtyForm && (
               <p className="text-xs text-center p-4 opacity-80">
@@ -107,29 +102,30 @@ const Numerology = () => {
                 output={getChineseZodiac(Number(formData.homeYear))}
               />
             )}
-            {formData.bday && (
+            {formData.bornYear && (
               <Level
                 level="Bonus 2"
                 description="Chinese zodiac of birth year"
-                inputString={formData.bday.toString()}
-                output={getChineseZodiac(Number(formData.bday))}
+                inputString={formData.bornYear.toString()}
+                output={getChineseZodiac(Number(formData.bornYear))}
               />
             )}
-            {formData.bornYear && formData.homeYear && (
-              <Level
-                level="Bonus 1 & Bonus 2"
-                description="Compatibility between home build year and birth year"
-                inputString={
-                  formData.bornYear +
-                  " " +
-                  getChineseZodiac(Number(formData.bornYear))
-                }
-                output={areZodiacsCompatible(
-                  getChineseZodiac(Number(formData.homeYear)),
-                  getChineseZodiac(Number(formData.bornYear))
-                )}
-              />
-            )}
+            {formData.bornYear?.length === 4 &&
+              formData.homeYear?.length === 4 && (
+                <Level
+                  level="Bonus 1 & Bonus 2"
+                  description="Compatibility between home build year and birth year"
+                  inputString={
+                    formData.bornYear +
+                    " → " +
+                    getChineseZodiac(Number(formData.bornYear.substring(0, 4)))
+                  }
+                  output={areZodiacsCompatible(
+                    getChineseZodiac(Number(formData.homeYear)),
+                    getChineseZodiac(Number(formData.bornYear.substring(0, 4)))
+                  )}
+                />
+              )}
           </div>
         </Container>
         <hr />
@@ -156,6 +152,12 @@ const Numerology = () => {
                 description=""
                 inputString={formData.bday}
                 output={personaYearNumber(formData.bday).toString()}
+              />
+              <Level
+                level="Chinese Zodiac"
+                description=""
+                inputString={formData.bday}
+                output={getChineseZodiac(Number(formData.bday.substring(0, 4)))}
               />
             </div>
           ) : (
@@ -197,19 +199,19 @@ const InputAddressComponent = ({
   return (
     <div className="p-4 ">
       <label
-        className=" text-xs absolute bg-white px-1 rounded dark:bg-slate-800 dark:text-white "
+        className=" text-xs text-slate-400 absolute bg-white px-1 rounded dark:bg-slate-800 dark:text-white "
         htmlFor={currentId}
       >
         {label}
       </label>
       <input
-        className="rounded-md p-2 mt-2 border border-yellow-200 dark:text-white dark:bg-slate-900"
+        className="rounded-md p-2 mt-2 border border-slate-200 dark:text-white dark:bg-slate-900"
         type={type}
         id={currentId}
         name={currentId}
         onChange={handleChange}
       />
-      <p className="text-xs opacity-75"> {example}</p>
+      <p className="text-xs opacity-75 text-slate-500 p-0.5"> {example}</p>
 
       {warning?.map((w) => (
         <p
@@ -237,8 +239,8 @@ const Level = ({
   const numerologyMeanings =
     NumerologyMeanings[output as keyof typeof NumerologyMeanings] ?? null;
   return (
-    <div className="rounded-lg border dark:border-yellow-50 border-yellow-900">
-      <p className="font-bold text-sm  text-yellow-900  dark:text-yellow-50 rounded-t-md p-2 border-b border-yellow-900 dark:border-yellow-50">
+    <div className="rounded-lg border bg-white dark:bg-slate-900 dark:border-slate-500 border-slate-700">
+      <p className="font-bold text-sm  text-slate-500  dark:text-slate-400 rounded-t-md p-2 border-b border-slate-700 dark:border-slate-500">
         {level} {description}
       </p>
       <div className="p-2">
@@ -247,7 +249,7 @@ const Level = ({
         </p>
         {numerologyMeanings && (
           <>
-            <p className="uppercase text-sm font-bold mt-4 mb-1 px-1 bg-yellow-50 dark:bg-yellow-900 w-fit">
+            <p className="font-light rounded-md uppercase text-sm  mt-4 mb-1 p-1 px-2 bg-slate-100  dark:bg-slate-800 w-fit">
               {" "}
               {numerologyMeanings?.meaning}
             </p>{" "}
@@ -261,7 +263,7 @@ const Level = ({
 
 const Banner = ({ children }: { children: ReactNode }) => {
   return (
-    <div className="text-center bg-yellow-50 rounded-t-lg p-4 dark:bg-yellow-900 text-yellow-900 dark:text-yellow-100 font-bold">
+    <div className="text-center text-lg rounded-t-lg p-4  text-slate-900 dark:text-slate-100 font-bold ">
       {children}
     </div>
   );

@@ -53,9 +53,9 @@ export const getLevelsArray = (formData: FormDataType): LevelType[] => {
 }
 
 export function chaldeanNumerologyCalculator(inputString: string) {
- if (inputString === '11' || inputString === '22' || inputString === '33'){
-  return Number(inputString);
- }
+  if (inputString === '11' || inputString === '22' || inputString === '33') {
+    return Number(inputString);
+  }
   // Remove all spaces from the input
   let fromattedInput = inputString.replace(/\s+/g, '');
 
@@ -68,7 +68,7 @@ export function chaldeanNumerologyCalculator(inputString: string) {
       total += chaldeanMapping[char.toUpperCase()] || 0;
     }
   }
-  if (total === 11 || total === 22 || total === 33){
+  if (total === 11 || total === 22 || total === 33) {
     return total;
   }
   return reduceToSingleDigit(total);
@@ -94,6 +94,7 @@ const chineseZodiac: Zodiacs[] = [
 
 export function getChineseZodiac(year: number): Zodiacs {
   const index = (year - 4) % 12;
+  console.log(year, index, chineseZodiac[index])
   return chineseZodiac[index];
 }
 

@@ -3,22 +3,21 @@ import Container from "./components/container";
 
 const Page = () => {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-4 lg:p-24 pb-40">
+    <main className="flex min-h-screen flex-col items-center justify-between p-4 lg:p-24 pb-40 font-open-sans">
       <Container>
         <div className="md:w-2/3 m-auto ">
           <p className="text-xl text-center py-8">
-            {" "}
-            Welcome to synchronicity tools{" "}
+            Try our synchronicity tools{" "}
           </p>
           <div className="flex flex-row justify-center space-x-4">
             <Link href="/numerology">
-              <p className="w-fit p-4 text-center bg-slate-900 rounded-md border text-yellow-100 ">
-                Numerology{" "}
+              <p className="w-fit p-4 text-center bg-slate-900 rounded-md  uppercase font-open-sans font-extralight tracking-widest hover:-translate-y-1 hover:bg-lime-950">
+                Numerology 🔢
               </p>
             </Link>
             <Link href="/feng-shui">
-              <p className="w-fit p-4 text-center bg-slate-900 rounded-md border text-green-100 ">
-                Flying Star Feng Shui{" "}
+              <p className="w-fit p-4 text-center bg-slate-900 rounded-md  uppercase font-open-sans font-extralight tracking-widest hover:-translate-y-1 hover:bg-lime-950">
+                Flying Star Feng Shui 🌟
               </p>
             </Link>
           </div>
