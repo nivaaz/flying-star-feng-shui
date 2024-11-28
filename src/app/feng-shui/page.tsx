@@ -31,12 +31,12 @@ export default function Home() {
     [1, 1, 1],
     [1, 1, 1],
   ]);
-  const [customPeriod, setCustomPeriod] = useState<Boolean>(true);
+  const [customPeriod, setCustomPeriod] = useState<boolean>(true);
 
   const [showPeriod, setShowPeriod] = useState(true);
   const [showYear, setShowYear] = useState(true);
   const [showHomePeriod, setShowHomePeriod] = useState(true);
-  const [goals, setGoals] = useState<Boolean[]>([
+  const [goals, setGoals] = useState<boolean[]>([
     false,
     false,
     false,
@@ -94,12 +94,12 @@ export default function Home() {
               {Array.from(Array(9).keys()).map((_, index) => (
                 <label
                   key={index}
-                  className="m-0.5 flex items-center space-x-2 p-1 border border-green-300 bg-green-100 dark:bg-green-900 rounded-md"
+                  className="m-0.5 flex items-center space-x-2 p-1  hover:bg-white dark:hover:bg-black dark:bg-slate-900 rounded-md"
                 >
                   <input
                     type="checkbox"
                     value={index + 1}
-                    className="rounded-md"
+                    className="rounded-md min-h-10"
                     onChange={onChangeGoals}
                   />
                   <p>
@@ -124,7 +124,7 @@ export default function Home() {
           <div className="flex space-x-4">
             {[...Object.keys(currentYear)].map((year) => (
               <label
-                className="flex space-x-2 p-1 border border-green-300 bg-green-100 dark:bg-green-900 rounded-md"
+                className="flex space-x-2 p-1 border border-slate-300 bg-slate-100 dark:bg-slate-900 rounded-md"
                 key={year}
               >
                 <input
@@ -146,7 +146,7 @@ export default function Home() {
               <div className="flex justify-center space-x-4">
                 {periods.map((period, i) => (
                   <label
-                    className="flex items-center space-x-2 p-1 border border-green-300 bg-green-100 dark:bg-green-900 rounded-md"
+                    className="flex items-center space-x-2 p-1 border border-slate-300 bg-slate-100 dark:bg-slate-900 rounded-md"
                     key={period}
                   >
                     <input
@@ -172,7 +172,7 @@ export default function Home() {
                     {directions.map((row, i) =>
                       row.map((cell, j) => (
                         <label className="p-1 m-0" key={row + cell}>
-                          <p className="absolute text-green-500  pl-1 pt-1">
+                          <p className="absolute text-slate-500  pl-1 pt-1">
                             {" "}
                             {cell}{" "}
                           </p>{" "}
@@ -206,7 +206,7 @@ export default function Home() {
             <p className="text-xl"> Chat view options </p>
 
             <button
-              className="border border-green-300 bg-green-100 p-2 rounded-lg dark:bg-green-900 dark:text-green-100 m-1"
+              className="border border-slate-300 bg-slate-100 p-2 rounded-lg dark:bg-slate-900 dark:text-slate-100 m-1"
               onClick={() => {
                 setShowYear(!showYear);
               }}
@@ -215,7 +215,7 @@ export default function Home() {
               {"(" + currentYearSquare + ")"}
             </button>
             <button
-              className="border border-green-300 bg-green-100 p-2 rounded-lg dark:bg-green-900 dark:text-green-100 m-1"
+              className="border border-slate-300 bg-slate-100 p-2 rounded-lg dark:bg-slate-900 dark:text-slate-100 m-1"
               onClick={() => {
                 setShowPeriod(!showPeriod);
               }}
@@ -223,7 +223,7 @@ export default function Home() {
               {showPeriod ? "Hide" : "Show"} current period (9)
             </button>
             <button
-              className="border border-green-300 bg-green-100 p-2 rounded-lg dark:bg-green-900 dark:text-green-100 m-1"
+              className="border border-slate-300 bg-slate-100 p-2 rounded-lg dark:bg-slate-900 dark:text-slate-100 m-1"
               onClick={() => {
                 setShowHomePeriod(!showHomePeriod);
               }}
@@ -237,7 +237,7 @@ export default function Home() {
               row.map((_, j) => (
                 <div
                   key={i + j}
-                  className="p-4 space-y-4 border border-green-200 m-1 rounded-sm"
+                  className="p-4 space-y-4 border dark:border-slate-400 m-1 rounded-sm"
                 >
                   <div className="flex space-x-4">
                     <p className="text-center text-xl">{directions[i][j]} </p>
@@ -249,21 +249,27 @@ export default function Home() {
                   </div>
                   {showPeriod && (
                     <CurrentElement
+                      goal={goals[period9[i][j]]}
                       chart="current period (9)"
                       star={period9[i][j]}
                     />
                   )}
                   {showYear && (
                     <CurrentElement
+                      goal={goals[currentYear[currentYearSquare][i][j]]}
                       chart={"current year " + currentYearSquare}
                       star={currentYear[currentYearSquare][i][j]}
                     />
                   )}
                   {showHomePeriod && (
-                    <CurrentElement chart="home" star={homeChart[i][j]} />
+                    <CurrentElement
+                      goal={goals[homeChart[i][j]]}
+                      chart="home"
+                      star={homeChart[i][j]}
+                    />
                   )}
                   <textarea
-                    className="w-full dark:bg-slate-800 dark:text-slate-100 py-1 text-slate-900"
+                    className="w-full dark:bg-slate-800 text-xxs dark:text-slate-100 py-1 text-slate-900"
                     placeholder="notes"
                   />{" "}
                 </div>
@@ -278,7 +284,7 @@ export default function Home() {
               onClick={() => {
                 window.print();
               }}
-              className="border border-green-300 bg-green-100 p-2 rounded-lg dark:bg-green-900 dark:text-green-100 m-1"
+              className="border border-slate-300 bg-slate-100 p-2 rounded-lg dark:bg-slate-900 dark:text-slate-100 m-1"
             >
               {" "}
               Save Design{" "}

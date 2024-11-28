@@ -12,6 +12,9 @@ const config: Config = {
         mukta: ["Mukta", "sans-serif"],
         "open-sans": ["Open Sans", "sans-serif"],
       },
+      fontSize: {
+        xxs: "0.625rem",
+      },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":
