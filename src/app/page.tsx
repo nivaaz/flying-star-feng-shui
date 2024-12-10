@@ -11,12 +11,12 @@ const Page = () => {
           </p>
           <div className="flex flex-row justify-center space-x-4">
             <Link href="/numerology">
-              <p className="w-fit p-4 text-center bg-slate-900 rounded-md  uppercase font-open-sans font-extralight tracking-widest hover:-translate-y-1 hover:bg-lime-950">
+              <p className="w-fit text-white dark:text-black p-4 text-center bg-slate-900 rounded-md  uppercase font-open-sans font-extralight tracking-widest hover:-translate-y-1 hover:bg-lime-950">
                 Numerology 🔢
               </p>
             </Link>
             <Link href="/feng-shui">
-              <p className="w-fit p-4 text-center bg-slate-900 rounded-md  uppercase font-open-sans font-extralight tracking-widest hover:-translate-y-1 hover:bg-lime-950">
+              <p className="w-fit p-4 text-white dark:text-black text-center bg-slate-900 rounded-md  uppercase font-open-sans font-extralight tracking-widest hover:-translate-y-1 hover:bg-lime-950">
                 Flying Star Feng Shui 🌟
               </p>
             </Link>
