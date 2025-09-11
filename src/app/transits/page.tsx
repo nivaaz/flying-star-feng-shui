@@ -77,17 +77,19 @@ export default function TransitsPage() {
               >
                 <p className="font-bold text-lg border-b ">{transit.planet} </p>
                 <div>
-                  <p className="font-bold pt-2"> Current Transit</p>
-                  <p className="text-sm">
+                  <p className="font-bold pt-2">
+                    {" "}
+                    Current Transit | {transit.current.sign}{" "}
+                  </p>
+                  <p className="text-sm text-gray-500">
                     {transit.current.start} - {transit.current.end}
                   </p>
                   <p className="text-sm pt-1"> Theme: {transit.theme}</p>
                   <p className="text-sm pt-1">
-                    {" "}
-                    Themes | {transit.current.sign} |
-                  </p>
-                  <p className="text-sm pt-1">
-                    In the house area of:{" "}
+                    House{" "}
+                    {houses.findIndex((h) => h.sign === transit.current.sign) +
+                      1}{" "}
+                    Theme (area of your life):{" "}
                     {
                       houseThemes[
                         houses.findIndex((h) => h.sign === transit.current.sign)
@@ -96,17 +98,18 @@ export default function TransitsPage() {
                   </p>
                 </div>
                 <div>
-                  <p className="font-bold pt-2"> Past Transit</p>
-                  <p className="text-sm">
+                  <p className="font-bold pt-2">
+                    {" "}
+                    Past Transit | {transit.past.sign}{" "}
+                  </p>
+                  <p className="text-sm text-gray-500">
                     {transit.past.start} - {transit.past.end}
                   </p>
                   <p className="text-sm pt-1"> Theme: {transit.theme}</p>
                   <p className="text-sm pt-1">
-                    {" "}
-                    Themes | {transit.past.sign} |
-                  </p>
-                  <p className="text-sm pt-1">
-                    In the house area of:{" "}
+                    House{" "}
+                    {houses.findIndex((h) => h.sign === transit.past.sign) + 1}{" "}
+                    Theme (area of your life):{" "}
                     {
                       houseThemes[
                         houses.findIndex((h) => h.sign === transit.past.sign)
@@ -127,8 +130,7 @@ export default function TransitsPage() {
 const planetTransits = [
   {
     planet: "Pluto",
-    theme:
-      "transformation, power, destruction/regeneration, collective evolution",
+    theme: "transformation, power, destruction/regeneration",
     current: {
       sign: "Aquarius",
       start: "March 23, 2023",
