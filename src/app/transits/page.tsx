@@ -242,16 +242,21 @@ const Houses = ({
         isPast ? "bg-blue-50" : "bg-purple-50"
       } p-2 grid sm:grid-cols-5 sm:gap-2 gap-1`}
     >
-      <p className="col-span-1 text-sm capitalize">
+      <p className="col-span-1 text-sm capitalize text-slate-600">
         House {currHouse}:{" "}
-        <b className="block text-xs text-slate-400"> (what changed) </b>
+        <b className="block text-xs text-slate-400"> (area of life) </b>
       </p>
       <p className="col-span-4 text-sm "> {houseThemes[currHouse - 1]}</p>
-      <p className="col-span-1 text-sm capitalize">
-        {placement.sign} Themes:{" "}
-        <b className="block text-xs text-slate-400"> (how it changed) </b>
+      <p className="col-span-1 text-sm capitalize text-slate-600 ">
+        {" "}
+        Highest vibration:{" "}
       </p>
-      <p className="col-span-4 text-sm">{placement.themes}</p>
+      <p className="col-span-4 text-sm">{placement.high}</p>
+      <p className="col-span-1 text-sm capitalize text-slate-600">
+        {" "}
+        Lowest vibration:{" "}
+      </p>
+      <p className="col-span-4 text-sm">{placement.low}</p>
     </div>
   );
 };
@@ -260,7 +265,8 @@ type Placement = {
   sign: string;
   start: string;
   end: string;
-  themes: string;
+  high: string;
+  low: string;
 };
 type trasitPlacement = {
   planet: string;
@@ -270,82 +276,104 @@ type trasitPlacement = {
 const planetTransits: trasitPlacement[] = [
   {
     planet: "Pluto",
-    current: {
-      sign: "Aquarius",
-      start: "March 23, 2023",
-      end: "January 19, 2044",
-      themes: "innovation, technology, humanity, systems, freedom, revolution",
-    },
     past: {
       sign: "Capricorn",
-      start: "January 25, 2008",
-      end: "January 20, 2024",
-      themes: "authority, structures, career, ambition",
+      start: "2008",
+      end: "2023",
+      high: "mastery of structures, long-term legacy, responsible power",
+      low: "control, corruption, fear of failure, rigidity",
+    },
+    current: {
+      sign: "Aquarius",
+      start: "2023",
+      end: "2043",
+      high: "collective innovation, freedom, future systems, social empowerment",
+      low: "chaos in tech, detachment, rebellion without cause, alienation",
     },
   },
   {
     planet: "Neptune",
-    current: {
-      sign: "Aries",
-      start: "March 30, 2025",
-      end: "April 20, 2039",
-      themes:
-        "individuality, pioneering, courage, identity dissolutions, self-assertion",
-    },
     past: {
       sign: "Pisces",
-      start: "April 4, 2011",
-      end: "March 30, 2025",
-      themes:
-        "spirituality, compassion, empathy, sacrifice, dissolving structures",
+      start: "2011",
+      end: "2025",
+      high: "compassion, spiritual awakening, creativity, unity consciousness",
+      low: "escapism, confusion, victimhood, illusions",
     },
-  },
-  {
-    planet: "Uranus",
     current: {
-      sign: "Taurus",
-      start: "May 15, 2018",
-      end: "April 26, 2026",
-      themes: "stability, resources, money, values, body, earth",
-    },
-    past: {
       sign: "Aries",
-      start: "March 11, 2011",
-      end: "May 15, 2018",
-      themes: "individuality, pioneering, courage, radical self-expression",
+      start: "2025",
+      end: "2039",
+      high: "courageous vision, spiritual self-leadership, pioneering compassion",
+      low: "self-delusion, ego-driven martyrdom, blurred identity",
     },
   },
   {
     planet: "Saturn",
-    current: {
-      sign: "Pisces",
-      start: "March 7, 2023",
-      end: "February 13, 2026",
-      themes:
-        "spirituality, compassion, sacrifice, boundaries, dissolution of structures",
-    },
     past: {
-      sign: "Aquarius",
-      start: "December 17, 2020",
-      end: "March 7, 2023",
-      themes:
-        "innovation, community, progress, technology, collective structures",
+      sign: "Pisces",
+      start: "2023",
+      end: "2026",
+      high: "spiritual discipline, boundaries in compassion, practical creativity",
+      low: "avoidance, self-pity, blurred limits, victim mindset",
+    },
+    current: {
+      sign: "Aries",
+      start: "2026",
+      end: "2028",
+      high: "self-mastery, courage to take responsibility, disciplined leadership",
+      low: "impatience, aggression, fear of failure, ego rigidity",
+    },
+  },
+  {
+    planet: "Uranus",
+    past: {
+      sign: "Taurus",
+      start: "2018",
+      end: "2026",
+      high: "innovative resources, sustainable values, embodied freedom",
+      low: "financial chaos, stubborn resistance, insecurity",
+    },
+    current: {
+      sign: "Gemini",
+      start: "2026",
+      end: "2033",
+      high: "breakthroughs in communication, learning, tech, networks",
+      low: "scattered attention, shallow rebellion, information chaos",
     },
   },
   {
     planet: "North Node",
     past: {
-      sign: "Taurus",
-      start: "January 18, 2022",
-      end: "July 17, 2023",
-      themes: "values, stability, security, embodiment, material growth",
+      sign: "Aries",
+      start: "2023",
+      end: "2025",
+      high: "independence, courage, pioneering destiny",
+      low: "selfishness, recklessness, conflict",
     },
     current: {
       sign: "Pisces",
-      start: "January 11, 2025",
-      end: "July 26, 2026",
-      themes:
-        "spirituality, compassion, surrender, intuition, dissolution of ego",
+      start: "2025",
+      end: "2026",
+      high: "spiritual growth, compassion, surrender to higher flow",
+      low: "escapism, victimhood, lack of boundaries",
+    },
+  },
+  {
+    planet: "South Node",
+    past: {
+      sign: "Libra",
+      start: "2023",
+      end: "2025",
+      high: "harmony, fairness, relationship wisdom",
+      low: "people-pleasing, indecision, dependency",
+    },
+    current: {
+      sign: "Virgo",
+      start: "2025",
+      end: "2026",
+      high: "discernment, service, practical wisdom",
+      low: "over-analysis, perfectionism, burnout",
     },
   },
 ];
