@@ -330,13 +330,13 @@ const planetTransits: trasitPlacement[] = [
     past: {
       sign: "Taurus",
       start: "2018",
-      end: "2026",
+      end: "2025",
       high: "innovative resources, sustainable values, embodied freedom",
       low: "financial chaos, stubborn resistance, insecurity",
     },
     current: {
       sign: "Gemini",
-      start: "2026",
+      start: "2025",
       end: "2033",
       high: "breakthroughs in communication, learning, tech, networks",
       low: "scattered attention, shallow rebellion, information chaos",
