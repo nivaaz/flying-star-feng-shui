@@ -139,3 +139,13 @@ const IsZodiacCompatible: ranks[][] = [
 export function areZodiacsCompatible(zodiac1: Zodiacs, zodiac2: Zodiacs): string {
   return compatabilityRanking[IsZodiacCompatible[ZodiacMapping.indexOf(zodiac1)][ZodiacMapping.indexOf(zodiac2)]];
 }
+
+
+export const personalYearNumber = (bday: string) => {
+  console.log(bday);
+  const x = bday.split("-");
+  const year = new Date().getFullYear();
+  x[0] = year.toString();
+  return chaldeanNumerologyCalculator(x.join("-"));
+};
+
