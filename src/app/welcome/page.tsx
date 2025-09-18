@@ -6,10 +6,8 @@ const Page = () => {
     <div className="flex min-h-screen flex-col items-center justify-between p-4 lg:p-24 pb-40 font-open-sans">
       <Container>
         <div className="md:w-2/3 m-auto ">
-          <p className="text-xl text-center py-8">
-            Try our synchronicity tools{" "}
-          </p>
-          <div className="flex flex-row justify-center space-x-4">
+          <p className="text-xl text-center py-8">Try our tools </p>
+          <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
             <Link href="/numerology">
               <p className="w-fit text-white dark:text-black p-4 text-center bg-slate-900 dark:bg-white rounded-md  uppercase font-open-sans font-extralight tracking-widest hover:-translate-y-1 hover:bg-lime-950">
                 Numerology 🔢
@@ -17,7 +15,12 @@ const Page = () => {
             </Link>
             <Link href="/feng-shui">
               <p className="w-fit p-4 text-white dark:text-black text-center bg-slate-900 dark:bg-white rounded-md  uppercase font-open-sans font-extralight tracking-widest hover:-translate-y-1 hover:bg-lime-950">
-                Flying Star Feng Shui 🌟
+                Feng Shui 🌟
+              </p>
+            </Link>
+            <Link href="/transits">
+              <p className="w-fit p-4 text-white dark:text-black text-center bg-slate-900 dark:bg-white rounded-md  uppercase font-open-sans font-extralight tracking-widest hover:-translate-y-1 hover:bg-lime-950">
+                Transists ♈
               </p>
             </Link>
           </div>

@@ -247,14 +247,11 @@ const Houses = ({
         <b className="block text-xs text-slate-400"> (area of life) </b>
       </p>
       <p className="col-span-4 text-sm "> {houseThemes[currHouse - 1]}</p>
-      <p className="col-span-1 text-sm capitalize text-slate-600 ">
-        {" "}
-        Highest vibration:{" "}
-      </p>
+      <p className="col-span-1 text-sm capitalize text-slate-600 "> Gifts: </p>
       <p className="col-span-4 text-sm">{placement.high}</p>
       <p className="col-span-1 text-sm capitalize text-slate-600">
         {" "}
-        Lowest vibration:{" "}
+        Challenges:{" "}
       </p>
       <p className="col-span-4 text-sm">{placement.low}</p>
     </div>
