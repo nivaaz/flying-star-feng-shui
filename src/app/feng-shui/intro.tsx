@@ -27,8 +27,7 @@ const Intro = () => {
           populated.
         </li>
         <li> Auspicious stars will be marked with a ⭐️ </li>
-        <li> Inspicious stars will be marked with a 🧂 </li>
-        <li> Add salt cures to any rooms with inauspcious stars 🧂 </li>
+        <li> Inspicious stars will be marked with a ❗️ </li>
       </ol>
     </Container>
   );

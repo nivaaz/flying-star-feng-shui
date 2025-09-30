@@ -1,5 +1,6 @@
 "use client";
-import { useState } from "react";
+import { useState, useRef } from "react";
+import html2pdf from "html2pdf.js";
 import {
   currentYear,
   directions,
@@ -11,6 +12,8 @@ import Intro from "./intro";
 import CurrentElement from "./currentElement";
 import Container from "../components/container";
 import { Star, YearSquares } from "./types";
+import { ElementExamples, generateFengShuiTemplate } from "./utils";
+import { starThemes } from "./constants";
 
 const periods = [
   "period 9 (2024-2043)",
@@ -24,16 +27,44 @@ const defaultLoShuSquare: Star[][] = [
   [1, 1, 1],
   [1, 1, 1],
 ];
+const defaultText: string[][] = [
+  ["", "", ""],
+  ["", "", ""],
+  ["", "", ""],
+];
+
+const AddTextField = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [text, setText] = useState("");
+  return (
+    <div>
+      {isOpen ? (
+        <div>
+          <input
+            className="dark:bg-slate-700 dark:text-slate-100 text-slate-900 rounded-md p-1 w-full"
+            type="text"
+            value={text}
+            onChange={(e) => setText(e.target.value)}
+          />
+          <button className="bg-gray-100" onClick={() => setIsOpen(false)}>
+            -
+          </button>
+        </div>
+      ) : (
+        <button onClick={() => setIsOpen(true)}>+</button>
+      )}
+    </div>
+  );
+};
 
 export default function Home() {
-  const [homeChart, setHomeChart] = useState<Star[][]>([
-    [1, 1, 1],
-    [1, 1, 1],
-    [1, 1, 1],
-  ]);
+  const [homeChart, setHomeChart] = useState<Star[][]>(defaultLoShuSquare);
+  const [clientName, setClientName] = useState(""); // State for client name
+  const [error, setError] = useState(false); // State for error popup
+  const pageRef = useRef<HTMLDivElement>(null); // Ref for the page to export
   const [customPeriod, setCustomPeriod] = useState<boolean>(true);
 
-  const [showPeriod, setShowPeriod] = useState(true);
+  const [showPeriod, setShowPeriod] = useState(false);
   const [showYear, setShowYear] = useState(true);
   const [showHomePeriod, setShowHomePeriod] = useState(true);
   const [goals, setGoals] = useState<boolean[]>([
@@ -48,7 +79,23 @@ export default function Home() {
     false,
   ]);
   const [currentYearSquare, setCurrentYearSquare] =
-    useState<YearSquares>("2024");
+    useState<YearSquares>("2025");
+
+  const [defaultValues, setDefaultValues] = useState<string[][]>(defaultText);
+
+  const generateDefaultText = () => {
+    console.log("generateDefaultText");
+    const dv: string[][] = defaultText;
+    for (let i = 0; i < 3; i++) {
+      for (let j = 0; j < 3; j++) {
+        dv[i][j] = generateFengShuiTemplate(
+          homeChart[i][j],
+          currentYear[currentYearSquare][i][j]
+        );
+      }
+    }
+    setDefaultValues(dv);
+  };
 
   const onChangeGoals = (e: React.ChangeEvent<HTMLInputElement>) => {
     const index = parseInt(e.target.value);
@@ -77,17 +124,83 @@ export default function Home() {
     }
   };
 
-  return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-4 lg:p-24 pb-40">
-      <div className="z-10 w-full max-w-5xl items-center justify-between text-sm lg:flex flex-col space-y-8">
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-slate-900 dark:via-slate-900 lg:static lg:size-auto lg:bg-none">
-          <p className="dark:text-slate-200">
-            Flying Star Feng Shui Calculator by nivaaz 2024
-          </p>
-        </div>
+  const handleExportPDF = async () => {
+    if (!clientName.trim()) {
+      setError(true); // Show error if client name is empty
+      return;
+    }
 
+    if (pageRef.current) {
+      const date = new Date().toISOString().split("T")[0];
+      const fileName = `${clientName || "client"}-${date}-fengshui.pdf`;
+
+      const options = {
+        margin: 0,
+        filename: fileName,
+        image: { type: "jpeg", quality: 0.98 },
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
+      };
+
+      // Clone the page and inline Tailwind CSS styles
+      const clonedPage = pageRef.current.cloneNode(true) as HTMLElement;
+      const tailwindStyles = document.querySelector(
+        "style[data-tailwind]"
+      )?.innerHTML;
+
+      if (tailwindStyles) {
+        const styleElement = document.createElement("style");
+        styleElement.innerHTML = tailwindStyles;
+        clonedPage.prepend(styleElement);
+      }
+
+      html2pdf().set(options).from(clonedPage).save();
+    }
+  };
+
+  const handleTextareaInput = (e: React.FormEvent<HTMLTextAreaElement>) => {
+    const target = e.target as HTMLTextAreaElement;
+    target.style.height = "auto"; // Reset height
+    target.style.height = target.scrollHeight + "px"; // Set new height
+  };
+  return (
+    <main
+      ref={pageRef} // Attach the ref to the main container
+      className="flex min-h-screen flex-col items-center justify-between p-4 pb-40"
+    >
+      <div className="z-10 w-full max-w-5xl items-center justify-between text-sm lg:flex flex-col space-y-8">
         <Intro />
         <Container>
+          <div>
+            <label htmlFor="clientName" className="block text-lg">
+              Client Name
+            </label>
+            <input
+              type="text"
+              id="clientName"
+              value={clientName}
+              onChange={(e) => {
+                setClientName(e.target.value);
+                setError(false); // Clear error when client name is updated
+              }}
+              className="p-2 mt-1 block w-full dark:text-slate-200 dark:bg-slate-900 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+              placeholder="Enter client name"
+            />
+            {error && (
+              <p className="text-red-500 text-sm mt-2">
+                Please enter the client name before saving.
+              </p>
+            )}
+          </div>
+          <div className="py-4">
+            <label className="block text-lg ">Astrocartography</label>
+            <input
+              type="text"
+              id="Astrocartography"
+              className="p-2 mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:text-slate-200 dark:bg-slate-900"
+              placeholder="location"
+            />
+          </div>
           <div>
             <p className="text-lg"> What are your goals?</p>
             <div className="grid grid-cols-3">
@@ -102,6 +215,7 @@ export default function Home() {
                     className="rounded-md min-h-10"
                     onChange={onChangeGoals}
                   />
+                  <AddTextField />
                   <p>
                     {"(" + (index + 1) + ") "}
                     {!elementNumberMap[(index + 1) as Star].auspicious &&
@@ -124,7 +238,7 @@ export default function Home() {
           <div className="flex space-x-4">
             {[...Object.keys(currentYear)].map((year) => (
               <label
-                className="flex space-x-2 p-1 border border-slate-300 bg-slate-100 dark:bg-slate-900 rounded-md"
+                className="flex space-x-2 p-1 border  bg-slate-100 dark:bg-slate-900 rounded-md"
                 key={year}
               >
                 <input
@@ -195,6 +309,7 @@ export default function Home() {
         </Container>
 
         <Container>
+          <button onClick={generateDefaultText}> Set default values </button>
           <div>
             <h2 className="text-xl "> Your chart</h2>
             <p>
@@ -206,7 +321,7 @@ export default function Home() {
             <p className="text-xl"> Chat view options </p>
 
             <button
-              className="border border-slate-300 bg-slate-100 p-2 rounded-lg dark:bg-slate-900 dark:text-slate-100 m-1"
+              className="border  bg-slate-100 p-2 rounded-lg dark:bg-slate-900 dark:text-slate-100 m-1"
               onClick={() => {
                 setShowYear(!showYear);
               }}
@@ -215,7 +330,7 @@ export default function Home() {
               {"(" + currentYearSquare + ")"}
             </button>
             <button
-              className="border border-slate-300 bg-slate-100 p-2 rounded-lg dark:bg-slate-900 dark:text-slate-100 m-1"
+              className="border  bg-slate-100 p-2 rounded-lg dark:bg-slate-900 dark:text-slate-100 m-1"
               onClick={() => {
                 setShowPeriod(!showPeriod);
               }}
@@ -223,7 +338,7 @@ export default function Home() {
               {showPeriod ? "Hide" : "Show"} current period (9)
             </button>
             <button
-              className="border border-slate-300 bg-slate-100 p-2 rounded-lg dark:bg-slate-900 dark:text-slate-100 m-1"
+              className="border  bg-slate-100 p-2 rounded-lg dark:bg-slate-900 dark:text-slate-100 m-1"
               onClick={() => {
                 setShowHomePeriod(!showHomePeriod);
               }}
@@ -232,7 +347,7 @@ export default function Home() {
             </button>
           </div>
 
-          <div className="grid md:grid-cols-3 w-full">
+          <div className="grid print:grid-cols-1 md:grid-cols-3 w-full">
             {period9.map((row, i) =>
               row.map((_, j) => (
                 <div
@@ -269,25 +384,32 @@ export default function Home() {
                     />
                   )}
                   <textarea
-                    className="w-full dark:bg-slate-800 text-xxs dark:text-slate-100 py-1 text-slate-900"
+                    className="w-full dark:bg-slate-800 dark:text-slate-100 py-1 text-slate-900 p-0.5"
                     placeholder="notes"
+                    value={defaultValues[i][j]}
+                    onInput={handleTextareaInput} // Adjust height dynamically
+                    onChange={(e) => {
+                      const newValues = [...defaultValues];
+                      newValues[i][j] = e.target.value;
+                      setDefaultValues(newValues);
+                    }}
+                    style={{ overflow: "hidden" }} // Prevent scrollbar
                   />{" "}
                 </div>
               ))
             )}
           </div>
         </Container>
+        <ElementExampleBlock />
+        <StarThemes />
         <Container>
           <div className="print:hidden">
             <p>When you&apos;re happy with your design, print as a pdf.</p>
             <button
-              onClick={() => {
-                window.print();
-              }}
+              onClick={handleExportPDF} // Modified to export the current page
               className="border border-slate-300 bg-slate-100 p-2 rounded-lg dark:bg-slate-900 dark:text-slate-100 m-1"
             >
-              {" "}
-              Save Design{" "}
+              Save Design
             </button>
           </div>
         </Container>
@@ -295,3 +417,62 @@ export default function Home() {
     </main>
   );
 }
+
+const ElementExample = (element: string, elementTitle: string) => {
+  return (
+    <div>
+      <p className="font-bold"> {elementTitle} </p>
+      <p> {element}</p>
+    </div>
+  );
+};
+const ElementExampleBlock = () => {
+  return (
+    <Container>
+      <h2 className="font-bold text-lg"> Element Item Examples </h2>
+      <div>
+        <div>
+          <p className="font-black pt-4"> 🔥 Fire </p>
+          <p> {ElementExamples.fire}</p>
+        </div>
+        <div>
+          <p className="font-black pt-4"> 🌎 Earth </p>
+          <p> {ElementExamples.earth}</p>
+        </div>
+        <div>
+          <p className="font-black pt-4"> 🪙 Metal </p>
+          <p> {ElementExamples.metal}</p>
+        </div>
+        <div>
+          <p className="font-black pt-4"> 💧 Water </p>
+          <p> {ElementExamples.water}</p>
+        </div>
+        <div>
+          <p className="font-black pt-4"> 🪵 Wood </p>
+          <p> {ElementExamples.wood}</p>
+        </div>
+      </div>
+    </Container>
+  );
+};
+
+const StarThemes = () => {
+  return (
+    <Container>
+      <h2 className="font-bold text-lg"> Star Themes </h2>
+      <div className="grid grid-cols-3 gap-2">
+        {starThemes.map((theme) => (
+          <div key={theme.starId} className="pb-4">
+            <p className="font-bold"> {theme.starId} </p>
+            {theme.themes.map((t) => (
+              <li className="text-sm" key={t}>
+                {" "}
+                {t}
+              </li>
+            ))}
+          </div>
+        ))}
+      </div>
+    </Container>
+  );
+};

@@ -143,11 +143,24 @@ const addremoveBaseElement = (elHome: { element: Element; auspicious: boolean },
     return textResponse;
 }
 
-const shouldAddSaltCure = (elHome: { element: Element; auspicious: boolean }, elCurrentYear: { element: Element; auspicious: boolean }, drainHome: Element, drainCurrentYear: Element): string => {
+const shouldAddSaltCure = (
+    elHome: { element: Element; auspicious: boolean },
+    elCurrentYear: { element: Element; auspicious: boolean },
+    drainHome: Element, drainCurrentYear: Element): string => {
     if (elHome.auspicious && elCurrentYear.auspicious) {
         return ""
     }
-    if (drainHome == Element.water || drainCurrentYear == Element.water) {
+    if (!elHome.auspicious) {
+        if (drainHome === Element.water) {
+            return "NO salt cure here.  .";
+        }
+    }
+    if (!elCurrentYear.auspicious) {
+        if (drainCurrentYear === Element.water) {
+            return "NO salt cure here.  .";
+        }
+    }
+    if (drainHome === Element.water || drainCurrentYear === Element.water) {
         return "NO salt cure here.  .";
     }
     return "ADD a salt cure here.  .";

@@ -49,7 +49,7 @@ const CurrentElement = ({
             "font-light text-slate-700 dark:text-slate-100 bg-white dark:bg-black px-2 mr-auto",
         ])}
       >
-        {goal && "🎯"} {!el?.auspicious && "🧂"} {chart}{" "}
+        {goal && "🎯"} {!el?.auspicious && "❗️"} {chart}{" "}
       </p>
       <div
         className={clsx(
@@ -64,8 +64,7 @@ const CurrentElement = ({
         )}
       >
         <p className="px-1 flex text-slate-400 text-xxs">
-          {el?.auspicious ? "⭐️ " : "🧂 "} {star} <br/> {el?.elementIcon}{" "}
-          {el?.element} <br/> {el?.color}
+          {el?.auspicious ? "⭐️ " : "❗️"} {star} {el?.elementIcon}{" "}{el?.element} {el?.color}
         </p>
         <ColouredElement element={nourish} isAuspicious={!el?.auspicious} />
         <ColouredElement element={drain} isAuspicious={el?.auspicious} />
