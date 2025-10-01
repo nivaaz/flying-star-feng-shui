@@ -34,10 +34,11 @@ export const generateFengShuiTemplate = (starHome: Star, starCurrentYear: Star) 
     const drainCurrentYear = getDrainingElement(elCurrentYear.element);
 
     let textresponse = getAuspiciousnessLevel(elHome.auspicious, elCurrentYear.auspicious);
-    textresponse += `Stars: .#${starHome} | ${elHome.element} - ${elHome.theme} [HOME] .#${starCurrentYear} | ${elCurrentYear.element} - ${elCurrentYear.theme} [Current Year] .`;
-    textresponse += shouldAddSaltCure(elHome, elCurrentYear, drainHome, drainCurrentYear) + " .";
-    textresponse += addremoveBaseElement(elHome, elCurrentYear) + " ."; // TODO:
-    textresponse += reccomendElements(elHome, nourishHome, drainHome, elCurrentYear, nourishCurrentYear, drainCurrentYear) + " .";
+    textresponse += `\n\n Stars: \n ⭐️[HOME] ${starHome} | ${elHome.element} - ${elHome.theme} \n ⭐️[YEAR]${starCurrentYear} | ${elCurrentYear.element} - ${elCurrentYear.theme}.`;
+   textresponse += "\n\n ⚪️ In this area: \n "
+    textresponse += "\n" + shouldAddSaltCure(elHome, elCurrentYear, drainHome, drainCurrentYear) + " .";
+    textresponse += "\n" + addremoveBaseElement(elHome, elCurrentYear) + " ."; // TODO:
+    textresponse += "\n" + reccomendElements(elHome, nourishHome, drainHome, elCurrentYear, nourishCurrentYear, drainCurrentYear) + " .";
     return textresponse;
 
 }
@@ -82,23 +83,25 @@ export const reccomendElements = (
 
     const textresponse = uniqueElements.map(el => {
         const currEl = el.split(" ")[1].trim();
+        const elExamples = (shortElementsExamples[currEl as keyof typeof shortElementsExamples] ? ` (${shortElementsExamples[currEl as keyof typeof shortElementsExamples]})` : "");
+
         if (el.includes("remove")) {
             const idx = uniqueElements.findIndex(e => e === "add " + currEl);
             if (idx !== -1) {
-                return "\n remove " + currEl;
+                return "\n 📌 remove " + currEl + " " + elExamples;
             }
-            return "\n " + el;
+            return "\n " + el + " " + elExamples;
         } else if (el.includes("add")) {
             const idx = uniqueElements.findIndex(e => e === "remove " + currEl);
             if (idx !== -1) {
-                return "\n remove " + currEl;
+                return "\n 📌 remove " + currEl + " " + elExamples;
             }
-            return "\n " + el;
+            return "\n ✅ " + el + " " + elExamples;
         }
-        return "\n " + el;
+        return "\n " + el + " " + elExamples;
     });
 
-    return Array.from(new Set(textresponse)).join(" . ");
+    return "\n" + Array.from(new Set(textresponse)).join(" . ");
 
 }
 
@@ -136,11 +139,11 @@ const shouldAddSaltCure = (
 
 const getAuspiciousnessLevel = (auspiciousness1: boolean, auspiciousness2: boolean): string => {
     if (auspiciousness1 && auspiciousness2) {
-        return "This is one of the best areas of your home . Add astrocartography here .";
+        return "⭐️ This is one of the best areas of your home . \n ⭐️ Add astrocartography here .";
     } else if (!auspiciousness1 && !auspiciousness2) {
-        return "This is one of the worst areas of your home. Spend less time here .";
+        return "‼️ This is one of the worst areas of your home. Spend less time here .";
     } else {
-        return "This is a mixed area of your home .";
+        return "🌀 This is a mixed area of your home .";
     }
 }
 
@@ -151,4 +154,12 @@ export const ElementExamples = {
     "metal": "Metal picture frames, metal bowls, stainless steel appliances, silver sculptures, gold sculptures, round mirrors, wind chimes, quartz stones, white stones, metic w art, metic wpaper, bells, clocks, tools, white linens, smooth surfaces and finishes.",
     "water": "Mirrors, glass tables, glass vases, aquariums, fish tanks, water fountains, wavy-patterned fabric, wavy art, navy curtains, navy rugs, ocean artwork, lake imagery, rain imagery, deep blue cushions, abstract or asymmetrical décor forms.",
     "wood": "Wooden tables, chairs, shelves, potted plants, trees, herbs, wicker furniture, rattan furniture, botanical wpaper, botanical artwork, books, vertical stripes, t decor pieces, fresh flowers in vases, essential oil diffusers, bamboo blinds.",
+}
+
+const shortElementsExamples = {
+    "fire": "candles, lighting elements, electronics, triangle, animals.",
+    "earth": "clay, pottery, ceramic tiles, stone surfaces, marble, earth colours, salt lamps.",
+    "metal": "metal picture frames, metal bowls, steel, silver, gold, wind chimes.",
+    "water": "mirrors, glass, water fountains, wavy-patterns, ocean artwork, blue.",
+    "wood": "plants, wood, books, vertical stripes, botanical artwork.",
 }
