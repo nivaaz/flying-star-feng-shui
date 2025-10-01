@@ -1,6 +1,5 @@
 "use client";
 import { useState, useRef } from "react";
-import html2pdf from "html2pdf.js";
 import {
   currentYear,
   directions,
@@ -126,6 +125,7 @@ export default function Home() {
   };
 
   const handleExportPDF = async () => {
+    console.log("clocl");
     if (!clientName.trim()) {
       setError(true); // Show error if client name is empty
       return;
@@ -154,8 +154,6 @@ export default function Home() {
         styleElement.innerHTML = tailwindStyles;
         clonedPage.prepend(styleElement);
       }
-
-      html2pdf().set(options).from(clonedPage).save();
     }
   };
 
@@ -475,13 +473,12 @@ const StarThemes = () => {
   return (
     <Container>
       <h2 className="font-bold text-lg"> Star Themes </h2>
-      <div className="grid grid-cols-3 gap-2">
+      <div className="grid grid-cols-3 gap-4">
         {starThemes.map((theme) => (
           <div key={theme.starId} className="pb-4">
             <p className="font-bold"> {theme.starId} </p>
             {theme.themes.map((t) => (
-              <li className="text-sm" key={t}>
-                {" "}
+              <li className="text-sm pr-2" key={t}>
                 {t}
               </li>
             ))}
