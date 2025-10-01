@@ -1,5 +1,5 @@
 import { text } from "stream/consumers";
-import { elementNumberMap, elementRelationship } from "./charts";
+import { currentYear, elementNumberMap, elementRelationship } from "./charts";
 import { Element, Star } from "./types";
 
 export const getNourishingElement = (curentElement: Element): Element => {
@@ -53,85 +53,53 @@ export const generateFengShuiTemplate = (starHome: Star, starCurrentYear: Star) 
  * @returns 
  */
 export const reccomendElements = (
-    elHome: { element: Element; auspicious: boolean },
-    nourishHome: Element, drainHome: Element,
-    elCurrentYear: { element: Element; auspicious: boolean },
-    nourishCurrentYear: Element, drainCurrentYear: Element
+    elHome: {
+        element: Element;
+        auspicious: boolean
+    },
+    nourishHome: Element,
+    drainHome: Element,
+    elCurrentYear: {
+        element: Element; auspicious: boolean
+    },
+    nourishCurrentYear: Element,
+    drainCurrentYear: Element
 ): string => {
-    let textresponse = '';
+    // TODO: try using an array instead. Obvious focus more on the element, and then seconsary on the enhancers. 
+    const homeels = [
+        elHome.auspicious ? "add " + elHome.element : "remove " + elHome.element,
+        (elHome.auspicious ? "add " : "remove ") + nourishHome,
+        (elHome.auspicious ? "remove " : "add ") + drainHome
+    ]
+    const currentYearels = [
+        elCurrentYear.auspicious ? "add " + elCurrentYear.element : "remove " + elCurrentYear.element,
+        (elCurrentYear.auspicious ? "add " : "remove ") + nourishCurrentYear,
+        (elCurrentYear.auspicious ? "remove " : "add ") + drainCurrentYear
+    ];
+    const allElements = [...homeels, ...currentYearels];
 
-    /**
-     * check the home element 
-      *  is it ausipicious?
-        * check the noursh element
-        * check the drain element 
-     * check the current year element
-         * is it ausipicious?   
-        * check the noursh element
-        * check the drain element 
-     */
-    if (elHome.auspicious && elCurrentYear.auspicious) {
-        if (nourishCurrentYear === nourishHome) {
-            textresponse += "Add " + nourishHome + " to enhance  .";
-        }
-        if (nourishHome === drainCurrentYear || elHome.element === drainCurrentYear) {
-            textresponse += "remove " + drainCurrentYear + "in this location  .";
-        }
-        if (elCurrentYear.element === drainHome || nourishCurrentYear === drainHome) {
-            textresponse += "remove " + drainHome + "in this location  .";
-        }
+    const uniqueElements = Array.from(new Set(allElements)); // remove duplicates 
 
-        else if (drainHome === nourishCurrentYear) {
-            textresponse += "remove " + drainHome + "in this location  .";
-        } else {
-            textresponse += "Add " + nourishHome + " and " + nourishCurrentYear + " .";
+    const textresponse = uniqueElements.map(el => {
+        const currEl = el.split(" ")[1].trim();
+        if (el.includes("remove")) {
+            const idx = uniqueElements.findIndex(e => e === "add " + currEl);
+            if (idx !== -1) {
+                return "\n remove " + currEl;
+            }
+            return "\n " + el;
+        } else if (el.includes("add")) {
+            const idx = uniqueElements.findIndex(e => e === "remove " + currEl);
+            if (idx !== -1) {
+                return "\n remove " + currEl;
+            }
+            return "\n " + el;
         }
-    } else if (!elHome.auspicious && !elCurrentYear.auspicious) {
-        if (elCurrentYear.element === elHome.element) {
-            textresponse += `remove ${elHome.element}. `;
-        }
-        if (nourishHome === drainCurrentYear) {
-            textresponse += "remove " + nourishHome + "in this location this permanently [current year] .";
-        }
-        if (drainHome === nourishCurrentYear) {
-            textresponse += "remove " + nourishCurrentYear + "in this location this year [current year] .";
-        }
-        if (nourishHome === nourishCurrentYear) {
-            textresponse += `remove ${nourishCurrentYear}`;
-        }
-        else {
-            textresponse += "Add " + drainHome + " and " + drainCurrentYear + " if you can't remove " + elHome.element + " .";
-        }
-    }
-    // mixed auspicious 
-    else if (elHome.auspicious && !elCurrentYear.auspicious) {
-        if (drainHome === nourishCurrentYear) {
-            textresponse += `remove ${drainHome} this year.`
-        }
-        if (nourishHome === drainCurrentYear) {
-            textresponse += `remove ${nourishHome} this year. Unless there is zero ${elCurrentYear.element}.`
-        }
-        if (nourishHome === nourishCurrentYear) {
-            textresponse += `remove ${nourishCurrentYear} this year.`
-        }
-    }
-    // mixed auspicious 
-    else if (elHome.auspicious && !elCurrentYear.auspicious) {
-        // if home element is the same as current year element
-        if (elHome.element === elCurrentYear.element) {
-            textresponse += `This cannot be balanced. Do not add ${elHome.element} this year.}  .`;
-            textresponse += `If you can't remove  ${elHome.element}, ensure be sure to remove ${drainHome} and remove ${nourishHome}}  .`;
-        }
-        // if the drainhome is the same as the nourish
-        if (drainHome === nourishCurrentYear) {
-            textresponse += `remove ${drainHome} this year.  .`;
-        }
-        // if the nourishhome is the same as the drain
-        else if (nourishHome === drainCurrentYear) {
-            textresponse += `remove ${nourishHome} this year.  .`;
-        }
-    }
-    return textresponse;
+        return "\n " + el;
+    });
+
+    return Array.from(new Set(textresponse)).join(" . ");
+
 }
 
 const addremoveBaseElement = (elHome: { element: Element; auspicious: boolean }, elCurrentYear: { element: Element; auspicious: boolean }): string => {
