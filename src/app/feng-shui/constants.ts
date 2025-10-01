@@ -1,50 +1,60 @@
-export const crystals = {
-  "Wood": [
-    "Green Aventurine",
-    "Amazonite",
-    "Malachite",
-    "Moss Agate",
-    "Fluorite",
-    "Tree Agate",
-    "Peridot"
-  ],
-  "Fire": [
-    "Carnelian",
-    "Red Jasper",
-    "Garnet",
-    "Ruby",
-    "Sunstone",
-    "Fire Agate",
-    "Bloodstone"
-  ],
-  "Earth": [
-    "Tiger’s Eye",
-    "Smoky Quartz",
-    "Citrine",
-    "Yellow Jasper",
-    "Calcite (Honey/Golden)",
-    "Aragonite",
-    "Petrified Wood"
-  ],
-  "Metal": [
-    "Clear Quartz",
-    "Selenite",
-    "Hematite",
-    "Pyrite",
-    "Chrysocolla",
-    "Magnetite",
-    "Howlite"
-  ],
-  "Water": [
-    "Amethyst",
-    "Lapis Lazuli",
-    "Aquamarine",
-    "Blue Lace Agate",
-    "Black Obsidian",
-    "Moonstone",
-    "Labradorite"
-  ]
-}
+export const crystals = [
+  {
+    element: "Wood", "examples": [
+      "Green Aventurine",
+      "Amazonite",
+      "Malachite",
+      "Moss Agate",
+      "Fluorite",
+      "Tree Agate",
+      "Peridot"
+    ],
+  },
+  {
+    element: "Fire", "examples": [
+      "Carnelian",
+      "Red Jasper",
+      "Garnet",
+      "Ruby",
+      "Sunstone",
+      "Fire Agate",
+      "Bloodstone"
+    ],
+  },
+  {
+    element: "Earth", "examples": [
+      "Tiger’s Eye",
+      "Smoky Quartz",
+      "Citrine",
+      "Yellow Jasper",
+      "Calcite (Honey/Golden)",
+      "Aragonite",
+      "Petrified Wood"
+    ],
+  },
+  {
+    element: "Metal", "examples": [
+      "Clear Quartz",
+      "Selenite",
+      "Hematite",
+      "Pyrite",
+      "Chrysocolla",
+      "Magnetite",
+      "Howlite"
+    ],
+  },
+  {
+    element: "Water", "examples": [
+      "Amethyst",
+      "Lapis Lazuli",
+      "Aquamarine",
+      "Blue Lace Agate",
+      "Black Obsidian",
+      "Moonstone",
+      "Labradorite"
+    ]
+  }
+]
 
 export const starThemes = [
   {

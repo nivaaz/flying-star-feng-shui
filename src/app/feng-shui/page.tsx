@@ -13,7 +13,8 @@ import CurrentElement from "./currentElement";
 import Container from "../components/container";
 import { Star, YearSquares } from "./types";
 import { ElementExamples, generateFengShuiTemplate } from "./utils";
-import { starThemes } from "./constants";
+import { crystals, starThemes } from "./constants";
+import html2canvas from "html2canvas";
 
 const periods = [
   "period 9 (2024-2043)",
@@ -194,11 +195,17 @@ export default function Home() {
           </div>
           <div className="py-4">
             <label className="block text-lg ">Astrocartography</label>
-            <input
-              type="text"
+            <textarea
               id="Astrocartography"
               className="p-2 mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:text-slate-200 dark:bg-slate-900"
               placeholder="location"
+              rows={1}
+              style={{ overflow: "hidden", resize: "none" }}
+              onInput={(e) => {
+                const target = e.target as HTMLTextAreaElement;
+                target.style.height = "auto";
+                target.style.height = target.scrollHeight + "px";
+              }}
             />
           </div>
           <div>
@@ -309,17 +316,24 @@ export default function Home() {
         </Container>
 
         <Container>
-          <button onClick={generateDefaultText}> Set default values </button>
           <div>
-            <h2 className="text-xl "> Your chart</h2>
+            <div className="flex justify-between w-full">
+              <h2 className="text-xl "> Your chart</h2>
+              <button
+                className="border rounded-lg px-4 py-2"
+                onClick={generateDefaultText}
+              >
+                {" "}
+                Set default values{" "}
+              </button>
+            </div>
             <p>
-              Here is the combined chart with Period 9, 2024 and the chart of
-              your home chart.
+              {" "}
+              Here is the chart for your home move in period, and selected year.{" "}
             </p>
           </div>
           <div className="py-8 print:hidden">
-            <p className="text-xl"> Chat view options </p>
-
+            <p className="text-lg"> Chat view options </p>
             <button
               className="border  bg-slate-100 p-2 rounded-lg dark:bg-slate-900 dark:text-slate-100 m-1"
               onClick={() => {
@@ -402,6 +416,7 @@ export default function Home() {
         </Container>
         <ElementExampleBlock />
         <StarThemes />
+        <Crystals />
         <Container>
           <div className="print:hidden">
             <p>When you&apos;re happy with your design, print as a pdf.</p>
@@ -473,6 +488,21 @@ const StarThemes = () => {
           </div>
         ))}
       </div>
+    </Container>
+  );
+};
+
+const Crystals = () => {
+  const cc = crystals.map((c) => (
+    <div key={c.element}>
+      <p className="font-bold"> {c.element} </p>
+      <p> {c.examples.join(", ")}</p>
+    </div>
+  ));
+  return (
+    <Container>
+      <h2 className="font-bold text-xl pb-2"> Crystals </h2>
+      <div className="grid grid-cols-3 gap-4">{cc}</div>
     </Container>
   );
 };
