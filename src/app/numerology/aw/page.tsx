@@ -4,12 +4,14 @@ import {
   areZodiacsCompatible,
   chaldeanNumerologyCalculator,
   getChineseZodiac,
-  getLevelsArrayPublic,
-} from "./utils";
-import { addressFields, levelLabels, NumerologyMeanings } from "./constants";
-import Container from "../components/container";
-import { FormDataType, LevelType } from "./types";
+  getLevelsArray,
+} from "../utils";
+import { addressFields } from "../constants";
+
+import Container from "../../components/container";
+import { FormDataType, LevelType } from "../types";
 import clsx from "clsx";
+import { ChineseZodiacMeanings, NumerologyMeanings } from "./constants";
 
 const Numerology = () => {
   const [formData, setFormData] = useState<FormDataType>({
@@ -35,7 +37,7 @@ const Numerology = () => {
     };
 
     setFormData(newFormData);
-    setLevels(getLevelsArrayPublic(newFormData));
+    setLevels(getLevelsArray(newFormData));
   };
 
   return (
@@ -85,7 +87,27 @@ const Numerology = () => {
                 />
               );
             })}
-            
+            {formData.streetName && (
+              <Level
+                key="L3"
+                level="L3"
+                description={"Street"}
+                inputString={formData.streetName}
+                output={chaldeanNumerologyCalculator(
+                  formData.streetName
+                ).toString()}
+              />
+            )}
+            {formData.postalCode && (
+              <Level
+                level="L4"
+                description="Postal Code"
+                inputString={formData.postalCode.toString()}
+                output={chaldeanNumerologyCalculator(
+                  formData.postalCode
+                ).toString()}
+              />
+            )}
             {formData.homeYear && (
               <Level
                 level="Bonus 1"
@@ -141,7 +163,7 @@ const Numerology = () => {
               />
               <Level
                 level="Personal Year Number"
-                description=""
+                description="Your number theme for this year"
                 inputString={formData.bday}
                 output={personaYearNumber(formData.bday).toString()}
               />
@@ -243,29 +265,68 @@ const Level = ({
   inputString?: string;
   output: string;
 }) => {
-  const numerologyMeanings =
-    NumerologyMeanings[output as keyof typeof NumerologyMeanings] ?? null;
-  const numericOutput = Number(output);
+  const normalizedOutput = output?.trim();
+  const numericValue = Number(normalizedOutput);
+  const hasNumericOutput = Number.isInteger(numericValue) && numericValue > 0;
+  const numerologyMeaning = hasNumericOutput
+    ? NumerologyMeanings[
+        (numericValue - 1) as keyof typeof NumerologyMeanings
+      ] ?? null
+    : null;
+  const zodiacMeaning =
+    ChineseZodiacMeanings.find((i) => i.name === normalizedOutput) ?? null;
+
+  const meanings = zodiacMeaning ?? numerologyMeaning;
+
   const badgeClassName = clsx(
-    "font-light rounded-md uppercase text-sm mt-4 mb-1 p-1 px-2 w-fit dark:bg-slate-800",
-    numerologyMeanings
-      ? numerologyBadgeColors[numericOutput] ?? "bg-slate-100"
-      : "bg-slate-100"
+    "rounded-md uppercase text-xs font-bold my-8 mb-1 p-1 px-2 w-fit dark:bg-slate-800",
+    numerologyMeaning
+      ? numerologyBadgeColors[numericValue] ?? "bg-yellow-100"
+      : "bg-yellow-100"
   );
-  console.log(numerologyMeanings);
+
   return (
-    <div className="rounded-lg border bg-white dark:bg-slate-900 dark:border-slate-500 border-slate-300">
-      <p className="font-bold text-sm  text-slate-500  dark:text-slate-400 rounded-t-md p-2 border-b border-slate-300 dark:border-slate-500">
-        {level} {description} {levelLabels[level]}
-      </p>
-      <div className="p-2">
-        <p>
-          {inputString?.toUpperCase()} → {output}{" "}
-          <b className={badgeClassName}>{numerologyMeanings?.meaning}</b>
+    <div className="rounded-lg border bg-white dark:bg-slate-900 dark:border-slate-300 border-slate-300">
+      <div className="text-sm  text-slate-700  dark:text-slate-400 rounded-t-md p-2 border-b border-slate-300 dark:border-slate-300">
+        <p className="bg-slate-100 w-fit mb-1 p-1 px-2 rounded-md">
+          {level} → {description} → {inputString?.toUpperCase()}
         </p>
-        {numerologyMeanings && (
+        <p>
+          <b className={badgeClassName}>
+            {output}
+            {numerologyMeaning && ` - ${numerologyMeaning.name}`}
+          </b>
+        </p>
+      </div>
+      <div className="p-2">
+        {meanings && (
           <>
-            <p> {numerologyMeanings?.description}</p>
+            <p>
+              {" "}
+              <b className="text-slate-700 text-sm  font-light">
+                Themes:{" "}
+              </b>{" "}
+              {meanings?.themes}
+            </p>
+            <p>
+              {" "}
+              <b className="text-slate-700 text-sm  font-light">
+                Challenges:{" "}
+              </b>{" "}
+              {meanings.challenges}
+            </p>
+            <p>
+              {" "}
+              <b className="text-slate-700 text-sm  font-light">Gifts:</b>{" "}
+              {meanings.gifts}
+            </p>
+            <p>
+              {" "}
+              <b className="text-slate-700 text-sm  font-light">
+                Reflection:
+              </b>{" "}
+              {meanings.nlp_prompt}
+            </p>
           </>
         )}
       </div>

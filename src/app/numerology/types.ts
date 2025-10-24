@@ -25,7 +25,7 @@ export type FormDataType = {
     bday: string,
     isDirtyForm: boolean,
 }        
-
+export type Level = "L1" | "L2" | "L1L2" | "L3" | "L4";
 
 export type LevelType = {
     level: string;

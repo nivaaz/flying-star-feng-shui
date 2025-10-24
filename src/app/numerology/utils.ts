@@ -12,6 +12,42 @@ const chaldeanMapping: { [key: string]: number } = {
   F: 8, P: 8
 };
 
+export const getLevelsArrayPublic = (formData: FormDataType): LevelType[] => {
+  const unit = formData.unitNumber ? { level: 'L1', value: formData.unitNumber, name: 'Unit Number' } : null;
+
+  const building = (formData.buildingNumberAndName) ? { level: 'L2', value: formData.buildingNumberAndName, name: 'Building Name & Number' } : null;
+
+  let L2AddOn = {
+    level: 'L2',
+    value: (formData.buildingNumberAndName ? formData.streetNumber : formData.streetName + ' ' + formData.streetNumber),
+    name: formData.buildingNumberAndName ? 'Building Name & Number' : 'Street Name'
+  };
+
+  let L2 = {
+    level: 'L2',
+    value: L2AddOn.value + ' ' + (building?.value ?? ''),
+    name: 'Street Number'
+  }
+
+  const combined = unit && L2 ? {
+    level: 'L1L2',
+    value: `${L2.value} + ${unit.value}`,
+    name: `${L2.name} + ${unit.name}`
+  } : null;
+
+  const street = formData.streetName
+    ? {
+      level: 'L3',
+      value: [formData.streetName].filter(Boolean).join(' '),
+      name: 'Street Name',
+    }
+    : null;
+  const zipcode = formData.postalCode ? { level: 'L4', value: formData.postalCode, name: 'ZipCode' } : null;
+
+  return [unit, L2, combined, street, zipcode].filter(Boolean) as LevelType[];
+}
+
+
 export const getLevelsArray = (formData: FormDataType): LevelType[] => {
   let levelsArray = [];
   if (formData.unitNumber !== "") {
@@ -57,11 +93,11 @@ export function chaldeanNumerologyCalculator(inputString: string) {
     return Number(inputString);
   }
   // Remove all spaces from the input
-  let fromattedInput = inputString.replace(/\s+/g, '');
+  let formattedInput = inputString.replace(/\s+/g, '');
 
   // Calculate the Chaldean number by summing the mapped values
   let total = 0;
-  for (let char of fromattedInput as string) {
+  for (let char of formattedInput as string) {
     if (!isNaN(Number(char))) {
       total += Number(char);
     } else {
@@ -98,7 +134,7 @@ export function getChineseZodiac(year: number): Zodiacs {
   return chineseZodiac[index];
 }
 
-type Zodiacs = 'Ox' | 'Tiger' | 'Rabbit' | 'Dragon' | 'Snake' | 'Horse' | 'Goat' | 'Monkey' | 'Rooster' | 'Dog' | 'Pig' | 'Rat';
+export type Zodiacs = 'Ox' | 'Tiger' | 'Rabbit' | 'Dragon' | 'Snake' | 'Horse' | 'Goat' | 'Monkey' | 'Rooster' | 'Dog' | 'Pig' | 'Rat';
 const ZodiacMapping = [
   "Ox",
   "Tiger",
@@ -114,6 +150,7 @@ const ZodiacMapping = [
   "Rat",
 ]
 type ranks = '-' | 'x' | 'd' | '?' | 't' | 'h';
+
 const compatabilityRanking = {
   '-': 'average',
   'x': 'worst',

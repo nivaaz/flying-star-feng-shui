@@ -1,3 +1,5 @@
+import { Level } from "./types"
+
 export const addressFields = [
     {
         example: "e.g. 3B",
@@ -39,6 +41,15 @@ export const addressFields = [
     },
 ]
 
+
+export const levelLabels: Record<Level, string> = {
+    "L1": "(On-going life event/theme)",
+    "L2": "(What super-charges the personal event)",
+    "L1L2": "(The long-term result of the personal event)",
+    "L3": "(Theme of friends/community)",
+    "L4": "(City theme)",
+}
+
 export const NumerologyMeanings = {
     "1": {
         meaning: "The Leader",
@@ -50,11 +61,11 @@ export const NumerologyMeanings = {
     },
     "3": {
         meaning: "The Communicator",
-        description: "social, network, friendships"
+        description: "social, network, friendships, cheating"
     },
     "4": {
         meaning: "The Worker",
-        description: "stability, security, responsibility"
+        description: "stability, security, responsibility, overworking"
     },
     "5": {
         meaning: "The Adventurer",
@@ -62,7 +73,7 @@ export const NumerologyMeanings = {
     },
     "6": {
         meaning: "The Nurturer",
-        description: "family, pets, romance, intimacy"
+        description: "family, pets, romance, intimacy, overgiving"
     },
     "7": {
         meaning: "The Seeker",
@@ -70,7 +81,7 @@ export const NumerologyMeanings = {
     },
     "8": {
         meaning: "The Achiever",
-        description: "money, karma, power, privacy"
+        description: "money, karma, power, privacy, make money fast, lose money fast"
     },
     "9": {
         meaning: "The Humanitarian",
@@ -78,14 +89,14 @@ export const NumerologyMeanings = {
     },
     "11": {
         meaning: "The Visionary",
-        description: "The number 11 is the number of inspiration, intuition, and enlightenment. It is the number of the visionary, the dreamer, and the seer. It is the number of the psychic, the healer, and the teacher. "
+        description: "partnership, inspiration, intuition, and enlightenment, visionary, the dreamer, and the seer. It is the number of the psychic, the healer, and the teacher. "
     },
     "22": {
         meaning: "The Master Builder",
-        description: "The number 22 is the number of mastery, power, and achievement. It is the number of the master builder, the architect, and the engineer. It is the number of the visionary, the leader, and the manager. "
+        description: "building mastery, power, and achievement, master builder, the architect, and the engineer. It is the number of the visionary, the leader, and the manager. "
     },
     "33": {
         meaning: "The Master Teacher",
-        description: "The number 33 is the number of compassion, healing, and guidance. It is the number of the master teacher, the counselor, and the mentor. It is the number of the humanitarian, the philanthropist, and the healer."
+        description: "compassion, healing, and guidance, master teacher, the counselor, and the mentor. It is the number of the humanitarian, the philanthropist, and the healer."
     }
 }

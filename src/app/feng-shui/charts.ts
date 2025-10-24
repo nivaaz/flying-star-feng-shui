@@ -57,11 +57,11 @@ export const elementNumberMap: Record<Star, { auspicious: boolean, color: string
     },
     4: {
         auspicious: true, color: 'green', elementIcon: '🪵',
-        theme: " intelligence & education", element: Element.wood
+        theme: " love, intelligence & education", element: Element.wood
     },
     5: {
         auspicious: false, color: 'yellow', elementIcon: '🌏',
-        theme: "  illness and misfortune", element: Element.earth
+        theme: " general misfortune", element: Element.earth
     },
     6: {
         auspicious: true, color: 'white', elementIcon: '🪙',

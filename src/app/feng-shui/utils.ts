@@ -34,10 +34,10 @@ export const generateFengShuiTemplate = (starHome: Star, starCurrentYear: Star) 
     const drainCurrentYear = getDrainingElement(elCurrentYear.element);
 
     let textresponse = getAuspiciousnessLevel(elHome.auspicious, elCurrentYear.auspicious);
-    textresponse += `\n\n Stars: \n ⭐️[HOME] ${starHome} | ${elHome.element} - ${elHome.theme} \n ⭐️[YEAR]${starCurrentYear} | ${elCurrentYear.element} - ${elCurrentYear.theme}.`;
-   textresponse += "\n\n ⚪️ In this area: \n "
+    textresponse += `\n\n Stars: \n -[HOME] ${starHome} | ${elHome.element} - ${elHome.theme} \n -[YEAR]${starCurrentYear} | ${elCurrentYear.element} - ${elCurrentYear.theme}.`;
+    textresponse += "\n\n ⚪️ In this area: \n "
     textresponse += "\n" + shouldAddSaltCure(elHome, elCurrentYear, drainHome, drainCurrentYear) + " .";
-    textresponse += "\n" + addremoveBaseElement(elHome, elCurrentYear) + " ."; // TODO:
+    textresponse += "\n The core elements for this area: \n" + addremoveBaseElement(elHome, elCurrentYear) + " ."; // TODO:
     textresponse += "\n" + reccomendElements(elHome, nourishHome, drainHome, elCurrentYear, nourishCurrentYear, drainCurrentYear) + " .";
     return textresponse;
 
@@ -106,11 +106,11 @@ export const reccomendElements = (
 }
 
 const addremoveBaseElement = (elHome: { element: Element; auspicious: boolean }, elCurrentYear: { element: Element; auspicious: boolean }): string => {
-    let textResponse = (elHome.auspicious ? "Add " : "remove ") + elHome.element + ". [HOME, can be permamnent change] . ";
+    let textResponse = "\n - " + (elHome.auspicious ? "Add " : "remove ") + elHome.element + ". [HOME, can be permanent change] . ";
     if (elHome.element === elCurrentYear.element) {
         return textResponse
     }
-    textResponse += (elCurrentYear.auspicious ? "Add " : "remove ") + elCurrentYear.element + ". [Current Year, non permanent change] . "
+    textResponse += "\n - " + (elCurrentYear.auspicious ? "Add " : "remove ") + elCurrentYear.element + ". [Current Year, non permanent change] . "
     return textResponse;
 }
 
@@ -123,27 +123,27 @@ const shouldAddSaltCure = (
     }
     if (!elHome.auspicious) {
         if (drainHome === Element.water) {
-            return "NO salt cure here.  .";
+            return "NO salt cure here.\n";
         }
     }
     if (!elCurrentYear.auspicious) {
         if (drainCurrentYear === Element.water) {
-            return "NO salt cure here.  .";
+            return "NO salt cure here.\n";
         }
     }
     if (drainHome === Element.water || drainCurrentYear === Element.water) {
-        return "NO salt cure here.  .";
+        return "NO salt cure here.\n";
     }
-    return "ADD a salt cure here.  .";
+    return "🧂 ADD a salt cure here.\n";
 }
 
 const getAuspiciousnessLevel = (auspiciousness1: boolean, auspiciousness2: boolean): string => {
     if (auspiciousness1 && auspiciousness2) {
-        return "⭐️ This is one of the best areas of your home . \n ⭐️ Add astrocartography here .";
+        return "⭐️ This is one of the best areas of your home . \n ⭐️ Add astrocartography here.";
     } else if (!auspiciousness1 && !auspiciousness2) {
-        return "‼️ This is one of the worst areas of your home. Spend less time here .";
+        return "‼️ This is one of the worst areas of your home. Spend less time here.";
     } else {
-        return "🌀 This is a mixed area of your home .";
+        return "🌀 This is a mixed area of your home.";
     }
 }
 
