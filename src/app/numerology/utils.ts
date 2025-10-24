@@ -74,7 +74,6 @@ export const getLevelsArray = (formData: FormDataType): LevelType[] => {
       { level: 'L1', ...levelsArray[0] },
       { level: 'L2', ...levelsArray[1] },
       { level: 'L1L2', value: levelsArray[1].value + ' ' + levelsArray[0].value, name: levelsArray[1].name + ' ' + levelsArray[0].name },
-      { level: 'L3', ...levelsArray[2] },
     ]
   } else if (levelsArray.length === 2) {
     return [
