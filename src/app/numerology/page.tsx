@@ -8,7 +8,7 @@ import {
 } from "./utils";
 import { addressFields, levelLabels, NumerologyMeanings } from "./constants";
 import Container from "../components/container";
-import { FormDataType, LevelType } from "./types";
+import { FormDataType, Levels, LevelType } from "./types";
 import clsx from "clsx";
 
 const Numerology = () => {
@@ -85,7 +85,7 @@ const Numerology = () => {
                 />
               );
             })}
-            
+
             {formData.homeYear && (
               <Level
                 level="Bonus 1"
@@ -252,11 +252,16 @@ const Level = ({
       ? numerologyBadgeColors[numericOutput] ?? "bg-slate-100"
       : "bg-slate-100"
   );
+  const isLevelType = (value: unknown): value is Levels =>
+    typeof value === "string" && value in levelLabels;
+
+  const displayLevel = isLevelType(level) ? levelLabels[level] : level;
+
   console.log(numerologyMeanings);
   return (
     <div className="rounded-lg border bg-white dark:bg-slate-900 dark:border-slate-500 border-slate-300">
       <p className="font-bold text-sm  text-slate-500  dark:text-slate-400 rounded-t-md p-2 border-b border-slate-300 dark:border-slate-500">
-        {level} {description} {levelLabels[level]}
+        {level} {description} {displayLevel}
       </p>
       <div className="p-2">
         <p>

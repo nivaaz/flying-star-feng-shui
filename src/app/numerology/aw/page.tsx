@@ -1,5 +1,5 @@
 "use client";
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode, useState } from "react";
 import {
   areZodiacsCompatible,
   chaldeanNumerologyCalculator,
@@ -9,7 +9,7 @@ import {
 import { addressFields } from "../constants";
 
 import Container from "../../components/container";
-import { FormDataType, LevelType } from "../types";
+import { FormDataType, LevelType, Meaning } from "../types";
 import clsx from "clsx";
 import { ChineseZodiacMeanings, NumerologyMeanings } from "./constants";
 
@@ -83,36 +83,18 @@ const Numerology = () => {
                   level={l.level}
                   description={l.name}
                   inputString={l.value}
+                  levelType="numerology"
                   output={chaldeanNumerologyCalculator(l.value).toString()}
                 />
               );
             })}
-            {formData.streetName && (
-              <Level
-                key="L3"
-                level="L3"
-                description={"Street"}
-                inputString={formData.streetName}
-                output={chaldeanNumerologyCalculator(
-                  formData.streetName
-                ).toString()}
-              />
-            )}
-            {formData.postalCode && (
-              <Level
-                level="L4"
-                description="Postal Code"
-                inputString={formData.postalCode.toString()}
-                output={chaldeanNumerologyCalculator(
-                  formData.postalCode
-                ).toString()}
-              />
-            )}
+          
             {formData.homeYear && (
               <Level
                 level="Bonus 1"
                 description="Chinese zodiac of Home build year"
                 inputString={formData.homeYear.toString()}
+                levelType="zodiac"
                 output={getChineseZodiac(Number(formData.homeYear))}
               />
             )}
@@ -121,6 +103,7 @@ const Numerology = () => {
                 level="Bonus 2"
                 description="Chinese zodiac of birth year"
                 inputString={formData.bornYear.toString()}
+                levelType="zodiac"
                 output={getChineseZodiac(Number(formData.bornYear))}
               />
             )}
@@ -129,6 +112,7 @@ const Numerology = () => {
                 <Level
                   level="Bonus 1 & Bonus 2"
                   description="Compatibility between home build year and birth year"
+                  levelType="string"
                   inputString={
                     formData.bornYear +
                     " → " +
@@ -159,18 +143,21 @@ const Numerology = () => {
                 level="Life Path Number"
                 description=""
                 inputString={formData.bday}
+                levelType="numerology"
                 output={chaldeanNumerologyCalculator(formData.bday).toString()}
               />
               <Level
                 level="Personal Year Number"
                 description="Your number theme for this year"
                 inputString={formData.bday}
+                levelType="numerology"
                 output={personaYearNumber(formData.bday).toString()}
               />
               <Level
                 level="Chinese Zodiac"
                 description=""
                 inputString={formData.bday}
+                levelType="zodiac"
                 output={getChineseZodiac(Number(formData.bday.substring(0, 4)))}
               />
             </div>
@@ -254,36 +241,80 @@ const numerologyBadgeColors: Record<number, string> = {
   33: "bg-rose-100",
 };
 
+type MeaningDisplayKey = Exclude<keyof Meaning, "name" | "number">;
+
+const meaningLabelMap: Partial<Record<MeaningDisplayKey, string>> = {
+  themes: "Themes",
+  challenges: "Challenges",
+  gifts: "Gifts",
+  nlp_prompt: "Reflection",
+};
+
+const formatMeaningLabel = (key: MeaningDisplayKey) => {
+  const customLabel = meaningLabelMap[key];
+  if (customLabel) {
+    return customLabel;
+  }
+
+  return key
+    .split("_")
+    .map((segment) => segment.charAt(0).toUpperCase() + segment.slice(1))
+    .join(" ");
+};
+
 const Level = ({
   level,
   description,
   inputString,
   output,
+  levelType,
 }: {
   level: string;
   description: string;
   inputString?: string;
   output: string;
+  levelType: "numerology" | "zodiac" | "string";
 }) => {
   const normalizedOutput = output?.trim();
+  let meanings: Meaning | null = null;
   const numericValue = Number(normalizedOutput);
-  const hasNumericOutput = Number.isInteger(numericValue) && numericValue > 0;
-  const numerologyMeaning = hasNumericOutput
-    ? NumerologyMeanings[
-        (numericValue - 1) as keyof typeof NumerologyMeanings
-      ] ?? null
-    : null;
-  const zodiacMeaning =
-    ChineseZodiacMeanings.find((i) => i.name === normalizedOutput) ?? null;
 
-  const meanings = zodiacMeaning ?? numerologyMeaning;
+  if (levelType === "numerology") {
+    const numerologyMeaning = NumerologyMeanings[numericValue - 1];
+    meanings = numerologyMeaning;
+  } else if (levelType === "zodiac") {
+    const zodiacMeaning =
+      ChineseZodiacMeanings.find((i) => i.name === normalizedOutput) ?? null;
+    meanings = zodiacMeaning;
+  } else {
+    meanings = null;
+  }
 
-  const badgeClassName = clsx(
-    "rounded-md uppercase text-xs font-bold my-8 mb-1 p-1 px-2 w-fit dark:bg-slate-800",
-    numerologyMeaning
-      ? numerologyBadgeColors[numericValue] ?? "bg-yellow-100"
-      : "bg-yellow-100"
-  );
+  const badgeClassName =
+    levelType === "numerology"
+      ? clsx(
+          "rounded-md uppercase text-xs font-bold my-8 mb-1 p-1 px-2 w-fit dark:bg-slate-800",
+          meanings
+            ? numerologyBadgeColors[numericValue] ?? "bg-yellow-100"
+            : "bg-yellow-100"
+        )
+      : "";
+
+  const meaningEntries: Array<[MeaningDisplayKey, string]> = meanings
+    ? (
+        Object.entries(meanings) as Array<
+          [keyof Meaning, Meaning[keyof Meaning]]
+        >
+      ).filter((entry): entry is [MeaningDisplayKey, string] => {
+        const [key, value] = entry;
+        return (
+          key !== "name" &&
+          key !== "number" &&
+          typeof value === "string" &&
+          value.trim().length > 0
+        );
+      })
+    : [];
 
   return (
     <div className="rounded-lg border bg-white dark:bg-slate-900 dark:border-slate-300 border-slate-300">
@@ -294,39 +325,24 @@ const Level = ({
         <p>
           <b className={badgeClassName}>
             {output}
-            {numerologyMeaning && ` - ${numerologyMeaning.name}`}
+            {meanings &&
+              typeof meanings !== "number" &&
+              typeof (meanings as any).name === "string" &&
+              ` - ${(meanings as any).name}`}
           </b>
         </p>
       </div>
       <div className="p-2">
         {meanings && (
           <>
-            <p>
-              {" "}
-              <b className="text-slate-700 text-sm  font-light">
-                Themes:{" "}
-              </b>{" "}
-              {meanings?.themes}
-            </p>
-            <p>
-              {" "}
-              <b className="text-slate-700 text-sm  font-light">
-                Challenges:{" "}
-              </b>{" "}
-              {meanings.challenges}
-            </p>
-            <p>
-              {" "}
-              <b className="text-slate-700 text-sm  font-light">Gifts:</b>{" "}
-              {meanings.gifts}
-            </p>
-            <p>
-              {" "}
-              <b className="text-slate-700 text-sm  font-light">
-                Reflection:
-              </b>{" "}
-              {meanings.nlp_prompt}
-            </p>
+            {meaningEntries.map(([key, value]) => (
+              <p key={key}>
+                <b className="text-slate-700 text-sm font-light">
+                  {formatMeaningLabel(key)}:
+                </b>{" "}
+                {value}
+              </p>
+            ))}
           </>
         )}
       </div>

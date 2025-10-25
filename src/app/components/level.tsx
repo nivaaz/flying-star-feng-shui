@@ -1,5 +1,6 @@
 import { ChineseZodiacMeanings } from "../numerology/aw/constants";
-import { Level, NumerologyMeanings } from "../numerology/constants";
+import { levelLabels, NumerologyMeanings } from "../numerology/constants";
+import { Levels } from "../numerology/types";
 
 const Level = ({
   level,
@@ -23,7 +24,7 @@ const Level = ({
   return (
     <div className="rounded-lg border bg-white dark:bg-slate-900 dark:border-slate-500 border-slate-700">
       <p className="font-bold text-sm  text-slate-500  dark:text-slate-400 rounded-t-md p-2 border-b border-slate-700 dark:border-slate-500">
-        {level} {description} {levelLabels[level as Level]}
+        {level} {description} {levelLabels[level as Levels]}
       </p>
       <div className="p-2">
         <p>

@@ -1,5 +1,4 @@
 import { FormDataType, LevelType } from "./types";
-
 // Chaldean mapping of letters to numbers
 const chaldeanMapping: { [key: string]: number } = {
   A: 1, I: 1, J: 1, Q: 1, Y: 1,
@@ -53,37 +52,25 @@ export const getLevelsArray = (formData: FormDataType): LevelType[] => {
   if (formData.unitNumber !== "") {
     levelsArray.push({ value: (formData.unitNumber), name: "Unit Number" });
   }
-  if (formData.buildingNumberAndName !== "") {
+  if (formData.buildingNumberAndName !== "" && formData.streetNumber !== "") {
+    levelsArray.push({ value: (formData.buildingNumberAndName) + " " + formData.streetNumber, name: "Building Name and Number & Street Number" })
+  } else if (formData.buildingNumberAndName !== "") {
     levelsArray.push({ value: (formData.buildingNumberAndName), name: "Building Name and Number" })
-  }
-  if (levelsArray.length === 0) {
-    if (formData.streetNumber !== "") {
-      levelsArray.push({ value: (formData.streetNumber), name: "Street Number" });
-    }
-    if (formData.streetName !== "") {
-      levelsArray.push({ value: (formData.streetName), name: "Street Name" });
-    }
-  } else if (formData.streetNumber !== "" && formData.streetName !== "") {
-    levelsArray.push({ value: (formData.streetNumber + " " + formData.streetName), name: "Street Number & Name" });
+  } else if (formData.streetNumber !== "") {
+    levelsArray.push({ value: (formData.streetNumber), name: "Street Number" });
   }
 
-
-  console.log(levelsArray);
-  if (levelsArray.length >= 3) {
-    return [
-      { level: 'L1', ...levelsArray[0] },
-      { level: 'L2', ...levelsArray[1] },
-      { level: 'L1L2', value: levelsArray[1].value + ' ' + levelsArray[0].value, name: levelsArray[1].name + ' ' + levelsArray[0].name },
-    ]
-  } else if (levelsArray.length === 2) {
-    return [
-      { level: 'L1', ...levelsArray[0] },
-      { level: 'L2', ...levelsArray[1] },
-      { level: 'L1L2', value: levelsArray[1].value + ' ' + levelsArray[0].value, name: levelsArray[1].name + ' ' + levelsArray[0].name },
-    ]
-  } else {
-    return levelsArray.map((level, index) => ({ level: `L${index + 1}`, ...level }));
+  if (formData.streetName !== "") {
+    levelsArray.push({ value: (formData.streetName), name: "Street Name" });
   }
+  if (levelsArray.length >= 2) {
+    levelsArray.push({ level: 'L1+L2', value: levelsArray[1].value + ' ' + levelsArray[0].value, name: levelsArray[1].name + ' ' + levelsArray[0].name });
+  }
+  if (formData.postalCode !== "") {
+    levelsArray.push({ level: 'L4', value: (formData.postalCode), name: "Postal Code" });
+  }
+
+  return levelsArray.map((level, index) => ({ level: `L${index + 1}`, ...level }));
 
 }
 

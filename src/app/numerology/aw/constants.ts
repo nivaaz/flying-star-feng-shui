@@ -1,92 +1,93 @@
-export const ChineseZodiacMeanings = [
-        {
-            "name": "Rat",
-            "themes": "Intelligence, strategy, adaptability, alertness",
-            "challenges": "Sneakiness, overthinking, anxiety, control",
-            "gifts": "Clever solutions, resourcefulness, sharp instincts",
-            "nlp_prompt": "Where am I trying to manipulate or outsmart life instead of trusting my wisdom?"
-        },
-        {
-            "name": "Ox",
-            "themes": "Stability, discipline, patience, perseverance",
-            "challenges": "Stubbornness, rigidity, emotional detachment",
-            "gifts": "Long-term strength, grounded action, reliability",
-            "nlp_prompt": "What belief am I holding onto that’s keeping me stuck?"
-        },
-        {
-            "name": "Tiger",
-            "themes": "Courage, boldness, independence, rebellion",
-            "challenges": "Impulsiveness, ego, aggressive dominance",
-            "gifts": "Fearless leadership, catalytic energy, protector spirit",
-            "nlp_prompt": "Where can I channel my fire into inspired action instead of reaction?"
-        },
-        {
-            "name": "Rabbit",
-            "themes": "Grace, diplomacy, softness, intuition",
-            "challenges": "Avoidance, fear of conflict, indecision",
-            "gifts": "Peacekeeping, beauty, emotional intelligence",
-            "nlp_prompt": "Where am I avoiding discomfort that would help me grow?"
-        },
-        {
-            "name": "Dragon",
-            "themes": "Power, charisma, innovation, spiritual strength",
-            "challenges": "Arrogance, drama, control issues",
-            "gifts": "Visionary potential, magnetism, transformative force",
-            "nlp_prompt": "Am I embodying power through presence or projection?"
-        },
-        {
-            "name": "Snake",
-            "themes": "Wisdom, mysticism, charm, strategy",
-            "challenges": "Manipulation, secrecy, jealousy",
-            "gifts": "Deep perception, seduction, psychological mastery",
-            "nlp_prompt": "Where can I speak truth instead of hiding behind illusion?"
-        },
-        {
-            "name": "Horse",
-            "themes": "Freedom, movement, joy, momentum",
-            "challenges": "Restlessness, burnout, lack of follow-through",
-            "gifts": "Inspiration, speed, trailblazing spirit",
-            "nlp_prompt": "What does freedom actually mean to me now?"
-        },
-        {
-            "name": "Goat",
-            "themes": "Compassion, creativity, gentleness, emotional depth",
-            "challenges": "Over-sensitivity, indecision, dependency",
-            "gifts": "Artistic gifts, healing energy, nurturing leadership",
-            "nlp_prompt": "Where can I hold myself the way I hold others?"
-        },
-        {
-            "name": "Monkey",
-            "themes": "Wit, playfulness, innovation, communication",
-            "challenges": "Scattered energy, deception, performance-based identity",
-            "gifts": "Creative genius, joyful expression, sharp thinking",
-            "nlp_prompt": "Am I being clever or being real?"
-        },
-        {
-            "name": "Rooster",
-            "themes": "Precision, integrity, beauty, truth",
-            "challenges": "Perfectionism, judgment, rigidity",
-            "gifts": "Clarity, style, accountability",
-            "nlp_prompt": "What would shift if I let go of being right?"
-        },
-        {
-            "name": "Dog",
-            "themes": "Loyalty, justice, protection, community",
-            "challenges": "Cynicism, fear-based loyalty, defensiveness",
-            "gifts": "Grounded faith, service, honorable leadership",
-            "nlp_prompt": "Is my loyalty empowering or enabling?"
-        },
-        {
-            "name": "Pig",
-            "themes": "Compassion, pleasure, abundance, sensuality",
-            "challenges": "Laziness, indulgence, victimhood",
-            "gifts": "Emotional generosity, deep joy, spiritual softness",
-            "nlp_prompt": "Where am I confusing comfort with fulfillment?"
-        }
-    ]
+import { Meaning } from "../types";
 
+export const ChineseZodiacMeanings: Meaning[] = [
+    {
+        "name": "Rat",
+        "themes": "Intelligence, strategy, adaptability, alertness",
+        "challenges": "Sneakiness, overthinking, anxiety, control",
+        "gifts": "Clever solutions, resourcefulness, sharp instincts",
+        "nlp_prompt": "Where am I trying to manipulate or outsmart life instead of trusting my wisdom?"
+    },
+    {
+        "name": "Ox",
+        "themes": "Stability, discipline, patience, perseverance",
+        "challenges": "Stubbornness, rigidity, emotional detachment",
+        "gifts": "Long-term strength, grounded action, reliability",
+        "nlp_prompt": "What belief am I holding onto that’s keeping me stuck?"
+    },
+    {
+        "name": "Tiger",
+        "themes": "Courage, boldness, independence, rebellion",
+        "challenges": "Impulsiveness, ego, aggressive dominance",
+        "gifts": "Fearless leadership, catalytic energy, protector spirit",
+        "nlp_prompt": "Where can I channel my fire into inspired action instead of reaction?"
+    },
+    {
+        "name": "Rabbit",
+        "themes": "Grace, diplomacy, softness, intuition",
+        "challenges": "Avoidance, fear of conflict, indecision",
+        "gifts": "Peacekeeping, beauty, emotional intelligence",
+        "nlp_prompt": "Where am I avoiding discomfort that would help me grow?"
+    },
+    {
+        "name": "Dragon",
+        "themes": "Power, charisma, innovation, spiritual strength",
+        "challenges": "Arrogance, drama, control issues",
+        "gifts": "Visionary potential, magnetism, transformative force",
+        "nlp_prompt": "Am I embodying power through presence or projection?"
+    },
+    {
+        "name": "Snake",
+        "themes": "Wisdom, mysticism, charm, strategy",
+        "challenges": "Manipulation, secrecy, jealousy",
+        "gifts": "Deep perception, seduction, psychological mastery",
+        "nlp_prompt": "Where can I speak truth instead of hiding behind illusion?"
+    },
+    {
+        "name": "Horse",
+        "themes": "Freedom, movement, joy, momentum",
+        "challenges": "Restlessness, burnout, lack of follow-through",
+        "gifts": "Inspiration, speed, trailblazing spirit",
+        "nlp_prompt": "What does freedom actually mean to me now?"
+    },
+    {
+        "name": "Goat",
+        "themes": "Compassion, creativity, gentleness, emotional depth",
+        "challenges": "Over-sensitivity, indecision, dependency",
+        "gifts": "Artistic gifts, healing energy, nurturing leadership",
+        "nlp_prompt": "Where can I hold myself the way I hold others?"
+    },
+    {
+        "name": "Monkey",
+        "themes": "Wit, playfulness, innovation, communication",
+        "challenges": "Scattered energy, deception, performance-based identity",
+        "gifts": "Creative genius, joyful expression, sharp thinking",
+        "nlp_prompt": "Am I being clever or being real?"
+    },
+    {
+        "name": "Rooster",
+        "themes": "Precision, integrity, beauty, truth",
+        "challenges": "Perfectionism, judgment, rigidity",
+        "gifts": "Clarity, style, accountability",
+        "nlp_prompt": "What would shift if I let go of being right?"
+    },
+    {
+        "name": "Dog",
+        "themes": "Loyalty, justice, protection, community",
+        "challenges": "Cynicism, fear-based loyalty, defensiveness",
+        "gifts": "Grounded faith, service, honorable leadership",
+        "nlp_prompt": "Is my loyalty empowering or enabling?"
+    },
+    {
+        "name": "Pig",
+        "themes": "Compassion, pleasure, abundance, sensuality",
+        "challenges": "Laziness, indulgence, victimhood",
+        "gifts": "Emotional generosity, deep joy, spiritual softness",
+        "nlp_prompt": "Where am I confusing comfort with fulfillment?"
+    }
+]
 
-export const NumerologyMeanings = [
+export const NumerologyMeanings: Meaning[] = [
     {
         "number": 1,
         "name": "The Leader",

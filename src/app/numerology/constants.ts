@@ -1,4 +1,4 @@
-import { Level } from "./types"
+import { Levels } from "./types"
 
 export const addressFields = [
     {
@@ -42,12 +42,15 @@ export const addressFields = [
 ]
 
 
-export const levelLabels: Record<Level, string> = {
+export const levelLabels: Record<Levels, string> = {
     "L1": "(On-going life event/theme)",
     "L2": "(What super-charges the personal event)",
     "L1L2": "(The long-term result of the personal event)",
     "L3": "(Theme of friends/community)",
     "L4": "(City theme)",
+    "Bonus 1": "(Chinese zodiac of Home build year)",
+    "Bonus 2": "(Chinese zodiac of birth year)",
+    "Bonus 1 & Bonus 2": "(Compatibility between home build year and birth year)"
 }
 
 export const NumerologyMeanings = {
