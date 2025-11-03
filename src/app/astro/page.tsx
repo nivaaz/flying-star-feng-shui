@@ -9,6 +9,7 @@ import {
   houseIndexByRisingSign,
 } from "./constants";
 import { getAspectsByPlanet } from "./utils";
+import { Astrocartography } from "./astrocartography";
 
 type AstrologyApiResponse = {
   // TODO: type this properly based on actual API response
@@ -295,7 +296,7 @@ const Planets = ({
                 </td> */}
                 <td className="px-4 py-2 text-slate-700 dark:text-slate-300">
                   {/* {planet.zodiac_sign.number} */}
-                  {houseIndexByRisingSign(rising, planet.zodiac_sign.name.en)}
+                  {/* {houseIndexByRisingSign(rising, planet.zodiac_sign.name.en)} */}
                 </td>
               </tr>
             ))}
@@ -341,6 +342,7 @@ const Aspects = ({ aspects }: { aspects: AstrologyAspect[] }) => {
           aspect={aspect}
         />
       ))}
+      <Astrocartography />
     </div>
   );
 };
