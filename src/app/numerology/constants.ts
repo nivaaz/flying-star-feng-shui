@@ -8,15 +8,15 @@ export const addressFields = [
     },
     {
         example: "e.g. 24 Astonia",
-        label: "Building Number + Building Name",
+        label: "Building Number + Building Name / House Number",
         warning: ["Don't include direction e.g. W"],
         currentId: "buildingNumberAndName",
     },
-    {
-        example: "e.g. 32 Wallaby Road => 32",
-        label: "Street Number",
-        currentId: "streetNumber",
-    },
+    // {
+    //     example: "e.g. 32 Wallaby Road => 32",
+    //     label: "Street Number",
+    //     currentId: "streetNumber",
+    // },
     {
         example: "e.g. Madison (Madison Ave)",
         label: "Street Name ",
