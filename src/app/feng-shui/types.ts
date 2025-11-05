@@ -1,5 +1,5 @@
 export type LoShuSquare = Star[][];
-export type YearSquares = "2024" | "2025";
+export type YearSquares = "2024" | "2025" | "2026";
 export type Star = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
 export enum Element {
     fire = "fire",

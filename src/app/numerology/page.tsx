@@ -26,6 +26,37 @@ const Numerology = () => {
 
   const [levels, setLevels] = useState<LevelType[]>([]);
 
+  const publicAddressFields = [
+    {
+      example: "",
+      label: "L1",
+      warning: [],
+      currentId: "unitNumber",
+    },
+    {
+      example: "",
+      label: "L2",
+      warning: [],
+      currentId: "streetName",
+    },
+    {
+      example: "e.g. 2000",
+      label: "  Postal Code:",
+      currentId: "postalCode",
+    },
+    {
+      example: "e.g. 1999",
+      label: " Home built year",
+      currentId: "homeYear",
+    },
+
+    {
+      example: "e.g. 1996",
+      label: " Your birth Year",
+      currentId: "bornYear",
+    },
+  ];
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     const newFormData = {
@@ -52,7 +83,7 @@ const Numerology = () => {
               fields, and that&apos;s ok!
             </p>
             <div className="grid sm:grid-cols-2 md:grid-cols-3 m-auto">
-              {addressFields.map((element) => {
+              {publicAddressFields.map((element) => {
                 return (
                   <InputAddressComponent
                     key={element.currentId}

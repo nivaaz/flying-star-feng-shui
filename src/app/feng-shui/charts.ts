@@ -18,9 +18,16 @@ export const loShuYear2025: LoShuSquare = [
     [5, 7, 3],
 ]
 
+export const loShuYear2026: LoShuSquare = [
+    [9, 5, 7],
+    [8, 1, 3],
+    [4, 6, 2],
+]
+
 export const currentYear: Record<YearSquares, LoShuSquare> = {
     2024: loShuYear2024,
-    2025: loShuYear2025
+    2025: loShuYear2025,
+    2026: loShuYear2026
 }
 
 export const period9: LoShuSquare = [

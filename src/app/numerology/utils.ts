@@ -12,38 +12,23 @@ const chaldeanMapping: { [key: string]: number } = {
 };
 
 export const getLevelsArrayPublic = (formData: FormDataType): LevelType[] => {
-  const unit = formData.unitNumber ? { level: 'L1', value: formData.unitNumber, name: 'Unit Number' } : null;
-
-  const building = (formData.buildingNumberAndName) ? { level: 'L2', value: formData.buildingNumberAndName, name: 'Building Name & Number' } : null;
-
-  let L2AddOn = {
-    level: 'L2',
-    value: (formData.buildingNumberAndName ? formData.streetNumber : formData.streetName + ' ' + formData.streetNumber),
-    name: formData.buildingNumberAndName ? 'Building Name & Number' : 'Street Name'
-  };
+  const L1 = formData.unitNumber ? { level: 'L1', value: formData.unitNumber, name: 'Unit Number' } : null;
 
   let L2 = {
     level: 'L2',
-    value: L2AddOn.value + ' ' + (building?.value ?? ''),
+    value: formData.streetName,
     name: 'Street Number'
   }
 
-  const combined = unit && L2 ? {
-    level: 'L1L2',
-    value: `${L2.value} + ${unit.value}`,
-    name: `${L2.name} + ${unit.name}`
+  const combined = L1 && L2 ? {
+    level: 'L3',
+    value: `${L2.value} + ${L1.value}`,
+    name: `(L2 + L1)`
   } : null;
 
-  const street = formData.streetName
-    ? {
-      level: 'L3',
-      value: [formData.streetName].filter(Boolean).join(' '),
-      name: 'Street Name',
-    }
-    : null;
   const zipcode = formData.postalCode ? { level: 'L4', value: formData.postalCode, name: 'ZipCode' } : null;
 
-  return [unit, L2, combined, street, zipcode].filter(Boolean) as LevelType[];
+  return [L1, L2, combined, zipcode].filter(Boolean) as LevelType[];
 }
 
 
