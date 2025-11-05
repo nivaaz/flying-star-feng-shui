@@ -12,12 +12,12 @@ const chaldeanMapping: { [key: string]: number } = {
 };
 
 export const getLevelsArrayPublic = (formData: FormDataType): LevelType[] => {
-  const L1 = formData.unitNumber ? { level: 'L1', value: formData.unitNumber, name: 'Unit Number' } : null;
+  const L1 = formData.unitNumber ? { level: 'L1', value: formData.unitNumber, name: '' } : null;
 
   let L2 = {
     level: 'L2',
     value: formData.streetName,
-    name: 'Street Number'
+    name: ''
   }
 
   const combined = L1 && L2 ? {
