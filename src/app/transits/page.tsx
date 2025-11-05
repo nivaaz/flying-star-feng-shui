@@ -83,7 +83,7 @@ export default function TransitsPage() {
 
   return (
     <main
-      className="max-w-3xl mx-auto p-4 mb-60"
+      className="max-w-3xl mx-auto p-4 mb-60 dark:text-black"
       style={{
         background: "linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%)",
         borderRadius: "24px",
@@ -202,7 +202,7 @@ const Transit = ({
 }) => {
   return (
     <div
-      className={`bg-white p-4 border-l-4 ${
+      className={`bg-white  p-4 border-l-4 ${
         isPast ? "border-blue-300" : "border-purple-300"
       }`}
     >

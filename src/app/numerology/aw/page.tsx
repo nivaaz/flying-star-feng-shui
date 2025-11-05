@@ -88,7 +88,7 @@ const Numerology = () => {
                 />
               );
             })}
-          
+
             {formData.homeYear && (
               <Level
                 level="Bonus 1"
@@ -200,7 +200,7 @@ const InputAddressComponent = ({
   return (
     <div className="p-4 ">
       <label
-        className=" text-xs text-slate-400 absolute bg-white px-1 rounded dark:bg-slate-800 dark:text-white "
+        className="text-xs text-slate-400 absolute bg-white px-1 rounded dark:bg-slate-800 dark:text-white "
         htmlFor={currentId}
       >
         {label}
