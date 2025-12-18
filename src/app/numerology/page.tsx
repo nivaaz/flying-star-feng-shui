@@ -112,7 +112,7 @@ const Numerology = () => {
                   level={l.level}
                   description={l.name}
                   inputString={l.value}
-                  output={chaldeanNumerologyCalculator(l.value).toString()}
+                  output={chaldeanNumerologyCalculator([l.value]).toString()}
                 />
               );
             })}
@@ -168,7 +168,7 @@ const Numerology = () => {
                 level="Life Path Number"
                 description=""
                 inputString={formData.bday}
-                output={chaldeanNumerologyCalculator(formData.bday).toString()}
+                output={chaldeanNumerologyCalculator([formData.bday]).toString()}
               />
               <Level
                 level="Personal Year Number"
@@ -201,7 +201,7 @@ const personaYearNumber = (bday: string) => {
   const x = bday.split("-");
   const year = new Date().getFullYear();
   x[0] = year.toString();
-  return chaldeanNumerologyCalculator(x.join("-"));
+  return chaldeanNumerologyCalculator([x.join("-")]);
 };
 
 const InputAddressComponent = ({

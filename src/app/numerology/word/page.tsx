@@ -24,7 +24,7 @@ const WordNumerology = () => {
   const [inputValue, setInputValue] = useState("");
   const result = useMemo(() => {
     const trimmed = inputValue.trim();
-    return trimmed ? chaldeanNumerologyCalculator(trimmed) : null;
+    return trimmed ? chaldeanNumerologyCalculator([trimmed]) : null;
   }, [inputValue]);
 
   const resultKey = result?.toString() ?? "";
