@@ -33,39 +33,30 @@ export const getLevelsArrayPublic = (formData: FormDataType): LevelType[] => {
 
 
 export const getLevelsArray = (formData: FormDataType): LevelType[] => {
-  let levelsArray = [];
+  const levelsArray: Array<{ value: string; name: string }> = [];
 
-  const L1 = formData.unitNumber && {
-    value: (formData.unitNumber), name: "Unit Number"
-  }
-  const L2A = formData.buildingNumberAndName && {
-    value: (formData.buildingNumberAndName),
-    name: "Building/House Name and Number"
-  }
-  const L2B = formData.streetNumber && {
-    value: (formData.streetNumber),
-    name: "House Number"
-  }
-  const L3 = formData.streetName && {
-    value: (formData.streetName), name: "Street Name"
-  }
-  const L4 = formData.postalCode && {
-    value: (formData.postalCode), name: "Postal Code"
-  }
+  const L1 = formData.unitNumber
+    ? { value: formData.unitNumber, name: "Unit Number" }
+    : null;
+  const L2A = formData.buildingNumberAndName
+    ? { value: formData.buildingNumberAndName, name: "Building/House Name and Number" }
+    : null;
+  const L2B = formData.streetNumber
+    ? { value: formData.streetNumber, name: "House Number" }
+    : null;
+  const L3 = formData.streetName
+    ? { value: formData.streetName, name: "Street Name" }
+    : null;
+  const L4 = formData.postalCode
+    ? { value: formData.postalCode, name: "Postal Code" }
+    : null;
 
-  if (L1?.value) {
-    levelsArray.push(L1);
-  } if (L2A?.value) {
-    levelsArray.push(L2A);
-  }
-  if (L2B?.value) {
-    levelsArray.push(L2B);
-  }
-  if (L3?.value) {
-    levelsArray.push(L3);
-  } if (L4?.value) {
-    levelsArray.push(L4);
-  }
+  if (L1?.value) levelsArray.push(L1);
+  if (L2A?.value) levelsArray.push(L2A);
+  if (L2B?.value) levelsArray.push(L2B);
+  if (L3?.value) levelsArray.push(L3);
+  if (L4?.value) levelsArray.push(L4);
+
   let unconsciousValue: string[] | null = null;
   if (L1?.value && L2A?.value && L2B?.value && L3?.value) {
     unconsciousValue = [L1.value, L2A.value, L2B.value, L3.value];
@@ -78,18 +69,18 @@ export const getLevelsArray = (formData: FormDataType): LevelType[] => {
   } else if (L2B?.value && L3?.value) {
     unconsciousValue = [L2B.value, L3.value];
   }
+
   if (unconsciousValue) {
     const unconsciousLabel = unconsciousValue.join(" + ");
     levelsArray.push({
-      level: "Unconscious",
       value: unconsciousLabel,
-      name: "Level"
+      name: "Level",
     });
   }
-  console.log(levelsArray)
-  return levelsArray.map((level, index) => ({ level: `L${index + 1} `, ...level }));
 
-}
+  console.log(levelsArray);
+  return levelsArray.map((level, index) => ({ level: `L${index + 1} `, ...level }));
+};
 
 const isMasterNumber = (value: number | string) =>
   value === 11 || value === 22 || value === 33;
@@ -209,4 +200,3 @@ export const personalYearNumber = (bday: string) => {
   x[0] = year.toString();
   return chaldeanNumerologyCalculator([x.join("-")]);
 };
-
