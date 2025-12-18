@@ -56,7 +56,7 @@ const angleByAngularHouse = (house: 1 | 4 | 7 | 10): AngleKey => {
   }
 };
 
-// Angular houses: {1,4,7,10}
+// TODO: change this to use IC, MC, ASC, DSC houses 
 export const getAngularByHouse = (
   planetsWithHouse: PlanetWithHouse[]
 ): AngularHouseHit[] => {
