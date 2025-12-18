@@ -5,6 +5,7 @@ const InputAddressComponent = ({
   warning,
   currentId,
   type = "text",
+  value,
 }: {
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   label: string;
@@ -12,6 +13,7 @@ const InputAddressComponent = ({
   warning?: string[];
   currentId: string;
   type?: string;
+  value?: string;
 }) => {
   return (
     <div className="p-4 ">
@@ -26,6 +28,7 @@ const InputAddressComponent = ({
         type={type}
         id={currentId}
         name={currentId}
+        value={value}
         onChange={handleChange}
       />
       <p className="text-xs opacity-75 text-slate-500 p-0.5"> {example}</p>
