@@ -6,8 +6,8 @@ import { GoogleAnalytics } from "@next/third-parties/google";
 const openSans = Open_Sans({ weight: "400", subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Flying Star Feng Shui",
-  description: "Flying Star Feng Shui Calculator",
+  title: "Pheydrus Tools - Astrology, Numerology, Feng Shui",
+  description: "Pheydrus Tools for Astrology, Numerology and Feng Shui",
 };
 
 export default function RootLayout({
@@ -20,11 +20,9 @@ export default function RootLayout({
       <body className={openSans.className}>
         <>
           <nav className="text-center text-xs bg-cyan-50 dark:bg-cyan-800 flex flex-row justify-center p-1 ">
-            <p className="my-auto"> Tools by Nivaaz </p>
+            <p className="my-auto"> Pheydrus Tools by Nivaaz </p>
           </nav>
-          <div className="w-full m-auto p-4 min-h-screen">
-            {children}
-          </div>
+          <div className="w-full m-auto p-4 min-h-screen">{children}</div>
         </>
       </body>
       <GoogleAnalytics gaId="G-S4DN9BVZ37" />

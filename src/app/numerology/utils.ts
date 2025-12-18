@@ -34,41 +34,75 @@ export const getLevelsArrayPublic = (formData: FormDataType): LevelType[] => {
 
 export const getLevelsArray = (formData: FormDataType): LevelType[] => {
   let levelsArray = [];
-  if (formData.unitNumber !== "") {
-    levelsArray.push({ value: (formData.unitNumber), name: "Unit Number" });
+
+  const L1 = formData.unitNumber && {
+    value: (formData.unitNumber), name: "Unit Number"
   }
-  if (formData.buildingNumberAndName !== "" && formData.streetNumber !== "") {
-    levelsArray.push({ value: (formData.buildingNumberAndName) + " " + formData.streetNumber, name: "Building Name and Number & Street Number" })
-  } else if (formData.buildingNumberAndName !== "") {
-    levelsArray.push({ value: (formData.buildingNumberAndName), name: "Building Name and Number" })
-  } else if (formData.streetNumber !== "") {
-    levelsArray.push({ value: (formData.streetNumber), name: "Street Number" });
+  const L2A = formData.buildingNumberAndName && {
+    value: (formData.buildingNumberAndName),
+    name: "Building/House Name and Number"
+  }
+  const L2B = formData.streetNumber && {
+    value: (formData.streetNumber),
+    name: "House Number"
+  }
+  const L3 = formData.streetName && {
+    value: (formData.streetName), name: "Street Name"
+  }
+  const L4 = formData.postalCode && {
+    value: (formData.postalCode), name: "Postal Code"
   }
 
-  if (formData.streetName !== "") {
-    levelsArray.push({ value: (formData.streetName), name: "Street Name" });
+  if (L1?.value) {
+    levelsArray.push(L1);
+  } if (L2A?.value) {
+    levelsArray.push(L2A);
   }
-  if (levelsArray.length >= 2) {
-    levelsArray.push({ level: 'L1+L2', value: levelsArray[1].value + ' ' + levelsArray[0].value, name: levelsArray[1].name + ' ' + levelsArray[0].name });
+  if (L2B?.value) {
+    levelsArray.push(L2B);
   }
-  if (formData.postalCode !== "") {
-    levelsArray.push({ level: 'L4', value: (formData.postalCode), name: "Postal Code" });
+  if (L3?.value) {
+    levelsArray.push(L3);
+  } if (L4?.value) {
+    levelsArray.push(L4);
   }
-
-  return levelsArray.map((level, index) => ({ level: `L${index + 1}`, ...level }));
+  let unconsciousValue: string[] | null = null;
+  if (L1?.value && L2A?.value && L2B?.value && L3?.value) {
+    unconsciousValue = [L1.value, L2A.value, L2B.value, L3.value];
+  } else if (L1?.value && L2A?.value) {
+    unconsciousValue = [L1.value, L2A.value];
+  } else if (L1?.value && L2B?.value && L3?.value) {
+    unconsciousValue = [L1.value, L2B.value, L3.value];
+  } else if (L1?.value && L2B?.value) {
+    unconsciousValue = [L1.value, L2B.value];
+  } else if (L2B?.value && L3?.value) {
+    unconsciousValue = [L2B.value, L3.value];
+  }
+  if (unconsciousValue) {
+    const unconsciousLabel = unconsciousValue.join(" + ");
+    levelsArray.push({
+      level: "Unconscious",
+      value: unconsciousLabel,
+      name: "Level"
+    });
+  }
+  console.log(levelsArray)
+  return levelsArray.map((level, index) => ({ level: `L${index + 1} `, ...level }));
 
 }
 
-export function chaldeanNumerologyCalculator(inputString: string) {
+const isMasterNumber = (value: number | string) =>
+  value === 11 || value === 22 || value === 33;
+
+
+// Calculate the Chaldean number by summing the mapped values
+const findNumerology = (inputString: string): number => {
   if (inputString === '11' || inputString === '22' || inputString === '33') {
     return Number(inputString);
   }
-  // Remove all spaces from the input
-  let formattedInput = inputString.replace(/\s+/g, '');
 
-  // Calculate the Chaldean number by summing the mapped values
   let total = 0;
-  for (let char of formattedInput as string) {
+  for (let char of inputString as string) {
     if (!isNaN(Number(char))) {
       total += Number(char);
     } else {
@@ -79,6 +113,25 @@ export function chaldeanNumerologyCalculator(inputString: string) {
     return total;
   }
   return reduceToSingleDigit(total);
+}
+
+// takes in an array of strings 
+export function chaldeanNumerologyCalculator(inputStrings: string[]): number {
+  console.log("inputStrings", inputStrings)
+
+
+  const output = inputStrings?.reduce((acc, curr): number => {
+    const currentString = curr.split(" "); // split by spaces 
+    console.log("currentString", currentString)
+    const currNumerology = currentString.reduce((p, c) => findNumerology(c) + p, 0)
+    console.log("currNumerology", currNumerology)
+
+    return findNumerology(String(acc + currNumerology))
+  }, 0)
+
+  console.log(output)
+  console.log(inputStrings)
+  return output;
 }
 // Function to reduce the total to a single-digit or 11, 22, or 33 (Master Numbers)
 function reduceToSingleDigit(numIn: number) {
@@ -154,6 +207,6 @@ export const personalYearNumber = (bday: string) => {
   const x = bday.split("-");
   const year = new Date().getFullYear();
   x[0] = year.toString();
-  return chaldeanNumerologyCalculator(x.join("-"));
+  return chaldeanNumerologyCalculator([x.join("-")]);
 };
 

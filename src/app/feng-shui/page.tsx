@@ -14,6 +14,9 @@ import { Star, YearSquares } from "./types";
 import { ElementExamples, generateFengShuiTemplate } from "./utils";
 import { crystals, starThemes } from "./constants";
 import html2canvas from "html2canvas";
+import Image from "next/image";
+import { useEffect } from "react";
+import Numerology from "../numerology/aw/page";
 
 const periods = [
   "period 9 (2024-2043)",
@@ -32,6 +35,8 @@ const defaultText: string[][] = [
   ["", "", ""],
   ["", "", ""],
 ];
+
+type FloorPlan = { id: string; name: string; src: string };
 
 const AddTextField = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -62,7 +67,15 @@ export default function Home() {
   const [clientName, setClientName] = useState(""); // State for client name
   const [error, setError] = useState(false); // State for error popup
   const pageRef = useRef<HTMLDivElement>(null); // Ref for the page to export
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [customPeriod, setCustomPeriod] = useState<boolean>(true);
+
+  useEffect(() => {
+    console.log(
+      "[floor-plans] file input mounted?",
+      Boolean(fileInputRef.current)
+    );
+  }, []);
 
   const [showPeriod, setShowPeriod] = useState(false);
   const [showYear, setShowYear] = useState(true);
@@ -82,6 +95,15 @@ export default function Home() {
     useState<YearSquares>("2025");
 
   const [defaultValues, setDefaultValues] = useState<string[][]>(defaultText);
+  const [showNumerology, setShowNumerology] = useState(false);
+  const [showAstrocartography, setShowAstrocartography] = useState(false);
+  const [astroLinks, setAstroLinks] = useState<
+    { url: string; label: string }[]
+  >([
+    { url: "", label: "" },
+    { url: "", label: "" },
+    { url: "", label: "" },
+  ]);
 
   const generateDefaultText = () => {
     console.log("generateDefaultText");
@@ -162,6 +184,54 @@ export default function Home() {
     target.style.height = "auto"; // Reset height
     target.style.height = target.scrollHeight + "px"; // Set new height
   };
+
+  const handleFiles = async (fileList: FileList | File[] | null) => {
+    if (!fileList || !fileList.length) return;
+    console.log("[floor-plans] handling files", fileList.length);
+    const fileArray = Array.isArray(fileList) ? fileList : Array.from(fileList);
+    const readers = fileArray.map(
+      (file) =>
+        new Promise<FloorPlan>((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = () => {
+            resolve({
+              id: `${file.name}-${file.size}-${Date.now()}`,
+              name: file.name,
+              src: reader.result as string,
+            });
+          };
+          reader.onerror = () => reject(reader.error);
+          reader.readAsDataURL(file);
+        })
+    );
+    const loadedPlans = await Promise.all(readers);
+  };
+
+  const handleAstroUrlBlur = (idx: number, raw: string) => {
+    const value = raw.trim();
+    if (!value) {
+      const next = [...astroLinks];
+      next[idx] = { url: "", label: "" };
+      setAstroLinks(next);
+      return;
+    }
+    let href = value;
+    if (!/^https?:\/\//i.test(href)) {
+      href = `https://${href}`;
+    }
+    try {
+      const u = new URL(href);
+      const shortLabel = u.host + (u.pathname !== "/" ? u.pathname : "");
+      const next = [...astroLinks];
+      next[idx] = { url: u.toString(), label: shortLabel };
+      setAstroLinks(next);
+    } catch {
+      const next = [...astroLinks];
+      next[idx] = { url: "", label: "" };
+      setAstroLinks(next);
+    }
+  };
+
   return (
     <main
       ref={pageRef} // Attach the ref to the main container
@@ -318,7 +388,7 @@ export default function Home() {
             <div className="flex justify-between w-full">
               <h2 className="text-xl "> Your chart</h2>
               <button
-                className="border rounded-lg px-4 py-2"
+                className="border rounded-lg px-4 py-2 print:hidden"
                 onClick={generateDefaultText}
               >
                 {" "}
@@ -415,11 +485,104 @@ export default function Home() {
         <ElementExampleBlock />
         <StarThemes />
         <Crystals />
+        <Cures />
+        <Container>
+          <div className="space-y-4">
+            <button
+              type="button"
+              onClick={() => setShowNumerology((prev) => !prev)}
+              className="border border-slate-300 bg-slate-100 p-2 rounded-lg dark:bg-slate-900 dark:text-slate-100"
+            >
+              {showNumerology ? "Hide numerology" : "Add numerology"}
+            </button>
+            {showNumerology && (
+              <div className="border-t border-slate-200 pt-4">
+                <Numerology />
+              </div>
+            )}
+          </div>
+        </Container>
+        <Container>
+          <div className="space-y-4">
+            <button
+              type="button"
+              onClick={() => setShowAstrocartography((prev) => !prev)}
+              className="border border-slate-300 bg-slate-100 p-2 rounded-lg dark:bg-slate-900 dark:text-slate-100"
+            >
+              {showAstrocartography
+                ? "Hide astrocartography"
+                : "Add astrocartography"}
+            </button>
+            {showAstrocartography && (
+              <div className="border-t border-slate-200 pt-4 space-y-4">
+                <h2 className="text-xl font-bold">Astrocartography</h2>
+                <p className="text-sm text-slate-600 dark:text-slate-300">
+                  Add up to three locations you&apos;re considering. Use the
+                  notes to describe how each place feels in your body, work,
+                  relationships, and overall luck.
+                </p>
+                <div className="grid md:grid-cols-3 gap-4">
+                  {[1, 2, 3].map((slot, idx) => {
+                    const link = astroLinks[idx];
+
+                    return (
+                      <div
+                        key={slot}
+                        className="rounded-lg border border-slate-200 dark:border-slate-700 p-3 space-y-2"
+                      >
+                        <label className="block text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400">
+                          Location {slot}
+                        </label>
+                        <input
+                          type="text"
+                          className="w-full rounded-md border border-slate-200 dark:border-slate-700 p-2 text-sm dark:bg-slate-900 dark:text-slate-100"
+                          placeholder="City, Country or region line"
+                        />
+                        <label className="block text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400">
+                          Location URL
+                        </label>
+                        <input
+                          type="url"
+                          className="w-full rounded-md border border-slate-200 dark:border-slate-700 p-2 text-sm dark:bg-slate-900 dark:text-slate-100"
+                          placeholder="Paste map / astrocartography URL here"
+                          defaultValue={link.url}
+                          onBlur={(e) =>
+                            handleAstroUrlBlur(idx, e.target.value)
+                          }
+                        />
+                        {link.url && link.label && (
+                          <p className="text-xs text-indigo-700 dark:text-indigo-300 break-all">
+                            Link:{" "}
+                            <a
+                              href={link.url}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="underline"
+                            >
+                              {link.label}
+                            </a>
+                          </p>
+                        )}
+                        <label className="block text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400">
+                          Notes (good / challenging themes)
+                        </label>
+                        <textarea
+                          className="w-full rounded-md border border-slate-200 dark:border-slate-700 p-2 text-sm min-h-[96px] dark:bg-slate-900 dark:text-slate-100"
+                          placeholder="E.g. Strong career focus, but relationships feel intense; great for study and solo projects; or feels soft, restful, more family-focused."
+                        />
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+          </div>
+        </Container>
         <Container>
           <div className="print:hidden">
             <p>When you&apos;re happy with your design, print as a pdf.</p>
             <button
-              onClick={handleExportPDF} // Modified to export the current page
+              onClick={() => window.print()}
               className="border border-slate-300 bg-slate-100 p-2 rounded-lg dark:bg-slate-900 dark:text-slate-100 m-1"
             >
               Save Design
@@ -469,6 +632,107 @@ const ElementExampleBlock = () => {
   );
 };
 
+const FloorPlanOverlay = ({
+  plan,
+  index,
+}: {
+  plan: FloorPlan;
+  index: number;
+}) => {
+  const [gridScale, setGridScale] = useState(1);
+  const [gridRotation, setGridRotation] = useState(0);
+
+  const rotateDirection = (direction: string, degrees: number) => {
+    if (direction === "C") return direction;
+    const compass = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"];
+    const currentIndex = compass.indexOf(direction);
+    if (currentIndex === -1) return direction;
+
+    const steps = Math.round(degrees / 45); // shift in 45° increments
+    const normalizedIndex =
+      (currentIndex + steps + compass.length) % compass.length;
+    return compass[normalizedIndex];
+  };
+
+  const onScaleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const next = Number(event.target.value);
+    setGridScale(next);
+  };
+
+  const onRotationChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const next = Number(event.target.value);
+    setGridRotation(next);
+  };
+
+  return (
+    <div className="space-y-2">
+      <div className="flex justify-between items-center">
+        <p className="font-semibold text-lg">Floor plan {index + 1}</p>
+        <p className="text-xs text-slate-500 truncate">{plan.name}</p>
+      </div>
+      <div className="grid gap-2 sm:grid-cols-2">
+        <label className="text-xs text-slate-600 flex items-center space-x-2">
+          <span>Grid size</span>
+          <input
+            type="range"
+            min="0.5"
+            max="1.5"
+            step="0.05"
+            value={gridScale}
+            onChange={onScaleChange}
+            className="w-full"
+          />
+          <span className="w-12 text-right">{gridScale.toFixed(2)}x</span>
+        </label>
+        <label className="text-xs text-slate-600 flex items-center space-x-2">
+          <span>Rotate</span>
+          <input
+            type="range"
+            min="-180"
+            max="180"
+            step="1"
+            value={gridRotation}
+            onChange={onRotationChange}
+            className="w-full"
+          />
+          <span className="w-12 text-right">{gridRotation}°</span>
+        </label>
+      </div>
+      <div className="relative border rounded-lg overflow-hidden bg-slate-100 dark:bg-slate-800">
+        <Image
+          src={plan.src}
+          alt={`Floor plan ${index + 1}`}
+          width={1200}
+          height={900}
+          className="w-full h-auto"
+        />
+        <div
+          className="absolute inset-0 grid grid-cols-3 grid-rows-3 pointer-events-none"
+          style={{
+            transform: `scale(${gridScale})`,
+            transformOrigin: "center",
+          }}
+        >
+          {directions.map((row, i) =>
+            row.map((cell, j) => (
+              <div
+                key={`${cell}-${i}-${j}`}
+                className="flex items-center justify-center border border-white/70 dark:border-slate-500/70 bg-black/10 text-white font-semibold text-sm"
+              >
+                {rotateDirection(cell, gridRotation)}
+              </div>
+            ))
+          )}
+        </div>
+      </div>
+      <p className="text-xs text-slate-500">
+        Align the grid with the plan&apos;s north arrow; each square shows its
+        feng shui direction.
+      </p>
+    </div>
+  );
+};
+
 const StarThemes = () => {
   return (
     <Container>
@@ -500,6 +764,70 @@ const Crystals = () => {
     <Container>
       <h2 className="font-bold text-xl pb-2"> Crystals </h2>
       <div className="grid grid-cols-3 gap-4">{cc}</div>
+    </Container>
+  );
+};
+
+const Cures = () => {
+  return (
+    <Container>
+      <h2 className="font-bold text-xl pb-2">
+        {" "}
+        Feng Shui Cures (Expert Notes){" "}
+      </h2>
+      <div className="space-y-4 text-sm leading-relaxed">
+        <div>
+          <p className="font-bold">🧂 Salt cure (for stubborn sha qi)</p>
+          <p>
+            Use a glass or ceramic jar. Add one cup coarse sea salt, place six
+            clean metal coins on top (imperial side up if available), then fill
+            with water to just below the rim. Set the jar on a ceramic saucer in
+            the afflicted sector, undisturbed. Do not cap it.
+          </p>
+          <p className="text-xs text-indigo-700 dark:text-indigo-300">
+            Link to salt-cure tutorial:{" "}
+            <a
+              href="https://www.youtube.com/watch?v=l1y7KL-VPc0"
+              className="underline"
+            >
+              https://www.youtube.com/watch?v=l1y7KL-VPc0
+            </a>
+          </p>
+        </div>
+        <div>
+          <p className="font-bold">💧 Water element cure</p>
+          <p>
+            Place mirrors, glass, actual water e.g. water bottle/jug of water.
+            Water or ocean imagery. Blue items or fluids shapes.
+          </p>
+        </div>
+        <div>
+          <p className="font-bold">⚙️ Metal cure</p>
+          <p>
+            Favor dense, heavy metal: solid brass, iron, or steel weights; a
+            substantial bell or singing bowl; or a compact metal statue (no
+            sharp edges). One anchored piece is stronger than many trinkets. A
+            large weight or scultpure made of metal is best.
+          </p>
+          <p className="text-xs text-indigo-700 dark:text-indigo-300">
+            Recommended feng shui coins (can be found on amazon). Super small &
+            thin coins approx 2 cm/ 0.8 inch, thickness is 0.8 mm/ 0.03 inch.
+            <a
+              href="https://www.amazon.com/Boao-Pieces-Chinese-Fortune-I-Ching/dp/B07JHJX5YD/ref=sr_1_9?crid=MIPWN0J22WAU&dib=eyJ2IjoiMSJ9.XbmSAFFF-8gTKEUZZoVrQ3cgnUnbVavALklNH7RkFhfnUGa-j-qG-7K6PwXizIxRG23cMqramwq4SmE9xbAaLoG1tkjDBYecbJqCCKNRZU6i9CJiZaRm0jge6z90CYxeTrOglAm_sZRx9-ks_t_mdJ8OdYW3LkxWg2_H6mUH1_aZBywv8NWfUfXl8bHGapmeEuVmhzGwI_3FZG8FXxyikKuHD46QuVK0LCXbRZy6TLdraV3sxJJJ5H58uYQHxWE4IIRAtBmDhrHWjCvn6775ZhdCL0ByaCic_NEAhwEYPdA.gLupYAPJ8fF45_WruEyKpyr0kUZWis4Hux2TJzd30jQ&dib_tag=se&keywords=feng%2Bshui%2Bcoins&qid=1765191512&sprefix=feng%2Bshui%2Bcoi%2Caps%2C478&sr=8-9&th=1"
+              className="underline"
+            >
+              amazon link
+            </a>
+          </p>
+        </div>
+        <div>
+          <p className="font-bold"> 🔥 Fire cure</p>
+          <p>
+            Lots of candles, a large light, or heat source is ideal. Lots of
+            yellow/red/purple colours or triangular shapes.
+          </p>
+        </div>
+      </div>
     </Container>
   );
 };

@@ -43,7 +43,7 @@ const LifePath = () => {
             level="Life Path Number"
             description=""
             inputString={formData.bday}
-            output={chaldeanNumerologyCalculator(formData.bday).toString()}
+            output={chaldeanNumerologyCalculator([formData.bday]).toString()}
           />
           <Level
             level="Personal Year Number"
@@ -69,9 +69,9 @@ const LifePath = () => {
 };
 export default LifePath;
 
-// change the year of the bday to the current year 
+// change the year of the bday to the current year
 const formatPersonalYearNumber = (bday: string): string => {
   const currentYear = new Date().getFullYear();
 
   return `${currentYear}${bday.substring(5, 10)}`;
-}
+};

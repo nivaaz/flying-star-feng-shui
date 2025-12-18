@@ -34,11 +34,11 @@ export const generateFengShuiTemplate = (starHome: Star, starCurrentYear: Star) 
     const drainCurrentYear = getDrainingElement(elCurrentYear.element);
 
     let textresponse = getAuspiciousnessLevel(elHome.auspicious, elCurrentYear.auspicious);
-    textresponse += `\n\n Stars: \n -[HOME] ${starHome} | ${elHome.element} - ${elHome.theme} \n -[YEAR]${starCurrentYear} | ${elCurrentYear.element} - ${elCurrentYear.theme}.`;
-    textresponse += "\n\n ⚪️ In this area: \n "
-    textresponse += "\n" + shouldAddSaltCure(elHome, elCurrentYear, drainHome, drainCurrentYear) + " .";
-    textresponse += "\n The core elements for this area: \n" + addremoveBaseElement(elHome, elCurrentYear) + " ."; // TODO:
-    textresponse += "\n" + reccomendElements(elHome, nourishHome, drainHome, elCurrentYear, nourishCurrentYear, drainCurrentYear) + " .";
+    textresponse += `\n\nStars:\n - [HOME] ${starHome} | ${elHome.element} - ${elHome.theme}\n - [YEAR] ${starCurrentYear} | ${elCurrentYear.element} - ${elCurrentYear.theme}.`;
+    textresponse += "\n\n⚪️ In this area:\n";
+    textresponse += "\n" + shouldAddSaltCure(elHome, elCurrentYear, drainHome, drainCurrentYear) + ".";
+    textresponse += "\nThe elements for the two ruling stars here: add/remove these first, then balance with secondary elements.\n" + addremoveBaseElement(elHome, elCurrentYear) + ".";
+    textresponse += "\n" + reccomendElements(elHome, nourishHome, drainHome, elCurrentYear, nourishCurrentYear, drainCurrentYear) + ".";
     return textresponse;
 
 }
@@ -90,7 +90,7 @@ export const reccomendElements = (
             if (idx !== -1) {
                 return "\n 📌 remove " + currEl + " " + elExamples;
             }
-            return "\n " + el + " " + elExamples;
+            return "\n 📌 " + el + " " + elExamples;
         } else if (el.includes("add")) {
             const idx = uniqueElements.findIndex(e => e === "remove " + currEl);
             if (idx !== -1) {
@@ -106,11 +106,11 @@ export const reccomendElements = (
 }
 
 const addremoveBaseElement = (elHome: { element: Element; auspicious: boolean }, elCurrentYear: { element: Element; auspicious: boolean }): string => {
-    let textResponse = "\n - " + (elHome.auspicious ? "Add " : "remove ") + elHome.element + ". [HOME, can be permanent change] . ";
+    let textResponse = "\n - " + (elHome.auspicious ? "Add " : "remove ") + elHome.element + " [HOME, can be a permanent change].";
     if (elHome.element === elCurrentYear.element) {
         return textResponse
     }
-    textResponse += "\n - " + (elCurrentYear.auspicious ? "Add " : "remove ") + elCurrentYear.element + ". [Current Year, non permanent change] . "
+    textResponse += "\n - " + (elCurrentYear.auspicious ? "Add " : "remove ") + elCurrentYear.element + " [CURRENT YEAR, keep non-permanent]."
     return textResponse;
 }
 

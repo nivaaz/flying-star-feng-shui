@@ -84,7 +84,7 @@ const Numerology = () => {
                   description={l.name}
                   inputString={l.value}
                   levelType="numerology"
-                  output={chaldeanNumerologyCalculator(l.value).toString()}
+                  output={chaldeanNumerologyCalculator([l.value]).toString()}
                 />
               );
             })}
@@ -141,10 +141,19 @@ const Numerology = () => {
             <div className="p-4 space-y-4">
               <Level
                 level="Life Path Number"
-                description=""
+                description="Your core path and lifetime lesson arc"
                 inputString={formData.bday}
                 levelType="numerology"
-                output={chaldeanNumerologyCalculator(formData.bday).toString()}
+                output={chaldeanNumerologyCalculator([
+                  formData.bday,
+                ]).toString()}
+              />
+              <Level
+                level="Day Path Number"
+                description="The flavor of the day you were born"
+                inputString={formData.bday}
+                levelType="numerology"
+                output={dayPathNumber(formData.bday).toString()}
               />
               <Level
                 level="Personal Year Number"
@@ -175,11 +184,18 @@ const Numerology = () => {
 export default Numerology;
 
 const personaYearNumber = (bday: string) => {
-  console.log(bday);
   const x = bday.split("-");
   const year = new Date().getFullYear();
   x[0] = year.toString();
-  return chaldeanNumerologyCalculator(x.join("-"));
+  return chaldeanNumerologyCalculator([x.join(" ")]);
+};
+
+const dayPathNumber = (bday: string) => {
+  // Expecting ISO date input from the date field: YYYY-MM-DD
+  const parts = bday.split("-");
+  if (parts.length !== 3) return "";
+  const day = parts[2];
+  return chaldeanNumerologyCalculator([day]);
 };
 
 const InputAddressComponent = ({
@@ -262,6 +278,14 @@ const formatMeaningLabel = (key: MeaningDisplayKey) => {
     .join(" ");
 };
 
+const numerologyDefinitionIndex = (curr: number): number | null => {
+  // Look up by configured number instead of assuming fixed positions.
+  const idx = NumerologyMeanings.findIndex((m) => m.number === curr);
+  if (idx !== -1) return idx;
+  // Fallback for simple 1–9 mapping if definitions are missing.
+  if (curr >= 1 && curr <= 9) return curr - 1;
+  return null;
+};
 const Level = ({
   level,
   description,
@@ -280,8 +304,10 @@ const Level = ({
   const numericValue = Number(normalizedOutput);
 
   if (levelType === "numerology") {
-    const numerologyMeaning = NumerologyMeanings[numericValue - 1];
-    meanings = numerologyMeaning;
+    const idx = numerologyDefinitionIndex(numericValue);
+    if (idx !== null) {
+      meanings = NumerologyMeanings[idx];
+    }
   } else if (levelType === "zodiac") {
     const zodiacMeaning =
       ChineseZodiacMeanings.find((i) => i.name === normalizedOutput) ?? null;
