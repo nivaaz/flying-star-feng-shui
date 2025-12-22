@@ -37,7 +37,7 @@ export const generateFengShuiTemplate = (starHome: Star, starCurrentYear: Star) 
     textresponse += `\n\nStars:\n - [HOME] ${starHome} | ${elHome.element} - ${elHome.theme}\n - [YEAR] ${starCurrentYear} | ${elCurrentYear.element} - ${elCurrentYear.theme}.`;
     textresponse += "\n\n⚪️ In this area:\n";
     textresponse += "\n" + shouldAddSaltCure(elHome, elCurrentYear, drainHome, drainCurrentYear) + ".";
-    textresponse += "\nThe elements for the two ruling stars here: add/remove these first, then balance with secondary elements.\n" + addremoveBaseElement(elHome, elCurrentYear) + ".";
+    // textresponse += "\nThe elements for the two ruling stars here: add/remove these first, then balance with secondary elements.\n" + addremoveBaseElement(elHome, elCurrentYear) + ".";
     textresponse += "\n" + reccomendElements(elHome, nourishHome, drainHome, elCurrentYear, nourishCurrentYear, drainCurrentYear) + ".";
     return textresponse;
 
@@ -139,7 +139,7 @@ const shouldAddSaltCure = (
 
 const getAuspiciousnessLevel = (auspiciousness1: boolean, auspiciousness2: boolean): string => {
     if (auspiciousness1 && auspiciousness2) {
-        return "⭐️ This is one of the best areas of your home . \n ⭐️ Add astrocartography here.";
+        return "⭐️ This is one of the best areas of your home . \n ⭐️ Add astrocartography here for the locations & themes related to the two stars of this corner.";
     } else if (!auspiciousness1 && !auspiciousness2) {
         return "‼️ This is one of the worst areas of your home. Spend less time here.";
     } else {
