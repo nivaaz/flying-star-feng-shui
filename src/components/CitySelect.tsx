@@ -41,9 +41,11 @@ export type CitySelectProps = {
 
 const normalize = (value: string) =>
   value
-    .toLowerCase()
-    .normalize("NFKD")
-    .replace(/\p{Diacritic}+/gu, "");
+    // Use NFD + explicit combining-diacritic range instead of
+    // Unicode property escapes so this works on older JS targets.
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase();
 
 const formatCityLabel = (city: City) => {
   if (!city) return "";

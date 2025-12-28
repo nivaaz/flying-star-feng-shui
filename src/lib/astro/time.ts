@@ -28,9 +28,34 @@ export const birthLocalToUtcDate = ({
     );
   }
 
-  const plain = new Temporal.PlainDateTime(year, month, day, hour, minute, 0, 0, 0);
-  const tz = Temporal.TimeZone.from(timeZone);
-  const instant = tz.getInstantFor(plain);
+  const plain = new Temporal.PlainDateTime(
+    year,
+    month,
+    day,
+    hour,
+    minute,
+    0,
+    0,
+    0
+  );
+
+  // Use ZonedDateTime.from with an explicit timeZone string so we don't
+  // rely on Temporal.TimeZone.from, which is not present in the
+  // polyfill's TypeScript types in this project.
+  const zdt = Temporal.ZonedDateTime.from({
+    timeZone,
+    year: plain.year,
+    month: plain.month,
+    day: plain.day,
+    hour: plain.hour,
+    minute: plain.minute,
+    second: plain.second,
+    millisecond: plain.millisecond,
+    microsecond: plain.microsecond,
+    nanosecond: plain.nanosecond,
+  });
+
+  const instant = zdt.toInstant();
 
   return new Date(Number(instant.epochMilliseconds));
 };
