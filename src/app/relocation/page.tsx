@@ -191,7 +191,7 @@ export default function RelocationPage() {
   return (
     <div className="w-full flex flex-col p-1 justify-center pb-32">
       <div className="text-center py-8">
-        <Heading level={1} className="uppercase">
+        <Heading level={1} className="uppercase italic font-light">
           Relocation
         </Heading>
       </div>
@@ -422,14 +422,14 @@ export default function RelocationPage() {
           </Container>
         ) : null}
 
-        {result ? (
+        {/* {result ? (
           <Container>
             <Banner>Output</Banner>
             <pre className="text-xs whitespace-pre-wrap break-words bg-slate-950 text-slate-100 p-4 rounded">
               {JSON.stringify(result, null, 2)}
             </pre>
           </Container>
-        ) : null}
+        ) : null} */}
       </div>
     </div>
   );
