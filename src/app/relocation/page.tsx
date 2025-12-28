@@ -10,44 +10,13 @@ import { birthLocalToUtcDate, toJulianDay } from "../../../lib/astro/time";
 import { assignWholeSignHouses } from "../../../lib/astro/houses";
 import { getAngularByHouse } from "../../../lib/astro/angular";
 
-type BirthPlaceMode = "city" | "latlon";
-
 export default function RelocationPage() {
   const [birthDate, setBirthDate] = useState("");
   const [birthTime, setBirthTime] = useState("");
-  const [birthTz, setBirthTz] = useState(
-    Intl.DateTimeFormat().resolvedOptions().timeZone ?? ""
-  );
 
-  const [birthPlaceMode, setBirthPlaceMode] = useState<BirthPlaceMode>("city");
   const [birthCity, setBirthCity] = useState<City | null>(null);
-  const [birthLat, setBirthLat] = useState("");
-  const [birthLon, setBirthLon] = useState("");
 
   const [destinationCity, setDestinationCity] = useState<City | null>(null);
-
-  const timeZoneOptions = useMemo(() => {
-    // Small curated list for now; can be expanded or swapped for a full tz database later.
-    const zones = [
-      "UTC",
-      "America/Los_Angeles",
-      "America/Denver",
-      "America/Chicago",
-      "America/New_York",
-      "America/Phoenix",
-      "Europe/London",
-      "Europe/Paris",
-      "Europe/Berlin",
-      "Asia/Dubai",
-      "Asia/Kolkata",
-      "Asia/Singapore",
-      "Asia/Tokyo",
-      "Australia/Sydney",
-      "Pacific/Auckland",
-    ];
-
-    return zones.map((tz) => ({ value: tz, label: tz }));
-  }, []);
 
   const [isCalculating, setIsCalculating] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -80,7 +49,7 @@ export default function RelocationPage() {
         throw new Error("Cannot calculate during SSR.");
       }
 
-      if (birthPlaceMode === "city" && !birthCity) {
+      if (!birthCity) {
         throw new Error("Birth city not selected.");
       }
 
@@ -96,10 +65,14 @@ export default function RelocationPage() {
       await initEphemeris();
 
       // Local birth datetime -> UTC -> Julian Day (UT)
+      if (!birthCity?.timeZone) {
+        throw new Error("Selected birth city is missing time zone data.");
+      }
+
       const utcDate = birthLocalToUtcDate({
         date: birthDate,
         time: birthTime,
-        timeZone: birthTz,
+        timeZone: birthCity.timeZone,
       });
       const jdUT = toJulianDay(utcDate);
 
@@ -166,11 +139,10 @@ export default function RelocationPage() {
           birth: {
             date: birthDate,
             time: birthTime,
-            timeZone: birthTz,
-            place:
-              birthPlaceMode === "city" && birthCity
-                ? { mode: "city" as const, cityId: birthCity.id }
-                : { mode: "latlon" as const, lat: birthLat, lon: birthLon },
+            timeZone: birthCity?.timeZone ?? "",
+            place: birthCity
+              ? { mode: "city" as const, cityId: birthCity.id }
+              : null,
           },
           destination: destinationCity,
         },
@@ -219,92 +191,20 @@ export default function RelocationPage() {
               handleChange={(e) => setBirthTime(e.target.value)}
             />
 
-            <div className="p-4">
-              <label
-                className=" text-xs text-slate-400 absolute bg-white px-1 rounded dark:bg-slate-800 dark:text-white "
-                htmlFor="birth-tz"
-              >
-                Birth timezone (IANA)
-              </label>
-              <select
-                id="birth-tz"
-                name="birth-tz"
-                className="rounded-md p-2 mt-2 border border-slate-200 dark:text-white dark:bg-slate-900 w-full"
-                value={birthTz}
-                onChange={(e) => setBirthTz(e.target.value)}
-              >
-                {timeZoneOptions.map((opt) => (
-                  <option key={opt.value} value={opt.value}>
-                    {opt.label}
-                  </option>
-                ))}
-              </select>
-              <p className="text-xs opacity-75 text-slate-500 p-0.5">
-                Select your birth timezone.
-              </p>
-            </div>
+            <div className="p-4" />
           </div>
 
-          <div className="px-4 pt-2">
-            <p className="text-xs text-slate-500">Birth place</p>
-            <div className="mt-2 flex gap-4 text-sm">
-              <label className="flex items-center gap-2">
-                <input
-                  type="radio"
-                  name="birth-place-mode"
-                  checked={birthPlaceMode === "city"}
-                  onChange={() => setBirthPlaceMode("city")}
-                />
-                City
-              </label>
-              <label className="flex items-center gap-2">
-                <input
-                  type="radio"
-                  name="birth-place-mode"
-                  checked={birthPlaceMode === "latlon"}
-                  onChange={() => setBirthPlaceMode("latlon")}
-                />
-                Lat/Lon
-              </label>
-            </div>
+          <div className="p-4">
+            <CitySelect
+              label="Birth city"
+              value={birthCity}
+              onChange={setBirthCity}
+              placeholder="Search birth city"
+            />
+            <p className="text-xs opacity-75 text-slate-500 p-0.5">
+              Start typing a city name (supports name + country).
+            </p>
           </div>
-
-          {birthPlaceMode === "city" ? (
-            <div className="p-4">
-              <CitySelect
-                label="Birth city"
-                value={birthCity}
-                onChange={(city) => {
-                  setBirthCity(city);
-                  if (city?.timeZone) {
-                    setBirthTz(city.timeZone);
-                  }
-                }}
-                placeholder="Search birth city"
-              />
-              <p className="text-xs opacity-75 text-slate-500 p-0.5">
-                Start typing a city name (supports name + country).
-              </p>
-            </div>
-          ) : (
-            <div className="grid sm:grid-cols-2 md:grid-cols-3 m-auto">
-              <InputAddressComponent
-                label="Birth latitude"
-                example="e.g. 40.7128"
-                currentId="birth-lat"
-                value={birthLat}
-                handleChange={(e) => setBirthLat(e.target.value)}
-              />
-              <InputAddressComponent
-                label="Birth longitude"
-                example="e.g. -74.0060"
-                currentId="birth-lon"
-                value={birthLon}
-                handleChange={(e) => setBirthLon(e.target.value)}
-              />
-              <div className="p-4" />
-            </div>
-          )}
         </Container>
 
         <Container>
