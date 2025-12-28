@@ -5,7 +5,7 @@ import Banner from "../components/banner";
 import Container from "../components/container";
 import Heading from "../components/heading";
 import InputAddressComponent from "../components/inputComponent";
-import { CITIES } from "../../../lib/data/cities";
+import CitySelect, { City } from "@/components/CitySelect";
 import { birthLocalToUtcDate, toJulianDay } from "../../../lib/astro/time";
 import { assignWholeSignHouses } from "../../../lib/astro/houses";
 import { getAngularByHouse } from "../../../lib/astro/angular";
@@ -20,20 +20,11 @@ export default function RelocationPage() {
   );
 
   const [birthPlaceMode, setBirthPlaceMode] = useState<BirthPlaceMode>("city");
-  const [birthCityId, setBirthCityId] = useState(CITIES[0]?.id ?? "");
+  const [birthCity, setBirthCity] = useState<City | null>(null);
   const [birthLat, setBirthLat] = useState("");
   const [birthLon, setBirthLon] = useState("");
 
-  const [destinationCityId, setDestinationCityId] = useState(CITIES[0]?.id ?? "");
-
-  const cityOptions = useMemo(
-    () =>
-      CITIES.map((c) => ({
-        value: c.id,
-        label: `${c.name}${c.country ? ` (${c.country})` : ""}`,
-      })),
-    []
-  );
+  const [destinationCity, setDestinationCity] = useState<City | null>(null);
 
   const timeZoneOptions = useMemo(() => {
     // Small curated list for now; can be expanded or swapped for a full tz database later.
@@ -69,9 +60,11 @@ export default function RelocationPage() {
     Array<{ key: string; house: number; nature: "benefic" | "malefic" }>
   >([]);
 
-  const classifyPlanet = (planet: string): "benefic" | "malefic" | "neutral" => {
-    if (["Venus", "Jupiter"].includes(planet)) return "benefic";
-    if (["Mars", "Saturn"].includes(planet)) return "malefic";
+  const classifyPlanet = (
+    planet: string
+  ): "benefic" | "malefic" | "neutral" => {
+    if (["Venus", "Jupiter", "Sun", "Moon"].includes(planet)) return "benefic";
+    if (["Mars", "Saturn", "Pluto"].includes(planet)) return "malefic";
     return "neutral";
   };
 
@@ -87,9 +80,12 @@ export default function RelocationPage() {
         throw new Error("Cannot calculate during SSR.");
       }
 
-      const destination = CITIES.find((c) => c.id === destinationCityId);
-      if (!destination) {
-        throw new Error("Destination city not found.");
+      if (birthPlaceMode === "city" && !birthCity) {
+        throw new Error("Birth city not selected.");
+      }
+
+      if (!destinationCity) {
+        throw new Error("Destination city not selected.");
       }
 
       // Lazy-load ephemeris (client-only)
@@ -110,7 +106,7 @@ export default function RelocationPage() {
       // Destination angles + planet longitudes
       const [planetLongitudes, angles] = await Promise.all([
         getPlanetLongitudes(jdUT),
-        getAngles(jdUT, destination.location.lat, destination.location.lon),
+        getAngles(jdUT, destinationCity.lat, destinationCity.lon),
       ]);
 
       // Whole-sign houses (ASC sign) + angular filtering (houses 1/4/7/10)
@@ -118,18 +114,48 @@ export default function RelocationPage() {
         ([key, lon]) => ({ key, lon })
       );
 
-      const planetsWithHouse = assignWholeSignHouses(angles.asc, planetsLonArray);
-      const angularHits = getAngularByHouse(planetsWithHouse);
+      const planetsWithHouse = assignWholeSignHouses(
+        angles.asc,
+        planetsLonArray
+      );
+      const angleEntries = [
+        { key: "ASC", lon: angles.asc },
+        { key: "DSC", lon: (angles.asc + 180) % 360 },
+        { key: "MC", lon: angles.mc },
+        { key: "IC", lon: (angles.mc + 180) % 360 },
+      ].map((entry) => ({
+        ...entry,
+        lon: ((entry.lon % 360) + 360) % 360,
+      }));
+      const angleAssignments = assignWholeSignHouses(angles.asc, angleEntries);
+      const angularHits = planetsWithHouse.flatMap((planet) =>
+        angleAssignments
+          .filter((angle) => angle.house === planet.house)
+          .map((angle) => ({
+            key: planet.key,
+            angle: angle.key,
+            house: planet.house,
+          }))
+      );
 
       setAngularHitsResult(angularHits);
 
       const bizHouses = [2, 6, 10];
       const biz = planetsWithHouse
         .filter((p) => bizHouses.includes(p.house))
-        .map((p) => ({ key: p.key, house: p.house, nature: classifyPlanet(p.key) }))
+        .map((p) => ({
+          key: p.key,
+          house: p.house,
+          nature: classifyPlanet(p.key),
+        }))
         .filter(
-          (p): p is { key: string; house: number; nature: "benefic" | "malefic" } =>
-            p.nature === "benefic" || p.nature === "malefic"
+          (
+            p
+          ): p is {
+            key: string;
+            house: number;
+            nature: "benefic" | "malefic";
+          } => p.nature === "benefic" || p.nature === "malefic"
         )
         .sort((a, b) => a.house - b.house || a.key.localeCompare(b.key));
 
@@ -142,11 +168,11 @@ export default function RelocationPage() {
             time: birthTime,
             timeZone: birthTz,
             place:
-              birthPlaceMode === "city"
-                ? { mode: "city" as const, cityId: birthCityId }
+              birthPlaceMode === "city" && birthCity
+                ? { mode: "city" as const, cityId: birthCity.id }
                 : { mode: "latlon" as const, lat: birthLat, lon: birthLon },
           },
-          destination,
+          destination: destinationCity,
         },
         jdUT,
         utcDate: utcDate.toISOString(),
@@ -245,27 +271,19 @@ export default function RelocationPage() {
 
           {birthPlaceMode === "city" ? (
             <div className="p-4">
-              <label
-                className=" text-xs text-slate-400 absolute bg-white px-1 rounded dark:bg-slate-800 dark:text-white "
-                htmlFor="birth-city"
-              >
-                Birth city
-              </label>
-              <select
-                id="birth-city"
-                name="birth-city"
-                className="rounded-md p-2 mt-2 border border-slate-200 dark:text-white dark:bg-slate-900 w-full"
-                value={birthCityId}
-                onChange={(e) => setBirthCityId(e.target.value)}
-              >
-                {cityOptions.map((opt) => (
-                  <option key={opt.value} value={opt.value}>
-                    {opt.label}
-                  </option>
-                ))}
-              </select>
+              <CitySelect
+                label="Birth city"
+                value={birthCity}
+                onChange={(city) => {
+                  setBirthCity(city);
+                  if (city?.timeZone) {
+                    setBirthTz(city.timeZone);
+                  }
+                }}
+                placeholder="Search birth city"
+              />
               <p className="text-xs opacity-75 text-slate-500 p-0.5">
-                Select a city (seed list for now).
+                Start typing a city name (supports name + country).
               </p>
             </div>
           ) : (
@@ -292,25 +310,12 @@ export default function RelocationPage() {
         <Container>
           <Banner>Destination</Banner>
           <div className="p-4">
-            <label
-              className=" text-xs text-slate-400 absolute bg-white px-1 rounded dark:bg-slate-800 dark:text-white "
-              htmlFor="dest-city"
-            >
-              Destination city
-            </label>
-            <select
-              id="dest-city"
-              name="dest-city"
-              className="rounded-md p-2 mt-2 border border-slate-200 dark:text-white dark:bg-slate-900 w-full"
-              value={destinationCityId}
-              onChange={(e) => setDestinationCityId(e.target.value)}
-            >
-              {cityOptions.map((opt) => (
-                <option key={opt.value} value={opt.value}>
-                  {opt.label}
-                </option>
-              ))}
-            </select>
+            <CitySelect
+              label="Destination city"
+              value={destinationCity}
+              onChange={setDestinationCity}
+              placeholder="Search destination city"
+            />
             <p className="text-xs opacity-75 text-slate-500 p-0.5">
               Select a destination city.
             </p>
@@ -370,43 +375,49 @@ export default function RelocationPage() {
           <Container>
             <Banner>Angular hits</Banner>
             <ul className="p-4 space-y-2">
-              {angularHitsResult.map((hit) => {
-                const nature = classifyPlanet(hit.key);
-                const isBizAngular = hit.house === 10;
-                return (
-                  <li
-                    key={`${hit.key}-${hit.angle}-${hit.house}`}
-                    className={
-                      isBizAngular
-                        ? "flex flex-wrap items-center justify-between gap-3 rounded border border-amber-300 dark:border-amber-700 bg-amber-50 dark:bg-amber-950/30 px-3 py-2"
-                        : "flex flex-wrap items-center justify-between gap-3 rounded border border-slate-200 dark:border-slate-700 px-3 py-2"
-                    }
-                  >
-                    <div className="text-sm">
-                      <span className="font-semibold">{hit.key}</span>
-                      <span className="opacity-70"> on </span>
-                      <span className="font-semibold">{hit.angle}</span>
-                      <span className="opacity-70"> (house {hit.house})</span>
-                      {isBizAngular ? (
-                        <span className="ml-2 text-xs rounded bg-amber-200 text-amber-900 dark:bg-amber-900 dark:text-amber-100 px-2 py-0.5">
-                          business
-                        </span>
-                      ) : null}
-                    </div>
-                    <div
+              {(() => {
+                const mcHouse = angularHitsResult.find(
+                  (hit) => hit.angle === "MC"
+                )?.house;
+                return angularHitsResult.map((hit) => {
+                  const nature = classifyPlanet(hit.key);
+                  const isBizAngular =
+                    mcHouse !== undefined && hit.house === mcHouse;
+                  return (
+                    <li
+                      key={`${hit.key}-${hit.angle}-${hit.house}`}
                       className={
-                        nature === "benefic"
-                          ? "text-xs rounded bg-emerald-100 text-emerald-900 dark:bg-emerald-900 dark:text-emerald-100 px-2 py-1"
-                          : nature === "malefic"
-                            ? "text-xs rounded bg-rose-100 text-rose-900 dark:bg-rose-900 dark:text-rose-100 px-2 py-1"
-                            : "text-xs rounded bg-slate-100 text-slate-900 dark:bg-slate-900 dark:text-slate-100 px-2 py-1"
+                        isBizAngular
+                          ? "flex flex-wrap items-center justify-between gap-3 rounded border border-amber-300 dark:border-amber-700 bg-amber-50 dark:bg-amber-950/30 px-3 py-2"
+                          : "flex flex-wrap items-center justify-between gap-3 rounded border border-slate-200 dark:border-slate-700 px-3 py-2"
                       }
                     >
-                      {nature}
-                    </div>
-                  </li>
-                );
-              })}
+                      <div className="text-sm">
+                        <span className="font-semibold">{hit.key}</span>
+                        <span className="opacity-70"> on </span>
+                        <span className="font-semibold">{hit.angle}</span>
+                        <span className="opacity-70"> (house {hit.house})</span>
+                        {isBizAngular ? (
+                          <span className="ml-2 text-xs rounded bg-amber-200 text-amber-900 dark:bg-amber-900 dark:text-amber-100 px-2 py-0.5">
+                            career
+                          </span>
+                        ) : null}
+                      </div>
+                      <div
+                        className={
+                          nature === "benefic"
+                            ? "text-xs rounded bg-emerald-100 text-emerald-900 dark:bg-emerald-900 dark:text-emerald-100 px-2 py-1"
+                            : nature === "malefic"
+                            ? "text-xs rounded bg-rose-100 text-rose-900 dark:bg-rose-900 dark:text-rose-100 px-2 py-1"
+                            : "text-xs rounded bg-slate-100 text-slate-900 dark:bg-slate-900 dark:text-slate-100 px-2 py-1"
+                        }
+                      >
+                        {nature}
+                      </div>
+                    </li>
+                  );
+                });
+              })()}
             </ul>
           </Container>
         ) : null}

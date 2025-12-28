@@ -229,7 +229,11 @@ const Astrology = () => {
             planetColorMap={planetColorMap}
             signColorMap={signColorMap}
           />
-          <Aspects aspects={aspects} />
+          <Aspects
+            aspects={aspects}
+            birthDate={birthDetails.dob}
+            birthTime={birthDetails.time}
+          />
         </Container>
       </div>
     </div>
@@ -307,7 +311,15 @@ const Planets = ({
   );
 };
 
-const Aspects = ({ aspects }: { aspects: AstrologyAspect[] }) => {
+const Aspects = ({
+  aspects,
+  birthDate,
+  birthTime,
+}: {
+  aspects: AstrologyAspect[];
+  birthDate: string;
+  birthTime: string;
+}) => {
   const icaspects = getAspectsByPlanet(aspects, "IC", "Conjunction");
   const dscaspects = getAspectsByPlanet(aspects, "DSC", "Conjunction");
   const ascaspects = getAspectsByPlanet(aspects, "ASC", "Conjunction");
@@ -342,7 +354,7 @@ const Aspects = ({ aspects }: { aspects: AstrologyAspect[] }) => {
           aspect={aspect}
         />
       ))}
-      <Astrocartography />
+      {/* <Astrocartography birthDate={birthDate} birthTime={birthTime} /> */}
     </div>
   );
 };
